@@ -10635,6 +10635,9 @@ var Header = function () {
 
     var bindPlatform = function bindPlatform() {
         var platform_list = getElementById('platform__list');
+        if (platform_list.hasChildNodes()) {
+            return;
+        }
         var platforms = {
             dtrader: {
                 name: 'DTrader',
@@ -10657,6 +10660,7 @@ var Header = function () {
             smarttrader: {
                 name: 'SmartTrader',
                 desc: 'Trade in the world\'s financial markets with a simple online platform',
+                link: '#',
                 icon: 'logo_smart_trader.svg'
             }
         };
