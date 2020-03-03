@@ -10639,19 +10639,22 @@ var Header = function () {
             dtrader: {
                 name: 'DTrader',
                 desc: 'Start trading now with a powerful, yet easy-to-use platform',
+                link: 'https://deriv.app',
                 icon: 'ic-brand-dtrader.svg'
             },
             dbot: {
                 name: 'DBot',
                 desc: 'Automate your trading ideas without coding',
+                link: 'https://deriv.app/bot',
                 icon: 'ic-brand-dbot.svg'
             },
             dmt5: {
                 name: 'DMT5',
                 desc: 'Trade with platform of choice for professionals',
+                link: 'https://deriv.app/mt5',
                 icon: 'ic-brand-dmt5.svg'
             },
-            dsmarttrader: {
+            smarttrader: {
                 name: 'SmartTrader',
                 desc: 'Trade in the world\'s financial markets with a simple online platform',
                 icon: 'logo_smart_trader.svg'
@@ -10660,7 +10663,7 @@ var Header = function () {
 
         Object.keys(platforms).forEach(function (key) {
             var platform = platforms[key];
-            var platform_div = createElement('div', { class: 'platform__list-item ' + (key === 'dsmarttrader' ? 'platform__list-item--active' : '') });
+            var platform_div = createElement('a', { class: 'platform__list-item ' + (key === 'smarttrader' ? 'platform__list-item--active' : ''), href: platform.link });
             var platform_icon = createElement('img', { src: '' + Url.urlForStatic('' + header_icon_base_path + platform.icon), class: 'platform__list-item-icon' });
             var platform_text_container = createElement('div', { class: 'platform__list-item-text ' });
             var platform_name = createElement('div', { text: platform.name, class: 'platform__list-item-name' });

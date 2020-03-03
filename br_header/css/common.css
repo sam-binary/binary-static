@@ -1553,7 +1553,6 @@ body .header {
     border-radius: 8px;
     margin: 24px 16px;
     padding: 24px 16px;
-    cursor: pointer;
     -ms-flex-preferred-size: 100%;
         flex-basis: 100%;
     width: 302px; }
@@ -1565,7 +1564,8 @@ body .header {
       width: 35px;
       height: 35px; }
     body .header .platform__list-item-text {
-      margin-left: 15px; }
+      margin-left: 15px;
+      font-weight: normal; }
     body .header .platform__list-item-name {
       font-size: 1rem;
       font-weight: 700;
