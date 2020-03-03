@@ -10218,7 +10218,7 @@ var Client = function () {
         // const secondary_bg_color    = 'secondary-bg-color';
 
         if (ClientBase.isLoggedIn()) {
-            BinarySocket.wait('authorize', 'website_status', 'get_account_status').then(function () {
+            BinarySocket.wait('authorize', 'website_status', 'get_account_status', 'balance').then(function () {
                 // const client_logged_in = getElementById('client-logged-in');
                 // client_logged_in.classList.add('gr-centered');
 
