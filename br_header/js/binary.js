@@ -10653,7 +10653,7 @@ var Header = function () {
             },
             dsmarttrader: {
                 name: 'SmartTrader',
-                desc: 'Lorem Ipsum is not simply random text.',
+                desc: 'Trade in the world\'s financial markets with a simple online platform',
                 icon: 'logo_smart_trader.svg'
             }
         };
