@@ -3,6 +3,10 @@
     <head>
         <style id="antiClickjack">body{display:none !important;}</style>
         <script type="text/javascript">
+            /* hardcode redirect for crawlers */
+            if (/ia_archiver|bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent)) {
+                window.location = '/en/trading.html';
+            }
             if (self === top) {
                 var antiClickjack = document.getElementById("antiClickjack");
                 antiClickjack.parentNode.removeChild(antiClickjack);
@@ -13,6 +17,7 @@
         <title>Binary.com</title>
         <meta charset="utf-8" />
         <meta name="google-site-verification" content="Myh35QddfEArh0686LcO2zMjrgv0C7L4FCBU0k0oZvU" />
+        <meta name='referrer' content='origin' />
         <script type="text/javascript">
             var redirectTimeOut,
                 lang;
@@ -26,7 +31,6 @@
                     'de': 'de|at|li',
                     'es': 'ar|bo|cl|co|cr|cu|do|ec|sv|gt|hn|mx|ni|pa|py|pr|es|uy|ve',
                     'fr': 'fr|ad|bj|bf|cf|cg|ga|gn|ml|mc|ne|sn|tg',
-                    'id': 'id',
                     'it': 'it',
                     'ko': 'kr',
                     'pl': 'po',
@@ -55,11 +59,11 @@
                 var has_utm_source        = /utm_source/.test(search);
                 var utm_source            = has_external_referrer && !has_utm_source ? ((search ? '&' : '?') + 'utm_source=' + new URL(document.referrer).hostname) : '';
 
-                window.location.href = (lang || 'en').toLowerCase() + '/' + (is_logged_in ? 'trading' : 'home') + '.html' + search + utm_source;
+                window.location.href = (lang || 'en').toLowerCase() + '/trading.html' + search + utm_source;
             }
 
             if (/^https:\/\/staging\.binary\.com\/translations\//i.test(window.location.href)) {
-                window.location.href = 'ach/home.html'; // in-context translation
+                window.location.href = 'ach/trading.html'; // in-context translation
             } else {
                 if (document.referrer) {
                     localStorage.setItem('index_referrer', document.referrer);
