@@ -10807,12 +10807,12 @@ var Header = function () {
                         // applyToAllElements('.account-type', (el) => { elementInnerHtml(el, localized_type); });
                         // applyToAllElements('.account-id', (el) => { elementInnerHtml(el, loginid); });
                         applyToAllElements('#header__acc-icon', function (el) {
-                            el.src = '' + header_icon_base_path + (is_real ? icon : 'ic-currency-virtual.svg');
+                            el.src = '' + Url.urlForStatic('' + header_icon_base_path + (is_real ? icon : 'ic-currency-virtual.svg'));
                         });
                     }
 
                     var account = createElement('div', { class: 'account__switcher-acc ' + (is_current ? 'account__switcher-acc--active' : ''), 'data-value': loginid });
-                    var account_icon = createElement('img', { src: '' + header_icon_base_path + icon });
+                    var account_icon = createElement('img', { src: '' + Url.urlForStatic('' + header_icon_base_path + icon) });
                     var account_detail = createElement('span', { text: currency });
                     var account_loginid = createElement('div', { class: 'account__switcher-loginid', text: loginid });
                     var account_balance = createElement('span', { class: 'account__switcher-balance account__switcher-balance-' + (is_real ? currency : 'virtual') });
