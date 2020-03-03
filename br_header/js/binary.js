@@ -10661,7 +10661,7 @@ var Header = function () {
         Object.keys(platforms).forEach(function (key) {
             var platform = platforms[key];
             var platform_div = createElement('div', { class: 'platform__list-item ' + (key === 'dsmarttrader' ? 'platform__list-item--active' : '') });
-            var platform_icon = createElement('img', { src: '' + header_icon_base_path + platform.icon, class: 'platform__list-item-icon' });
+            var platform_icon = createElement('img', { src: '' + Url.urlForStatic('' + header_icon_base_path + platform.icon), class: 'platform__list-item-icon' });
             var platform_text_container = createElement('div', { class: 'platform__list-item-text ' });
             var platform_name = createElement('div', { text: platform.name, class: 'platform__list-item-name' });
             var platform_desc = createElement('div', { text: platform.desc, class: 'platform__list-item-desc' });
