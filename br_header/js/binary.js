@@ -10603,9 +10603,9 @@ var header_icon_base_path = '/images/pages/header/';
 var Header = function () {
     var onLoad = function onLoad() {
         populateAccountsList();
+        bindPlatform();
         bindClick();
         bindSvg();
-        bindPlatform();
         if (Client.isLoggedIn()) {
             displayAccountStatus();
         }
@@ -10740,6 +10740,12 @@ var Header = function () {
                 body.classList.remove('stop-scrolling');
             }
         };
+
+        applyToAllElements('.platform__list-item', function (el) {
+            el.addEventListener('click', function () {
+                showPlatformSwitcher(false);
+            });
+        });
 
         platform_switcher.addEventListener('click', function () {
             if (platform_dropdown.classList.contains('platform__dropdown--show')) {
@@ -10998,6 +11004,7 @@ var Header = function () {
         var msg_code = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
 
         var msg_notification = getElementById('msg_notification');
+        var platform_switcher = getElementById('platform__dropdown');
         if (msg_notification.getAttribute('data-code') === 'STORAGE_NOT_SUPPORTED') return;
 
         msg_notification.html(message);
@@ -11011,10 +11018,14 @@ var Header = function () {
                 if (is_error) msg_notification.classList.add('error');
             });
         }
+
+        // Removed once notification feature is implemented
+        platform_switcher.style.top = 51 + 26 + 'px';
     };
 
     var hideNotification = function hideNotification(msg_code) {
         var msg_notification = getElementById('msg_notification');
+        var platform_switcher = getElementById('platform__dropdown');
         if (/^(STORAGE_NOT_SUPPORTED|MFSA_MESSAGE)$/.test(msg_notification.getAttribute('data-code')) || msg_code && msg_notification.getAttribute('data-code') !== msg_code) {
             return;
         }
@@ -11026,6 +11037,9 @@ var Header = function () {
                 msg_notification.removeAttribute('data-message data-code');
             });
         }
+
+        // Removed once notification feature is implemented
+        platform_switcher.style.top = '51px';
     };
 
     var displayAccountStatus = function displayAccountStatus() {
@@ -27365,12 +27379,11 @@ __webpack_require__(/*! jquery.scrollto */ "./node_modules/jquery.scrollto/jquer
 var BinaryLoader = __webpack_require__(/*! ./app/base/binary_loader */ "./src/javascript/app/base/binary_loader.js");
 
 document.addEventListener('DOMContentLoaded', BinaryLoader.init);
-$(window).on('pageshow', function (e) {
-    // Safari doesn't fire load event when using back button
-    if (e.originalEvent.persisted) {
-        BinaryLoader.init();
+window.onpageshow = function (event) {
+    if (event.persisted) {
+        window.location.reload();
     }
-});
+};
 
 /***/ }),
 
