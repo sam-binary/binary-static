@@ -326,6 +326,9 @@ button.full-width, button.full-width span, .button.full-width, .button.full-widt
 button.full-width .barspinner, .button.full-width .barspinner {
   display: inline-block; }
 
+div.barspinner > div.barspinner__rect {
+  background: var(--brand-red-coral) !important; }
+
 span.checked {
   background: url("../images/pages/authenticate/checked.svg") no-repeat;
   width: 16px;
