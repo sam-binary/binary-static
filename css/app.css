@@ -1587,7 +1587,7 @@ a.previous-wrapper {
   min-width: 120px;
   position: relative; }
   .markets .market_current {
-    border: 1px solid #dedede;
+    border: 1px solid #d6dadb;
     border-radius: 4px;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1601,11 +1601,12 @@ a.previous-wrapper {
     cursor: pointer;
     min-width: 150px; }
     .markets .market_current:hover {
-      border: 1px solid #1c5ae3; }
+      border: 1px solid #999999; }
     .markets .market_current .market {
       font-size: 14px;
       font-weight: 400;
-      margin: 5px 0; }
+      margin: 5px 0;
+      color: #999999; }
     .markets .market_current .underlying {
       font-size: 16px;
       font-weight: 600;
@@ -1618,10 +1619,10 @@ a.previous-wrapper {
         padding: 5px 6px; } }
   .markets .markets_dropdown {
     background: #ffffff;
-    border: 1px solid #dedede;
+    border: 1px solid #d6dadb;
     border-radius: 4px;
-    -webkit-box-shadow: 0 0 2px 1px #dedede;
-            box-shadow: 0 0 2px 1px #dedede;
+    -webkit-box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.08), 0 0 16px 0 rgba(0, 0, 0, 0.08);
+            box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.08), 0 0 16px 0 rgba(0, 0, 0, 0.08);
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -1660,16 +1661,30 @@ a.previous-wrapper {
       padding: 15px 15px 0;
       background: #ffffff;
       border-radius: 4px 4px 0px 0px;
-      border-bottom: 1px solid #dedede; }
+      border-bottom: 1px solid #d6dadb; }
       .markets .markets_dropdown .search input {
         outline: none;
-        border: 1px solid #dedede;
+        border: 1px solid #d6dadb;
         border-radius: 4px;
         line-height: 30px;
         padding: 0 7px;
         width: 100%; }
-        .markets .markets_dropdown .search input:hover, .markets .markets_dropdown .search input:focus {
-          border: 1px solid #394171; }
+        .markets .markets_dropdown .search input:hover {
+          border: 1px solid #999999; }
+        .markets .markets_dropdown .search input:focus {
+          border: 1px solid #39b19d; }
+        .markets .markets_dropdown .search input::-webkit-input-placeholder {
+          /* Edge */
+          color: #d6dadb; }
+        .markets .markets_dropdown .search input:-ms-input-placeholder {
+          /* Internet Explorer 10-11 */
+          color: #d6dadb; }
+        .markets .markets_dropdown .search input::-moz-placeholder {
+          color: #d6dadb; }
+        .markets .markets_dropdown .search input::-ms-input-placeholder {
+          color: #d6dadb; }
+        .markets .markets_dropdown .search input::placeholder {
+          color: #d6dadb; }
       .markets .markets_dropdown .search .icon {
         width: 16px;
         height: 16px;
@@ -1705,9 +1720,9 @@ a.previous-wrapper {
         -webkit-box-flex: 1;
             -ms-flex: 1 0 auto;
                 flex: 1 0 auto;
-        min-width: 140px;
+        min-width: 150px;
         background: #ffffff;
-        border-right: 1px solid #dedede;
+        border-right: 1px solid #d6dadb;
         border-bottom-left-radius: 4px; }
         @media (min-width: 320px) and (max-width: 767px) {
           .markets .markets_dropdown .markets_view .markets_column {
@@ -1715,7 +1730,7 @@ a.previous-wrapper {
         .markets .markets_dropdown .markets_view .markets_column .desktop .market {
           font-size: 12px;
           padding: 8px 10px;
-          color: #1c5ae3;
+          cursor: pointer;
           -webkit-transition: background 0.2s 0.1s;
           transition: background 0.2s 0.1s;
           display: -webkit-box;
@@ -1727,14 +1742,13 @@ a.previous-wrapper {
                   flex-direction: row;
           -webkit-box-align: center;
               -ms-flex-align: center;
-                  align-items: center;
-          cursor: pointer; }
-          .markets .markets_dropdown .markets_view .markets_column .desktop .market:hover {
-            text-decoration: underline; }
+                  align-items: center; }
+          .markets .markets_dropdown .markets_view .markets_column .desktop .market:not(.active):hover {
+            background-color: #e6e9e9; }
           .markets .markets_dropdown .markets_view .markets_column .desktop .market.active {
             text-decoration: none;
             font-weight: 600;
-            border-right: 2px solid #1c5ae3; }
+            border-right: 2px solid #ff444f; }
           .markets .markets_dropdown .markets_view .markets_column .desktop .market span:nth-of-type(2) {
             margin-left: 10px; }
         .markets .markets_dropdown .markets_view .markets_column .mobile {
@@ -1751,7 +1765,7 @@ a.previous-wrapper {
                 -ms-flex-pack: justify;
                     justify-content: space-between;
             padding: 5px 15px 0;
-            border-bottom: 1px solid #dedede; }
+            border-bottom: 1px solid #d6dadb; }
             .markets .markets_dropdown .markets_view .markets_column .mobile ul li {
               margin: 0 !important;
               font-size: 12px;
@@ -1762,7 +1776,7 @@ a.previous-wrapper {
               -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
               -webkit-tap-highlight-color: transparent; }
               .markets .markets_dropdown .markets_view .markets_column .mobile ul li.active {
-                border-bottom: 2px solid #1c5ae3; }
+                border-bottom: 2px solid #ff444f; }
               .markets .markets_dropdown .markets_view .markets_column .mobile ul li .icon {
                 width: 24px;
                 height: 24px; }
@@ -1777,41 +1791,26 @@ a.previous-wrapper {
             background-size: contain;
             -webkit-transition: none;
             transition: none; }
-            .markets .markets_dropdown .markets_view .markets_column .icon.forex.active {
-              background: url("../images/pages/trade/assets/ic-forex-active.svg") no-repeat;
-              background-size: contain; }
           .markets .markets_dropdown .markets_view .markets_column .icon.indices {
             background: url("../images/pages/trade/assets/ic-indices-normal.svg") no-repeat;
             background-size: contain;
             -webkit-transition: none;
             transition: none; }
-            .markets .markets_dropdown .markets_view .markets_column .icon.indices.active {
-              background: url("../images/pages/trade/assets/ic-indices-active.svg") no-repeat;
-              background-size: contain; }
           .markets .markets_dropdown .markets_view .markets_column .icon.stocks {
             background: url("../images/pages/trade/assets/ic-stocks-normal.svg") no-repeat;
             background-size: contain;
             -webkit-transition: none;
             transition: none; }
-            .markets .markets_dropdown .markets_view .markets_column .icon.stocks.active {
-              background: url("../images/pages/trade/assets/ic-stocks-active.svg") no-repeat;
-              background-size: contain; }
           .markets .markets_dropdown .markets_view .markets_column .icon.commodities {
             background: url("../images/pages/trade/assets/ic-commodities-normal.svg") no-repeat;
             background-size: contain;
             -webkit-transition: none;
             transition: none; }
-            .markets .markets_dropdown .markets_view .markets_column .icon.commodities.active {
-              background: url("../images/pages/trade/assets/ic-commodities-active.svg") no-repeat;
-              background-size: contain; }
           .markets .markets_dropdown .markets_view .markets_column .icon.synthetic_index {
             background: url("../images/pages/trade/assets/ic-synthetic_index-normal.svg") no-repeat;
             background-size: contain;
             -webkit-transition: none;
             transition: none; }
-            .markets .markets_dropdown .markets_view .markets_column .icon.synthetic_index.active {
-              background: url("../images/pages/trade/assets/ic-synthetic_index-active.svg") no-repeat;
-              background-size: contain; }
         @media (min-width: 320px) and (max-width: 767px) {
           .markets .markets_dropdown .markets_view .markets_column .desktop {
             display: none; }
@@ -1846,11 +1845,10 @@ a.previous-wrapper {
           .markets .markets_dropdown .markets_view .list .market .market_name {
             font-size: 18px;
             padding: 10px 0;
-            font-weight: 400;
+            font-weight: bold;
             -webkit-box-flex: 1;
                 -ms-flex: 1 0 auto;
                     flex: 1 0 auto;
-            color: #1c5ae3;
             -webkit-transition: none;
             transition: none; }
             @media (min-width: 320px) and (max-width: 767px) {
@@ -1858,7 +1856,7 @@ a.previous-wrapper {
                 font-size: 20px; } }
             .markets .markets_dropdown .markets_view .list .market .market_name.sticky {
               position: absolute;
-              width: 431px;
+              width: 70%;
               top: 60px;
               background: #ffffff; }
               @media (max-width: 767px) {
@@ -1886,7 +1884,7 @@ a.previous-wrapper {
                   -ms-flex: 1 0 auto;
                       flex: 1 0 auto;
               font-weight: 300;
-              color: #ff9933; }
+              color: #999999; }
               @media (min-width: 320px) and (max-width: 767px) {
                 .markets .markets_dropdown .markets_view .list .market .submarket .submarket_name {
                   font-size: 14px; } }
@@ -1905,7 +1903,7 @@ a.previous-wrapper {
                       flex: 1 0 auto; }
               .markets .markets_dropdown .markets_view .list .market .submarket .symbols .symbol_name {
                 padding: 5px;
-                margin: 10px 0 5px 5px;
+                margin: 10px 5px 5px 0;
                 line-height: 18px;
                 cursor: pointer;
                 width: 162px;
@@ -1917,22 +1915,21 @@ a.previous-wrapper {
                   .markets .markets_dropdown .markets_view .list .market .submarket .symbols .symbol_name {
                     width: 200px;
                     font-size: 16px; } }
-                .markets .markets_dropdown .markets_view .list .market .submarket .symbols .symbol_name:hover {
-                  background: #dedede; }
+                .markets .markets_dropdown .markets_view .list .market .submarket .symbols .symbol_name:not(.active):hover {
+                  background: #e6e9e9; }
                 .markets .markets_dropdown .markets_view .list .market .submarket .symbols .symbol_name.active {
-                  background: #1c5ae3;
-                  color: #ffffff; }
+                  background: #d6dadb;
+                  font-weight: bold; }
                   @media (min-width: 320px) and (max-width: 767px) {
                     .markets .markets_dropdown .markets_view .list .market .submarket .symbols .symbol_name.active {
-                      background: #1c5ae3;
-                      color: #ffffff;
-                      font-weight: normal;
+                      background: #d6dadb;
+                      font-weight: bold;
                       padding-left: 5px; } }
 
 .contracts {
   position: relative; }
   .contracts .contract_current {
-    border: 1px solid #dedede;
+    border: 1px solid #d6dadb;
     border-radius: 4px;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1946,14 +1943,15 @@ a.previous-wrapper {
     text-align: left;
     cursor: pointer; }
     .contracts .contract_current:hover {
-      border: 1px solid #1c5ae3; }
+      border: 1px solid #999999; }
       .contracts .contract_current:hover.disabled {
         border: 1px solid #dedede;
         cursor: not-allowed; }
     .contracts .contract_current .type {
       font-size: 14px;
       font-weight: 400;
-      margin: 5px 0; }
+      margin: 5px 0;
+      color: #999999; }
     .contracts .contract_current .contract {
       font-size: 16px;
       font-weight: 600;
@@ -1962,10 +1960,10 @@ a.previous-wrapper {
     position: absolute;
     top: 0;
     background: #ffffff;
-    border: 1px solid #dedede;
+    border: 1px solid #d6dadb;
     border-radius: 4px;
-    -webkit-box-shadow: 0 0 2px 1px #dedede;
-            box-shadow: 0 0 2px 1px #dedede;
+    -webkit-box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.08), 0 0 16px 0 rgba(0, 0, 0, 0.08);
+            box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.08), 0 0 16px 0 rgba(0, 0, 0, 0.08);
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -2052,7 +2050,7 @@ a.previous-wrapper {
         font-size: 12px;
         font-weight: 300;
         padding: 0 0 10px;
-        color: #ff9933; }
+        color: #999999; }
         @media (max-width: 767px) {
           .contracts .contracts_dropdown .contract .contract_type {
             font-size: 14px; } }
@@ -2064,16 +2062,16 @@ a.previous-wrapper {
         .contracts .contracts_dropdown .contract .contract_subtypes .sub {
           padding: 5px 0 5px 5px;
           margin-bottom: 10px;
-          cursor: pointer; }
+          cursor: pointer;
+          line-height: normal; }
           .contracts .contracts_dropdown .contract .contract_subtypes .sub:hover {
-            background: #dedede; }
+            background: #e6e9e9; }
           .contracts .contracts_dropdown .contract .contract_subtypes .sub.active {
-            background: #1c5ae3;
-            color: #ffffff; }
+            background: #d6dadb;
+            font-weight: bold; }
             @media (min-width: 320px) and (max-width: 767px) {
               .contracts .contracts_dropdown .contract .contract_subtypes .sub.active {
-                background: #1c5ae3;
-                color: #ffffff;
+                background: #d6dadb;
                 padding: 5px;
                 margin: 0 0 10px;
-                font-weight: normal; } }
+                font-weight: bold; } }

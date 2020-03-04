@@ -264,7 +264,8 @@ body {
   min-height: 100%;
   position: relative;
   background: repeat-x bottom;
-  overflow-x: hidden; }
+  overflow-x: hidden;
+  font-family: "IBM Plex Sans", sans-serif !important; }
   body .ui-widget {
     font-size: 1rem; }
   body .mm-page {
@@ -1425,7 +1426,7 @@ body .header {
       transition: background-color 0.3s;
       cursor: pointer;
       font-size: 1rem;
-      color: var(--text-general);
+      color: var(--text-general) !important;
       font-weight: 300;
       text-transform: none;
       text-align: left;
@@ -1531,7 +1532,7 @@ body .header {
     height: 100%;
     width: 100%;
     background: var(--overlay-outside-dialog);
-    z-index: 99;
+    z-index: 99999;
     top: 51px;
     display: none; }
     body .header .platform__dropdown--show {
@@ -1553,7 +1554,6 @@ body .header {
     border-radius: 8px;
     margin: 24px 16px;
     padding: 24px 16px;
-    cursor: pointer;
     -ms-flex-preferred-size: 100%;
         flex-basis: 100%;
     width: 302px; }
@@ -1565,7 +1565,8 @@ body .header {
       width: 35px;
       height: 35px; }
     body .header .platform__list-item-text {
-      margin-left: 15px; }
+      margin-left: 15px;
+      font-weight: normal; }
     body .header .platform__list-item-name {
       font-size: 1rem;
       font-weight: 700;

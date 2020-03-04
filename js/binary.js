@@ -10218,7 +10218,7 @@ var Client = function () {
         // const secondary_bg_color    = 'secondary-bg-color';
 
         if (ClientBase.isLoggedIn()) {
-            BinarySocket.wait('authorize', 'website_status', 'get_account_status').then(function () {
+            BinarySocket.wait('authorize', 'website_status', 'get_account_status', 'balance').then(function () {
                 // const client_logged_in = getElementById('client-logged-in');
                 // client_logged_in.classList.add('gr-centered');
 
@@ -10603,9 +10603,9 @@ var header_icon_base_path = '/images/pages/header/';
 var Header = function () {
     var onLoad = function onLoad() {
         populateAccountsList();
+        bindPlatform();
         bindClick();
         bindSvg();
-        bindPlatform();
         if (Client.isLoggedIn()) {
             displayAccountStatus();
         }
@@ -10635,32 +10635,39 @@ var Header = function () {
 
     var bindPlatform = function bindPlatform() {
         var platform_list = getElementById('platform__list');
+        if (platform_list.hasChildNodes()) {
+            return;
+        }
         var platforms = {
             dtrader: {
                 name: 'DTrader',
                 desc: 'Start trading now with a powerful, yet easy-to-use platform',
+                link: 'https://deriv.app',
                 icon: 'ic-brand-dtrader.svg'
             },
             dbot: {
                 name: 'DBot',
                 desc: 'Automate your trading ideas without coding',
+                link: 'https://deriv.app/bot',
                 icon: 'ic-brand-dbot.svg'
             },
             dmt5: {
                 name: 'DMT5',
                 desc: 'Trade with platform of choice for professionals',
+                link: 'https://deriv.app/mt5',
                 icon: 'ic-brand-dmt5.svg'
             },
-            dsmarttrader: {
+            smarttrader: {
                 name: 'SmartTrader',
                 desc: 'Trade in the world\'s financial markets with a simple online platform',
+                link: '#',
                 icon: 'logo_smart_trader.svg'
             }
         };
 
         Object.keys(platforms).forEach(function (key) {
             var platform = platforms[key];
-            var platform_div = createElement('div', { class: 'platform__list-item ' + (key === 'dsmarttrader' ? 'platform__list-item--active' : '') });
+            var platform_div = createElement('a', { class: 'platform__list-item ' + (key === 'smarttrader' ? 'platform__list-item--active' : ''), href: platform.link });
             var platform_icon = createElement('img', { src: '' + Url.urlForStatic('' + header_icon_base_path + platform.icon), class: 'platform__list-item-icon' });
             var platform_text_container = createElement('div', { class: 'platform__list-item-text ' });
             var platform_name = createElement('div', { text: platform.name, class: 'platform__list-item-name' });
@@ -10733,6 +10740,12 @@ var Header = function () {
                 body.classList.remove('stop-scrolling');
             }
         };
+
+        applyToAllElements('.platform__list-item', function (el) {
+            el.addEventListener('click', function () {
+                showPlatformSwitcher(false);
+            });
+        });
 
         platform_switcher.addEventListener('click', function () {
             if (platform_dropdown.classList.contains('platform__dropdown--show')) {
@@ -10807,12 +10820,12 @@ var Header = function () {
                         // applyToAllElements('.account-type', (el) => { elementInnerHtml(el, localized_type); });
                         // applyToAllElements('.account-id', (el) => { elementInnerHtml(el, loginid); });
                         applyToAllElements('#header__acc-icon', function (el) {
-                            el.src = '' + header_icon_base_path + (is_real ? icon : 'ic-currency-virtual.svg');
+                            el.src = '' + Url.urlForStatic('' + header_icon_base_path + (is_real ? icon : 'ic-currency-virtual.svg'));
                         });
                     }
 
                     var account = createElement('div', { class: 'account__switcher-acc ' + (is_current ? 'account__switcher-acc--active' : ''), 'data-value': loginid });
-                    var account_icon = createElement('img', { src: '' + header_icon_base_path + icon });
+                    var account_icon = createElement('img', { src: '' + Url.urlForStatic('' + header_icon_base_path + icon) });
                     var account_detail = createElement('span', { text: currency });
                     var account_loginid = createElement('div', { class: 'account__switcher-loginid', text: loginid });
                     var account_balance = createElement('span', { class: 'account__switcher-balance account__switcher-balance-' + (is_real ? currency : 'virtual') });
@@ -10991,6 +11004,7 @@ var Header = function () {
         var msg_code = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
 
         var msg_notification = getElementById('msg_notification');
+        var platform_switcher = getElementById('platform__dropdown');
         if (msg_notification.getAttribute('data-code') === 'STORAGE_NOT_SUPPORTED') return;
 
         msg_notification.html(message);
@@ -11004,10 +11018,14 @@ var Header = function () {
                 if (is_error) msg_notification.classList.add('error');
             });
         }
+
+        // Removed once notification feature is implemented
+        platform_switcher.style.top = 51 + 26 + 'px';
     };
 
     var hideNotification = function hideNotification(msg_code) {
         var msg_notification = getElementById('msg_notification');
+        var platform_switcher = getElementById('platform__dropdown');
         if (/^(STORAGE_NOT_SUPPORTED|MFSA_MESSAGE)$/.test(msg_notification.getAttribute('data-code')) || msg_code && msg_notification.getAttribute('data-code') !== msg_code) {
             return;
         }
@@ -11019,6 +11037,9 @@ var Header = function () {
                 msg_notification.removeAttribute('data-message data-code');
             });
         }
+
+        // Removed once notification feature is implemented
+        platform_switcher.style.top = '51px';
     };
 
     var displayAccountStatus = function displayAccountStatus() {
@@ -27358,12 +27379,11 @@ __webpack_require__(/*! jquery.scrollto */ "./node_modules/jquery.scrollto/jquer
 var BinaryLoader = __webpack_require__(/*! ./app/base/binary_loader */ "./src/javascript/app/base/binary_loader.js");
 
 document.addEventListener('DOMContentLoaded', BinaryLoader.init);
-$(window).on('pageshow', function (e) {
-    // Safari doesn't fire load event when using back button
-    if (e.originalEvent.persisted) {
-        BinaryLoader.init();
+window.onpageshow = function (event) {
+    if (event.persisted) {
+        window.location.reload();
     }
-});
+};
 
 /***/ }),
 
