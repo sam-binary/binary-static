@@ -310,6 +310,7 @@ var ClientBase = function () {
 
         if (key === 'loginid' && value !== current_loginid) {
             LocalStore.set('active_loginid', value);
+            syncWithDerivApp(value, client_object);
             current_loginid = value;
         } else {
             if (!(loginid in client_object)) {
@@ -317,6 +318,7 @@ var ClientBase = function () {
             }
             client_object[loginid][key] = value;
             LocalStore.setObject(storage_key, client_object);
+            syncWithDerivApp(loginid, client_object);
         }
     };
 
@@ -451,23 +453,6 @@ var ClientBase = function () {
     var getAccountTitle = function getAccountTitle(loginid) {
         var types_map = TypesMapConfig.get();
         return types_map[getAccountType(loginid)] || types_map.default;
-    };
-
-    var getAccountIcon = function getAccountIcon(currency) {
-        switch (currency) {
-            case 'USD':
-                return 'ic-currency-usd.svg';
-            case 'BTC':
-                return 'ic-currency-btc.svg';
-            case 'ETH':
-                return 'ic-currency-eth.svg';
-            case 'LTC':
-                return 'ic-currency-ltc.svg';
-            case 'UST':
-                return 'ic-currency-ust.svg';
-            default:
-                return '';
-        }
     };
 
     var responseAuthorize = function responseAuthorize(response) {
@@ -683,6 +668,30 @@ var ClientBase = function () {
         return is_current ? currency && !get('is_virtual') && has_account_criteria && !isCryptocurrency(currency) : has_account_criteria;
     };
 
+    var syncWithDerivApp = function syncWithDerivApp(active_loginid, client_accounts) {
+        var iframe_window = document.getElementById('localstorage-sync');
+        if (iframe_window) {
+            var origin = void 0;
+            if (/^smarttrader-staging\.deriv\.app$/i.test(window.location.hostname)) {
+                origin = 'https://staging.deriv.app';
+            } else if (/^smarttrader\.deriv\.app$/i.test(window.location.hostname)) {
+                origin = 'https://deriv.app';
+            } else {
+                return;
+            }
+
+            // Keep client.accounts in sync (in case user wasn't logged in).
+            iframe_window.contentWindow.postMessage({
+                key: 'client.accounts',
+                value: JSON.stringify(client_accounts)
+            }, origin);
+            iframe_window.contentWindow.postMessage({
+                key: 'active_loginid',
+                value: active_loginid
+            }, origin);
+        }
+    };
+
     return {
         init: init,
         isLoggedIn: isLoggedIn,
@@ -700,7 +709,6 @@ var ClientBase = function () {
         hasCurrencyType: hasCurrencyType,
         hasOnlyCurrencyType: hasOnlyCurrencyType,
         getAccountTitle: getAccountTitle,
-        getAccountIcon: getAccountIcon,
         responseAuthorize: responseAuthorize,
         shouldAcceptTnc: shouldAcceptTnc,
         clearAllAccounts: clearAllAccounts,
@@ -10587,7 +10595,6 @@ var GTM = __webpack_require__(/*! ../../_common/base/gtm */ "./src/javascript/_c
 var Login = __webpack_require__(/*! ../../_common/base/login */ "./src/javascript/_common/base/login.js");
 var SocketCache = __webpack_require__(/*! ../../_common/base/socket_cache */ "./src/javascript/_common/base/socket_cache.js");
 var elementInnerHtml = __webpack_require__(/*! ../../_common/common_functions */ "./src/javascript/_common/common_functions.js").elementInnerHtml;
-var elementTextContent = __webpack_require__(/*! ../../_common/common_functions */ "./src/javascript/_common/common_functions.js").elementTextContent;
 var getElementById = __webpack_require__(/*! ../../_common/common_functions */ "./src/javascript/_common/common_functions.js").getElementById;
 var localize = __webpack_require__(/*! ../../_common/localize */ "./src/javascript/_common/localize.js").localize;
 var localizeKeepPlaceholders = __webpack_require__(/*! ../../_common/localize */ "./src/javascript/_common/localize.js").localizeKeepPlaceholders;
@@ -10613,6 +10620,7 @@ var Header = function () {
 
     var bindSvg = function bindSvg() {
         var logo = getElementById('logo');
+        var add = getElementById('add_icon');
         var reports = getElementById('reports_icon');
         var cashier = getElementById('cashier_icon');
         var account = getElementById('header__account-settings');
@@ -10631,6 +10639,7 @@ var Header = function () {
         cashier.src = Url.urlForStatic(header_icon_base_path + 'ic-cashier.svg');
         account.src = Url.urlForStatic(header_icon_base_path + 'ic-user-outline.svg');
         logout.src = Url.urlForStatic(header_icon_base_path + 'ic-logout.svg');
+        add.src = Url.urlForStatic(header_icon_base_path + 'ic-add-circle.svg');
     };
 
     var bindPlatform = function bindPlatform() {
@@ -10812,7 +10821,7 @@ var Header = function () {
                     var is_real = !Client.getAccountType(loginid); // this function only returns virtual/gaming/financial types
                     var currency = Client.get('currency', loginid);
                     // const localized_type = localize('[_1] Account', is_real && currency ? currency : account_title);
-                    var icon = Client.getAccountIcon(currency);
+                    var icon = '' + Url.urlForStatic(header_icon_base_path + 'ic-currency-' + (is_real ? currency.toLowerCase() : 'virtual') + '.svg');
                     var is_current = loginid === Client.get('loginid');
 
                     if (is_current) {
@@ -10820,13 +10829,13 @@ var Header = function () {
                         // applyToAllElements('.account-type', (el) => { elementInnerHtml(el, localized_type); });
                         // applyToAllElements('.account-id', (el) => { elementInnerHtml(el, loginid); });
                         applyToAllElements('#header__acc-icon', function (el) {
-                            el.src = '' + Url.urlForStatic('' + header_icon_base_path + (is_real ? icon : 'ic-currency-virtual.svg'));
+                            el.src = icon;
                         });
                     }
 
                     var account = createElement('div', { class: 'account__switcher-acc ' + (is_current ? 'account__switcher-acc--active' : ''), 'data-value': loginid });
-                    var account_icon = createElement('img', { src: '' + Url.urlForStatic('' + header_icon_base_path + icon) });
-                    var account_detail = createElement('span', { text: currency });
+                    var account_icon = createElement('img', { src: icon });
+                    var account_detail = createElement('span', { text: is_real ? currency : 'Demo' });
                     var account_loginid = createElement('div', { class: 'account__switcher-loginid', text: loginid });
                     var account_balance = createElement('span', { class: 'account__switcher-balance account__switcher-balance-' + (is_real ? currency : 'virtual') });
 
@@ -10849,7 +10858,7 @@ var Header = function () {
                     // loginid_select.appendChild(link).appendChild(createElement('div', { class: 'separator-line-thin-gray' }));
                 }
                 applyToAllElements('#account__switcher-real-list', function (el) {
-                    el.html(loginid_real_select.innerHTML);
+                    el.insertBefore(loginid_real_select, el.firstChild);
                     applyToAllElements('div.account__switcher-acc', function (ele) {
                         ele.removeEventListener('click', loginIDOnClick);
                         ele.addEventListener('click', loginIDOnClick);
@@ -10857,7 +10866,7 @@ var Header = function () {
                     bindAccordion('#account__switcher-accordion-real');
                 });
                 applyToAllElements('#account__switcher-demo-list', function (el) {
-                    el.html(loginid_demo_select.innerHTML);
+                    el.insertBefore(loginid_demo_select, el.firstChild);
                     applyToAllElements('div.account__switcher-acc', function (ele) {
                         ele.removeEventListener('click', loginIDOnClick);
                         ele.addEventListener('click', loginIDOnClick);
@@ -10985,19 +10994,19 @@ var Header = function () {
 
     var showHideNewAccount = function showHideNewAccount(upgrade_info) {
         if (upgrade_info.can_upgrade || upgrade_info.can_open_multi) {
-            changeAccountsText(1, localize('Create Account'));
+            $('#account__switcher-add').addClass('account__switcher-add--active');
+            // changeAccountsText(1, localize('Create Account'));
         } else {
-            changeAccountsText(0, localize('Accounts List'));
+            $('#account__switcher-add').removeClass('account__switcher-add--active');
+            // changeAccountsText(0, localize('Accounts List'));
         }
     };
 
-    var changeAccountsText = function changeAccountsText(add_new_style, localized_text) {
-        var user_accounts = getElementById('user_accounts');
-        user_accounts.classList[add_new_style ? 'add' : 'remove']('create_new_account');
-        applyToAllElements('li', function (el) {
-            elementTextContent(el, localized_text);
-        }, '', user_accounts);
-    };
+    // const changeAccountsText = (add_new_style, localized_text) => {
+    //     const user_accounts = getElementById('user_accounts');
+    //     user_accounts.classList[add_new_style ? 'add' : 'remove']('create_new_account');
+    //     applyToAllElements('li', (el) => { elementTextContent(el, localized_text); }, '', user_accounts);
+    // };
 
     var displayNotification = function displayNotification(message) {
         var is_error = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
@@ -23343,7 +23352,7 @@ var TradePage = function () {
                 }
             }
             Client.activateByClientType('trading_socket_container');
-            BinarySocket.send({ payout_currencies: 1 }).then(function () {
+            BinarySocket.send({ payout_currencies: 1 }, { forced: true }).then(function () {
                 displayCurrencies();
                 Dropdown('#currency', true);
                 if (document.getElementById('multiplier_currency').tagName === 'SELECT') {
@@ -27245,6 +27254,7 @@ module.exports = ViewPopupUI;
  */
 var domain_app_ids = { // these domains also being used in '_common/url.js' as supported "production domains"
     'binary.com': 1,
+    'smarttrader.deriv.app': 22168,
     'binary.me': 15284,
     'deriv.com': 16929
 };
@@ -27278,6 +27288,9 @@ var getAppId = function getAppId() {
     } else if (/staging\.binary\.com/i.test(window.location.hostname)) {
         window.localStorage.removeItem('config.default_app_id');
         app_id = is_new_app ? 16303 : 1098;
+    } else if (/smarttrader-staging\.deriv\.app/i.test(window.location.hostname)) {
+        window.localStorage.removeItem('config.default_app_id');
+        app_id = 22169;
     } else if (user_app_id.length) {
         window.localStorage.setItem('config.default_app_id', user_app_id); // it's being used in endpoint chrome extension - please do not remove
         app_id = user_app_id;
@@ -27287,7 +27300,7 @@ var getAppId = function getAppId() {
         window.localStorage.removeItem('config.default_app_id');
         var current_domain = getCurrentBinaryDomain();
         // TODO: remove is_new_app && deriv.com check when repos are split
-        app_id = is_new_app && current_domain !== 'deriv.com' ? 15265 : domain_app_ids[current_domain] || 1;
+        app_id = is_new_app && current_domain !== 'deriv.com' ? 22168 : domain_app_ids[current_domain] || 22168;
     }
     return app_id;
 };
