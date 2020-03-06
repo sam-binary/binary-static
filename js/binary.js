@@ -11089,9 +11089,9 @@ var Header = function () {
                 return template(string, [].concat(_toConsumableArray(additional)));
             };
             var hasStatus = function hasStatus(string) {
-                return status.findIndex(function (s) {
+                return status && (status.findIndex(function (s) {
                     return s === string;
-                }) < 0 ? Boolean(false) : Boolean(true);
+                }) < 0 ? Boolean(false) : Boolean(true));
             };
             var hasVerification = function hasVerification(string) {
                 var _authentication = authentication,
