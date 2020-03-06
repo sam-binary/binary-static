@@ -26208,11 +26208,15 @@ var updateTotal = function updateTotal() {
     var total = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : Client.getTotalBalance();
 
     var is_demo_tab = $('#acc_tabs').tabs('option', 'active') === 1;
-    var virtual_total = $('.account__switcher-balance-virtual')[0].textContent;
+    var virtual_total = $('.account__switcher-balance-virtual')[0];
     var total_amount = $('#account__switcher-total-balance-amount');
 
+    if (!virtual_total || !total_amount) {
+        return;
+    }
+
     if (is_demo_tab) {
-        total_amount.html(formatMoney('USD', virtual_total)).addClass('account__switcher-balance-virtual');
+        total_amount.html(formatMoney('USD', virtual_total.textContent)).addClass('account__switcher-balance-virtual');
     } else {
         total_amount.html(formatMoney('USD', total)).removeClass('account__switcher-balance-virtual');
     }
