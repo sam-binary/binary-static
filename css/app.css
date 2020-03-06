@@ -1721,14 +1721,14 @@ a.previous-wrapper {
             -ms-flex: 1 0 auto;
                 flex: 1 0 auto;
         min-width: 150px;
-        background: #ffffff;
-        border-right: 1px solid #d6dadb;
+        background: var(--general-section-1);
         border-bottom-left-radius: 4px; }
         @media (min-width: 320px) and (max-width: 767px) {
           .markets .markets_dropdown .markets_view .markets_column {
             border-right: 0; } }
         .markets .markets_dropdown .markets_view .markets_column .desktop .market {
           font-size: 12px;
+          font-weight: 300;
           padding: 8px 10px;
           cursor: pointer;
           -webkit-transition: background 0.2s 0.1s;
@@ -1744,11 +1744,11 @@ a.previous-wrapper {
               -ms-flex-align: center;
                   align-items: center; }
           .markets .markets_dropdown .markets_view .markets_column .desktop .market:not(.active):hover {
-            background-color: #e6e9e9; }
+            background-color: var(--general-hover); }
           .markets .markets_dropdown .markets_view .markets_column .desktop .market.active {
             text-decoration: none;
             font-weight: 600;
-            border-right: 2px solid #ff444f; }
+            background-color: var(--general-main-1); }
           .markets .markets_dropdown .markets_view .markets_column .desktop .market span:nth-of-type(2) {
             margin-left: 10px; }
         .markets .markets_dropdown .markets_view .markets_column .mobile {
@@ -1908,7 +1908,7 @@ a.previous-wrapper {
                 cursor: pointer;
                 width: 162px;
                 font-size: 14px;
-                font-weight: 400;
+                font-weight: 300;
                 -webkit-transition: all 0.2s;
                 transition: all 0.2s; }
                 @media (min-width: 320px) and (max-width: 767px) {
@@ -2055,7 +2055,8 @@ a.previous-wrapper {
           .contracts .contracts_dropdown .contract .contract_type {
             font-size: 14px; } }
       .contracts .contracts_dropdown .contract .contract_subtypes {
-        font-size: 14px; }
+        font-size: 14px;
+        font-weight: 300; }
         @media (max-width: 767px) {
           .contracts .contracts_dropdown .contract .contract_subtypes {
             font-size: 16px; } }

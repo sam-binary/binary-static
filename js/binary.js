@@ -18188,6 +18188,31 @@ module.exports = Defaults;
 
 /***/ }),
 
+/***/ "./src/javascript/app/pages/trade/deriv-iframe.js":
+/*!********************************************************!*\
+  !*** ./src/javascript/app/pages/trade/deriv-iframe.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var getIFrameUrl = function getIFrameUrl() {
+    if (/^smarttrader-staging\.deriv\.app$/i.test(window.location.hostname)) {
+        return 'https://staging.deriv.app/localstorage-sync.html';
+    } else if (/^smarttrader\.deriv\.app$/i.test(window.location.hostname)) {
+        return 'https://deriv.app/localstorage-sync.html';
+    }
+    return null;
+};
+
+module.exports = {
+    getIFrameUrl: getIFrameUrl
+};
+
+/***/ }),
+
 /***/ "./src/javascript/app/pages/trade/digit_ticker.js":
 /*!********************************************************!*\
   !*** ./src/javascript/app/pages/trade/digit_ticker.js ***!
@@ -23324,6 +23349,7 @@ var Header = __webpack_require__(/*! ../../base/header */ "./src/javascript/app/
 var BinarySocket = __webpack_require__(/*! ../../base/socket */ "./src/javascript/app/base/socket.js");
 var Guide = __webpack_require__(/*! ../../common/guide */ "./src/javascript/app/common/guide.js");
 var TopUpVirtualPopup = __webpack_require__(/*! ../../pages/user/account/top_up_virtual/pop_up */ "./src/javascript/app/pages/user/account/top_up_virtual/pop_up.js");
+var getIFrameUrl = __webpack_require__(/*! ../../pages/trade/deriv-iframe */ "./src/javascript/app/pages/trade/deriv-iframe.js").getIFrameUrl;
 var State = __webpack_require__(/*! ../../../_common/storage */ "./src/javascript/_common/storage.js").State;
 
 var TradePage = function () {
@@ -23331,6 +23357,13 @@ var TradePage = function () {
     State.remove('is_trading');
 
     var onLoad = function onLoad() {
+        var el_iframe = document.getElementById('localstorage-sync');
+        var iframe_src = getIFrameUrl();
+
+        if (el_iframe && iframe_src) {
+            el_iframe.src = iframe_src;
+        }
+
         BinarySocket.wait('authorize').then(function () {
             init();
         });
