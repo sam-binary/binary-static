@@ -1743,7 +1743,7 @@ a.previous-wrapper {
           -webkit-box-align: center;
               -ms-flex-align: center;
                   align-items: center;
-          border-left: 2px solid var(--general-hover); }
+          border-left: 2px solid var(--general-section-1); }
           .markets .markets_dropdown .markets_view .markets_column .desktop .market:not(.active):hover {
             background-color: var(--general-hover); }
           .markets .markets_dropdown .markets_view .markets_column .desktop .market.active {
