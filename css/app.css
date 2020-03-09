@@ -1731,8 +1731,8 @@ a.previous-wrapper {
           font-weight: 300;
           padding: 8px 10px;
           cursor: pointer;
-          -webkit-transition: background 0.2s 0.1s;
-          transition: background 0.2s 0.1s;
+          -webkit-transition: background-color, border-left;
+          transition: background-color, border-left;
           display: -webkit-box;
           display: -ms-flexbox;
           display: flex;
@@ -1745,7 +1745,10 @@ a.previous-wrapper {
                   align-items: center;
           border-left: 2px solid var(--general-section-1); }
           .markets .markets_dropdown .markets_view .markets_column .desktop .market:not(.active):hover {
-            background-color: var(--general-hover); }
+            background-color: var(--general-hover);
+            border-left: 2px solid var(--general-hover);
+            -webkit-transition: background-color, border-left;
+            transition: background-color, border-left; }
           .markets .markets_dropdown .markets_view .markets_column .desktop .market.active {
             text-decoration: none;
             font-weight: 600;
