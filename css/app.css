@@ -214,11 +214,11 @@
   animation: pulsing 1.5s infinite ease; }
 
 .price_moved_up {
-  background-color: #29abe2;
+  background-color: var(--text-profit-success);
   color: #ffffff; }
 
 .price_moved_down {
-  background-color: #e31c4b;
+  background-color: var(--text-loss-danger);
   color: #ffffff; }
 
 a.close {
@@ -230,10 +230,15 @@ a.close {
   right: 0;
   z-index: 1;
   width: 35px;
-  height: 35px;
-  background: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50' width='14' height='14'%3E%3Cpath fill='white' d='M50,5,45,0,25,20,5,0,0,5,20,25,0,45l5,5L25,30,45,50l5-5L30,25Z'/%3E%3C/svg%3E") no-repeat center; }
-  a.close:hover {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50' width='14' height='14'%3E%3Cpath fill='%23ff9933' d='M50,5,45,0,25,20,5,0,0,5,20,25,0,45l5,5L25,30,45,50l5-5L30,25Z'/%3E%3C/svg%3E"); }
+  height: 35px; }
+  a.close--light-bg {
+    background: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50' width='14' height='14'%3E%3Cpath fill='%23333333' d='M50,5,45,0,25,20,5,0,0,5,20,25,0,45l5,5L25,30,45,50l5-5L30,25Z'/%3E%3C/svg%3E") no-repeat center; }
+    a.close--light-bg:hover {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50' width='14' height='14'%3E%3Cpath fill='black' d='M50,5,45,0,25,20,5,0,0,5,20,25,0,45l5,5L25,30,45,50l5-5L30,25Z'/%3E%3C/svg%3E"); }
+  a.close--dark-bg {
+    background: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50' width='14' height='14'%3E%3Cpath fill='white' d='M50,5,45,0,25,20,5,0,0,5,20,25,0,45l5,5L25,30,45,50l5-5L30,25Z'/%3E%3C/svg%3E") no-repeat center; }
+    a.close--dark-bg:hover {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50' width='14' height='14'%3E%3Cpath fill='%23cccccc' d='M50,5,45,0,25,20,5,0,0,5,20,25,0,45l5,5L25,30,45,50l5-5L30,25Z'/%3E%3C/svg%3E"); }
 
 a.previous-wrapper {
   display: -webkit-box;
@@ -252,10 +257,10 @@ a.previous-wrapper {
     text-decoration: none; }
 
 .profit {
-  color: #2e8836; }
+  color: var(--text-profit-success); }
 
 .loss {
-  color: #e31c4b; }
+  color: var(--text-loss-danger); }
 
 .pending {
   color: #000000;
@@ -286,6 +291,11 @@ a.previous-wrapper {
 #trading_socket_container #notifications_wrapper .notice-msg {
   margin-bottom: 10px; }
 
+.chart-legend-label {
+  margin: 0 10px;
+  font-size: 11px;
+  color: var(--text-prominent); }
+
 .popup_bet_desc {
   padding: 5px 0;
   border: 1px solid #dedede; }
@@ -308,8 +318,7 @@ a.previous-wrapper {
     line-height: 25px; }
 
 .inpage_popup_container {
-  border: 2px solid #1c5ae3;
-  border-top: 1px solid #ffffff;
+  border: 2px solid var(--border-normal);
   background-color: #ffffff; }
   .inpage_popup_container .inpage_popup_content_box {
     border: 0; }
@@ -321,10 +330,13 @@ a.previous-wrapper {
         background-color: rgba(204, 0, 0, 0.1); }
     .inpage_popup_container .inpage_popup_content_box .popup_bet_desc {
       border: 0;
+      border-bottom: 2px solid var(--border-normal);
       padding: 5px;
-      line-height: 20px;
-      background-color: #1c5ae3;
-      color: #ffffff;
+      font-size: 0.8695652174rem;
+      font-weight: bold;
+      line-height: 1.43;
+      background-color: var(--general-section-1);
+      color: var(--text-prominent);
       padding-right: 30px; }
     .inpage_popup_container .inpage_popup_content_box td {
       padding-left: 6%;
@@ -362,7 +374,7 @@ a.previous-wrapper {
             border-right: none; } }
       .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit {
         padding: 0;
-        border-left: 1px solid #44484c; }
+        border-left: 1px solid var(--border-normal); }
         .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table th, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit th {
           line-height: 24px;
           border-bottom: #c2c2c2; }
@@ -370,7 +382,7 @@ a.previous-wrapper {
             .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table th, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit th {
               line-height: 30px; } }
         .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table td, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table td[data-balloon], .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit td, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit td[data-balloon] {
-          border-bottom: 1px solid #f2f2f2;
+          border-bottom: 1px solid var(--border-normal);
           vertical-align: middle; }
         .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table #trade_details_profit_loss, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table #trade_details_total_pnl, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit #trade_details_profit_loss, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit #trade_details_total_pnl {
           font-weight: bold; }
@@ -395,7 +407,7 @@ a.previous-wrapper {
           padding: 3px 10px; }
         .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table #trade_details_entry_spot, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table #trade_details_current_spot, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit #trade_details_entry_spot, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit #trade_details_current_spot {
           line-height: 32px; }
-          .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table #trade_details_entry_spot span, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table #trade_details_current_spot span, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit #trade_details_entry_spot span, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit #trade_details_current_spot span {
+          .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table #trade_details_entry_spot span:not(:last-child), .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table #trade_details_current_spot span:not(:last-child), .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit #trade_details_entry_spot span:not(:last-child), .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit #trade_details_current_spot span:not(:last-child) {
             padding-right: 20px; }
           .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table #trade_details_entry_spot a, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table #trade_details_current_spot a, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit #trade_details_entry_spot a, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit #trade_details_current_spot a {
             margin-bottom: 0; }
@@ -579,71 +591,71 @@ a.previous-wrapper {
         -webkit-transform: scale(1.4, 1.2);
                 transform: scale(1.4, 1.2); } }
   .digit-ticker .peek-box.digit-running .mask {
-    background-color: #454545; }
+    background-color: var(--text-prominent); }
   .digit-ticker .peek-box.digit-running .topright {
-    background-color: #454545; }
+    background-color: var(--text-prominent); }
   .digit-ticker .peek-box.digit-running .topleft {
-    background-color: #454545; }
+    background-color: var(--text-prominent); }
   .digit-ticker .peek-box.digit-running .top {
-    background-color: #454545; }
+    background-color: var(--text-prominent); }
   .digit-ticker .peek-box.digit-running .left {
-    background-color: #454545; }
+    background-color: var(--text-prominent); }
   .digit-ticker .peek-box.digit-running .right {
-    background-color: #454545; }
+    background-color: var(--text-prominent); }
   .digit-ticker .peek-box.digit-running .bottom {
-    background-color: #454545; }
+    background-color: var(--text-prominent); }
   .digit-ticker .peek-box.digit-running .bottomleft {
-    background-color: #454545; }
+    background-color: var(--text-prominent); }
   .digit-ticker .peek-box.digit-running .bottomright {
-    background-color: #454545; }
+    background-color: var(--text-prominent); }
   .digit-ticker .peek-box.digit-running .peek {
-    border: 5px solid #454545; }
+    border: 5px solid var(--text-prominent); }
   .digit-ticker .peek-box.digit-running .mask {
-    border: 1px solid #454545; }
+    border: 1px solid var(--text-prominent); }
   .digit-ticker .peek-box.digit-losing .mask {
-    background-color: #cb0433; }
+    background-color: var(--text-loss-danger); }
   .digit-ticker .peek-box.digit-losing .topright {
-    background-color: #cb0433; }
+    background-color: var(--text-loss-danger); }
   .digit-ticker .peek-box.digit-losing .topleft {
-    background-color: #cb0433; }
+    background-color: var(--text-loss-danger); }
   .digit-ticker .peek-box.digit-losing .top {
-    background-color: #cb0433; }
+    background-color: var(--text-loss-danger); }
   .digit-ticker .peek-box.digit-losing .left {
-    background-color: #cb0433; }
+    background-color: var(--text-loss-danger); }
   .digit-ticker .peek-box.digit-losing .right {
-    background-color: #cb0433; }
+    background-color: var(--text-loss-danger); }
   .digit-ticker .peek-box.digit-losing .bottom {
-    background-color: #cb0433; }
+    background-color: var(--text-loss-danger); }
   .digit-ticker .peek-box.digit-losing .bottomleft {
-    background-color: #cb0433; }
+    background-color: var(--text-loss-danger); }
   .digit-ticker .peek-box.digit-losing .bottomright {
-    background-color: #cb0433; }
+    background-color: var(--text-loss-danger); }
   .digit-ticker .peek-box.digit-losing .peek {
-    border: 5px solid #cb0433; }
+    border: 5px solid var(--text-loss-danger); }
   .digit-ticker .peek-box.digit-losing .mask {
-    border: 1px solid #cb0433; }
+    border: 1px solid var(--text-loss-danger); }
   .digit-ticker .peek-box.digit-winning .mask {
-    background-color: #077453; }
+    background-color: var(--text-profit-success); }
   .digit-ticker .peek-box.digit-winning .topright {
-    background-color: #077453; }
+    background-color: var(--text-profit-success); }
   .digit-ticker .peek-box.digit-winning .topleft {
-    background-color: #077453; }
+    background-color: var(--text-profit-success); }
   .digit-ticker .peek-box.digit-winning .top {
-    background-color: #077453; }
+    background-color: var(--text-profit-success); }
   .digit-ticker .peek-box.digit-winning .left {
-    background-color: #077453; }
+    background-color: var(--text-profit-success); }
   .digit-ticker .peek-box.digit-winning .right {
-    background-color: #077453; }
+    background-color: var(--text-profit-success); }
   .digit-ticker .peek-box.digit-winning .bottom {
-    background-color: #077453; }
+    background-color: var(--text-profit-success); }
   .digit-ticker .peek-box.digit-winning .bottomleft {
-    background-color: #077453; }
+    background-color: var(--text-profit-success); }
   .digit-ticker .peek-box.digit-winning .bottomright {
-    background-color: #077453; }
+    background-color: var(--text-profit-success); }
   .digit-ticker .peek-box.digit-winning .peek {
-    border: 5px solid #077453; }
+    border: 5px solid var(--text-profit-success); }
   .digit-ticker .peek-box.digit-winning .mask {
-    border: 1px solid #077453; }
+    border: 1px solid var(--text-profit-success); }
   .digit-ticker .digits {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -664,13 +676,12 @@ a.previous-wrapper {
       .digit-ticker .digits {
         min-width: 280px; } }
   .digit-ticker .digit.digit-winning {
-    background-color: #9ddfcb;
-    color: #67b9a0;
-    border: none; }
+    background-color: #d0ebea;
+    color: #7dc2c1; }
   .digit-ticker .digit.digit-lost {
-    color: #cb0433; }
+    color: var(--text-loss-danger); }
   .digit-ticker .digit.digit-won {
-    color: #077453; }
+    color: var(--text-profit-success); }
   .digit-ticker .digit {
     height: 36px;
     width: 36px;
@@ -691,10 +702,10 @@ a.previous-wrapper {
         -ms-flex-pack: center;
             justify-content: center;
     font-weight: bold;
-    border-right: 1px solid #dedede;
-    border-top: 1px solid #dedede;
-    border-bottom: 1px solid #dedede;
-    color: #c2c2c2; }
+    border-right: 1px solid var(--border-normal);
+    border-top: 1px solid var(--border-normal);
+    border-bottom: 1px solid var(--border-normal);
+    color: var(--border-normal); }
     @media screen and (max-width: 480px) {
       .digit-ticker .digit {
         height: 28px;
@@ -785,6 +796,37 @@ a.previous-wrapper {
   to {
     opacity: 1; } }
 
+[data-balloon]:before {
+  font-size: 0.75rem;
+  text-align: left;
+  padding: 12px 8px;
+  max-width: 262px;
+  border-radius: 4px;
+  background: var(--general-active);
+  color: var(--text-prominent);
+  content: attr(data-balloon);
+  margin-bottom: 11px;
+  -webkit-box-shadow: none;
+          box-shadow: none; }
+
+[data-balloon]:after {
+  background: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36px' height='12px'%3E%3Cpath fill='%23d6dadb' transform='rotate(0)' d='M2.658,0.000 C-13.615,0.000 50.938,0.000 34.662,0.000 C28.662,0.000 23.035,12.002 18.660,12.002 C14.285,12.002 8.594,0.000 2.658,0.000 Z'/%3E%3C/svg%3E") no-repeat;
+  background-size: 100% auto;
+  height: 6px;
+  width: 18px;
+  content: '';
+  margin-bottom: 6px; }
+
+[data-balloon]:before, [data-balloon]:after {
+  opacity: 0;
+  -webkit-transition: opacity ease 0.2s;
+  transition: opacity ease 0.2s;
+  -webkit-transform: translate(-50%, 0);
+          transform: translate(-50%, 0); }
+
+[data-balloon]:hover:before, [data-balloon]:hover:after {
+  opacity: 1; }
+
 #trading_init_progress {
   cursor: pointer;
   /*background-image: url('../images/pages/binary-symbol-logo.png');
@@ -799,6 +841,7 @@ a.previous-wrapper {
   z-index: 9999; }
 
 #trading_socket_container {
+  color: var(--text-prominent);
   font-size: 1rem;
   position: relative;
   opacity: 0; }
@@ -831,19 +874,40 @@ a.previous-wrapper {
             animation: fade 1s;
     -webkit-animation-fill-mode: forwards;
             animation-fill-mode: forwards; }
-  #trading_socket_container select, #trading_socket_container input {
+  #trading_socket_container select, #trading_socket_container input, #trading_socket_container div.select-dropdown {
     border-radius: 5px;
     -webkit-box-sizing: border-box;
             box-sizing: border-box;
-    height: 28px; }
-  #trading_socket_container div.select-dropdown {
-    line-height: 1.4em; }
+    height: 28px;
+    border: solid 1px var(--border-normal); }
+  #trading_socket_container div.select-dropdown:after {
+    content: '';
+    height: 16px;
+    width: 16px;
+    -webkit-transform-origin: initial;
+            transform-origin: initial;
+    background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2.836 10.87C2.632 11.056 2.316 11.04 2.13 10.836C1.944 10.632 1.96 10.316 2.164 10.13L7.664 5.13C7.854 4.957 8.146 4.957 8.336 5.13L13.836 10.13C14.041 10.316 14.056 10.632 13.87 10.836C13.684 11.041 13.368 11.056 13.164 10.87L8 6.176L2.836 10.87Z' fill='%23333333'/%3E%3C/svg%3E%0A"); }
+  #trading_socket_container ul.select-options {
+    -webkit-box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.08), 0 0 16px 0 rgba(0, 0, 0, 0.08);
+            box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.08), 0 0 16px 0 rgba(0, 0, 0, 0.08); }
+    #trading_socket_container ul.select-options .select-items {
+      padding: 6px 16px;
+      font-size: 14px; }
+      #trading_socket_container ul.select-options .select-items:hover {
+        background-color: var(--general-hover); }
+    #trading_socket_container ul.select-options .select-items.selected {
+      font-weight: bold;
+      color: #000000;
+      background-color: var(--general-active); }
   #trading_socket_container label {
     line-height: 28px; }
     #trading_socket_container label[for=digit_underlying], #trading_socket_container label[for=tick_count] {
       margin-right: 0.5rem; }
   #trading_socket_container #contract_market_form_container {
-    height: 28px; }
+    height: 28px;
+    font-family: 'IBM Plex Sans';
+    font-size: 0.75rem;
+    font-weight: 100; }
     #trading_socket_container #contract_market_form_container .tm-li {
       height: 28px;
       vertical-align: top; }
@@ -895,7 +959,11 @@ a.previous-wrapper {
           #trading_socket_container #expiry_type_endtime div.select ~ #expiry_time_row input {
             width: 70%; } }
   #trading_socket_container #contract_form_content_wrapper {
-    padding-top: 0.5em; }
+    padding-top: 0.5em;
+    font-family: 'IBM Plex Sans';
+    font-weight: 100;
+    line-height: 1.4em;
+    font-size: 14px; }
   #trading_socket_container #contract_symbol_container {
     padding: 0;
     position: relative;
@@ -985,7 +1053,7 @@ a.previous-wrapper {
     padding-top: 25px;
     position: relative;
     border-radius: 4px;
-    border: 1px solid #dedede;
+    border: solid 1px var(--border-normal);
     -webkit-box-flex: 1;
         -ms-flex: 1 0 auto;
             flex: 1 0 auto; }
@@ -1013,13 +1081,17 @@ a.previous-wrapper {
     padding-top: 2.4em;
     text-align: center; }
     #trading_socket_container .contract_heading.ASIANU {
-      background: url("../images/pages/trade/asian-u_1.svg") no-repeat top center; }
+      background: url("../images/pages/trade/asian-u_1.svg") no-repeat top center;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.ASIAND {
-      background: url("../images/pages/trade/asian-d_1.svg") no-repeat top center; }
+      background: url("../images/pages/trade/asian-d_1.svg") no-repeat top center;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.DIGITDIFF {
-      background: url("../images/pages/trade/differs_1.svg") no-repeat top center; }
+      background: url("../images/pages/trade/differs_1.svg") no-repeat top center;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.DIGITMATCH {
-      background: url("../images/pages/trade/matches_1.svg") no-repeat top center; }
+      background: url("../images/pages/trade/matches_1.svg") no-repeat top center;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.DIGITEVEN {
       background: url("../images/pages/trade/digits_even_1.svg") no-repeat no-repeat top center;
       background-size: 40%; }
@@ -1033,63 +1105,79 @@ a.previous-wrapper {
       background: url("../images/pages/trade/digits_under_1.svg") no-repeat no-repeat top center;
       background-size: 40%; }
     #trading_socket_container .contract_heading.CALL {
-      background: url("../images/pages/trade/rise_1.png") no-repeat top center; }
+      background: url("../images/pages/trade/rise_1.svg") no-repeat top center;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.PUT {
-      background: url("../images/pages/trade/fall_1.png") no-repeat top center; }
+      background: url("../images/pages/trade/fall_1.svg") no-repeat top center;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.CALLE {
-      background: url("../images/pages/trade/rise_1.png") no-repeat top center; }
+      background: url("../images/pages/trade/rise_1.svg") no-repeat top center;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.PUTE {
-      background: url("../images/pages/trade/fall_1.png") no-repeat top center; }
+      background: url("../images/pages/trade/fall_1.svg") no-repeat top center;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.ONETOUCH {
-      background: url("../images/pages/trade/touch_1.png") no-repeat top center; }
+      background: url("../images/pages/trade/touch_1.svg") no-repeat top center;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.NOTOUCH {
-      background: url("../images/pages/trade/no-touch_1.png") no-repeat top center; }
+      background: url("../images/pages/trade/no-touch_1.svg") no-repeat top center;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.RANGE {
-      background: url("../images/pages/trade/stay-in-between_1.png") no-repeat top center; }
+      background: url("../images/pages/trade/stay-in-between_1.svg") no-repeat top center;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.UPORDOWN {
-      background: url("../images/pages/trade/stay-out_1.png") no-repeat top center; }
+      background: url("../images/pages/trade/stay-out_1.svg") no-repeat top center;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.EXPIRYRANGEE {
-      background: url("../images/pages/trade/ends-between_1.png") no-repeat top center; }
+      background: url("../images/pages/trade/ends-between_1.svg") no-repeat top center;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.EXPIRYMISSE {
-      background: url("../images/pages/trade/ends-outside_1.png") no-repeat top center; }
+      background: url("../images/pages/trade/ends-outside_1.svg") no-repeat top center;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.EXPIRYRANGE {
-      background: url("../images/pages/trade/ends-between_1.png") no-repeat top center; }
+      background: url("../images/pages/trade/ends-between_1.svg") no-repeat top center;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.EXPIRYMISS {
-      background: url("../images/pages/trade/ends-outside_1.png") no-repeat top center; }
+      background: url("../images/pages/trade/ends-outside_1.svg") no-repeat top center;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.LBFLOATPUT {
       background: url("../images/pages/trade/low_icon.svg") no-repeat center top;
-      background-size: 50%; }
+      background-size: 40%; }
     #trading_socket_container .contract_heading.LBFLOATCALL {
       background: url("../images/pages/trade/high_icon.svg") no-repeat center top;
-      background-size: 50%; }
+      background-size: 40%; }
     #trading_socket_container .contract_heading.LBHIGHLOW {
       background: url("../images/pages/trade/high_low_icon.svg") no-repeat center top;
-      background-size: 50%; }
+      background-size: 40%; }
     #trading_socket_container .contract_heading.RESETCALL {
       background: url("../images/pages/trade/reset_call.svg") no-repeat center top;
-      background-size: 50%; }
+      background-size: 40%; }
     #trading_socket_container .contract_heading.RESETPUT {
       background: url("../images/pages/trade/reset_put.svg") no-repeat center top;
-      background-size: 50%; }
+      background-size: 40%; }
     #trading_socket_container .contract_heading.CALLSPREAD {
       background: url("../images/pages/trade/call_spread.svg") no-repeat center top;
-      background-size: 50%; }
+      background-size: 40%; }
     #trading_socket_container .contract_heading.PUTSPREAD {
       background: url("../images/pages/trade/put_spread.svg") no-repeat center top;
-      background-size: 50%; }
+      background-size: 40%; }
     #trading_socket_container .contract_heading.RUNHIGH {
-      background: url("../images/pages/trade/run_high.svg") no-repeat center top; }
+      background: url("../images/pages/trade/run_high.svg") no-repeat center top;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.RUNLOW {
-      background: url("../images/pages/trade/run_low.svg") no-repeat center top; }
+      background: url("../images/pages/trade/run_low.svg") no-repeat center top;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.TICKHIGH {
-      background: url("../images/pages/trade/high_tick.svg") no-repeat center top; }
+      background: url("../images/pages/trade/high_tick.svg") no-repeat center top;
+      background-size: 40%; }
     #trading_socket_container .contract_heading.TICKLOW {
-      background: url("../images/pages/trade/low_tick.svg") no-repeat center top; }
+      background: url("../images/pages/trade/low_tick.svg") no-repeat center top;
+      background-size: 40%; }
   #trading_socket_container #contract_prices_container {
     position: relative;
     margin-left: 1em; }
     #trading_socket_container #contract_prices_container .price_container {
-      border: 1px solid #dedede;
+      border: 1px solid var(--border-normal);
       -webkit-box-align: stretch;
           -ms-flex-align: stretch;
               align-items: stretch;
@@ -1117,11 +1205,24 @@ a.previous-wrapper {
         display: inline-flex; }
         #trading_socket_container #contract_prices_container .price_container .contract_purchase .purchase_button {
           cursor: pointer;
-          width: 100%; }
+          width: 100%;
+          color: #ffffff;
+          font-size: 16px;
+          font-weight: 500; }
+        #trading_socket_container #contract_prices_container .price_container .contract_purchase #purchase_button_top, #trading_socket_container #contract_prices_container .price_container .contract_purchase #purchase_button_middle {
+          background-color: var(--text-profit-success); }
+        #trading_socket_container #contract_prices_container .price_container .contract_purchase #purchase_button_bottom {
+          background-color: var(--text-loss-danger); }
+        #trading_socket_container #contract_prices_container .price_container .contract_purchase.button-disabled #purchase_button_top {
+          background-color: rgba(75, 180, 179, 0.64); }
+        #trading_socket_container #contract_prices_container .price_container .contract_purchase.button-disabled #purchase_button_bottom {
+          background-color: rgba(236, 63, 63, 0.64); }
         #trading_socket_container #contract_prices_container .price_container .contract_purchase.button-disabled .purchase_button {
           cursor: auto; }
+    #trading_socket_container #contract_prices_container #contract_purchase_barrier {
+      padding-bottom: 7px; }
     #trading_socket_container #contract_prices_container #contract_purchase_reference {
-      padding-top: 7px; }
+      padding-bottom: 7px; }
     #trading_socket_container #contract_prices_container #confirmation_error {
       padding: 20px;
       font-style: italic;
@@ -1151,7 +1252,7 @@ a.previous-wrapper {
       margin: 10px 15px;
       line-height: 1.4em; }
     #trading_socket_container #contract_prices_container .price_comment, #trading_socket_container #contract_prices_container .contract_error, #trading_socket_container #contract_prices_container #contract_purchase_balance {
-      background-color: #dedede;
+      background-color: var(--general-section-1);
       line-height: 1.5rem;
       font-size: 0.7561436673rem;
       padding: 5px;
@@ -1159,13 +1260,15 @@ a.previous-wrapper {
       -webkit-box-flex: 0;
           -ms-flex: 0 0 auto;
               flex: 0 0 auto; }
+    #trading_socket_container #contract_prices_container .contract_error {
+      background-color: #fff2df !important; }
     #trading_socket_container #contract_prices_container #contract_purchase_balance {
       position: absolute;
       bottom: 0;
       color: #ffffff;
       -webkit-box-sizing: border-box;
               box-sizing: border-box;
-      background-color: #ff9933;
+      background-color: var(--purchase-main-1);
       width: 100%;
       display: -webkit-box;
       display: -ms-flexbox;
@@ -1187,22 +1290,25 @@ a.previous-wrapper {
     #trading_socket_container #contract_prices_container #confirmation_message {
       padding-bottom: 34px; }
       #trading_socket_container #contract_prices_container #confirmation_message div.button {
-        padding-top: 7px; }
-      #trading_socket_container #contract_prices_container #confirmation_message #trade_tick_chart .highcharts-tooltip span {
-        top: 1px !important;
-        left: 2px !important; }
-        #trading_socket_container #contract_prices_container #confirmation_message #trade_tick_chart .highcharts-tooltip span .tooltip-body {
-          background-color: #ffffff;
-          padding: 6px;
-          margin-bottom: -14px;
-          margin-right: -14px; }
+        padding-bottom: 7px; }
+      #trading_socket_container #contract_prices_container #confirmation_message #trade_tick_chart {
+        margin-top: 8px; }
+        #trading_socket_container #contract_prices_container #confirmation_message #trade_tick_chart .highcharts-tooltip span {
+          top: 1px !important;
+          left: 2px !important; }
+          #trading_socket_container #contract_prices_container #confirmation_message #trade_tick_chart .highcharts-tooltip span .tooltip-body {
+            background-color: #ffffff;
+            padding: 6px;
+            margin-bottom: -14px;
+            margin-right: -14px; }
     #trading_socket_container #contract_prices_container #contract_purchase_descr {
-      background-color: #ffffff;
-      border: 2px solid #dedede;
-      margin: 0 10px;
-      padding: 10px;
-      text-align: justify;
-      line-height: 1.4em; }
+      background-color: var(--general-main-1);
+      border: 1px solid var(--border-normal);
+      border-radius: 4px;
+      line-height: normal;
+      margin: 20px 10px;
+      padding: 12px;
+      text-align: left; }
     #trading_socket_container #contract_prices_container #contract_purchase_button {
       margin-top: 10px; }
     #trading_socket_container #contract_prices_container #contract_purchase_profit_list, #trading_socket_container #contract_prices_container #contract_purchase_spots .row {
@@ -1235,9 +1341,9 @@ a.previous-wrapper {
       #trading_socket_container #contract_prices_container #contract_purchase_spots.lost {
         background-color: rgba(204, 0, 0, 0.1); }
     #trading_socket_container #contract_prices_container #contract_purchase_payout {
-      border-right: 1px solid #dedede; }
+      border-right: 1px solid var(--border-normal); }
     #trading_socket_container #contract_prices_container #contract_purchase_profit {
-      border-left: 1px solid #dedede; }
+      border-left: 1px solid var(--border-normal); }
     #trading_socket_container #contract_prices_container .contract_amount, #trading_socket_container #contract_prices_container .contract_payout, #trading_socket_container #contract_prices_container .payout, #trading_socket_container #contract_prices_container .stake {
       padding: 3px;
       line-height: 1.5;
@@ -1285,15 +1391,19 @@ a.previous-wrapper {
           -ms-flex: 1 0 auto;
               flex: 1 0 auto; }
   #trading_socket_container #contract_confirmation_container {
-    background-color: #f2f2f2;
+    background-color: var(--general-section-1);
     text-align: center; }
     #trading_socket_container #contract_confirmation_container a.close {
-      background-color: #1c5ae3;
+      background-color: var(--text-prominent);
       border-radius: 0 0 0 4px; }
     #trading_socket_container #contract_confirmation_container #confirmation_message_container {
       padding: 15px 0;
       height: 90%;
       height: calc(100% - 30px); }
+  #trading_socket_container #contract_purchase_heading {
+    font-size: 22px;
+    font-weight: normal;
+    color: var(--text-prominent); }
   #trading_socket_container #contract_prices_container .price_container .price_wrapper {
     text-align: center;
     -webkit-box-align: center;
@@ -1328,7 +1438,7 @@ a.previous-wrapper {
             -ms-flex-align: center;
                 align-items: center;
         margin-bottom: 10px; }
-        #trading_socket_container #contract_prices_container .price_container .price_wrapper .amount_wrapper .amount_wrapper_div, #trading_socket_container #contract_prices_container .price_container .price_wrapper .amount_wrapper .amount_wrapper_div .contract_amount, #trading_socket_container #contract_prices_container .price_container .price_wrapper .amount_wrapper .amount_wrapper_div .contract_payout {
+        #trading_socket_container #contract_prices_container .price_container .price_wrapper .amount_wrapper .amount_wrapper_div, #trading_socket_container #contract_prices_container .price_container .price_wrapper .amount_wrapper .amount_wrapper_div .stake, #trading_socket_container #contract_prices_container .price_container .price_wrapper .amount_wrapper .amount_wrapper_div .payout, #trading_socket_container #contract_prices_container .price_container .price_wrapper .amount_wrapper .amount_wrapper_div .contract_amount, #trading_socket_container #contract_prices_container .price_container .price_wrapper .amount_wrapper .amount_wrapper_div .contract_payout {
           vertical-align: middle; }
         #trading_socket_container #contract_prices_container .price_container .price_wrapper .amount_wrapper .amount_wrapper_div div {
           -webkit-box-flex: 1;
@@ -1587,7 +1697,7 @@ a.previous-wrapper {
   min-width: 120px;
   position: relative; }
   .markets .market_current {
-    border: 1px solid #d6dadb;
+    border: 1px solid var(--border-normal);
     border-radius: 4px;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1619,7 +1729,7 @@ a.previous-wrapper {
         padding: 5px 6px; } }
   .markets .markets_dropdown {
     background: #ffffff;
-    border: 1px solid #d6dadb;
+    border: 1px solid var(--border-normal);
     border-radius: 4px;
     -webkit-box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.08), 0 0 16px 0 rgba(0, 0, 0, 0.08);
             box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.08), 0 0 16px 0 rgba(0, 0, 0, 0.08);
@@ -1661,10 +1771,10 @@ a.previous-wrapper {
       padding: 15px 15px 0;
       background: #ffffff;
       border-radius: 4px 4px 0px 0px;
-      border-bottom: 1px solid #d6dadb; }
+      border-bottom: 1px solid var(--border-normal); }
       .markets .markets_dropdown .search input {
         outline: none;
-        border: 1px solid #d6dadb;
+        border: 1px solid var(--border-normal);
         border-radius: 4px;
         line-height: 30px;
         padding: 0 7px;
@@ -1675,16 +1785,16 @@ a.previous-wrapper {
           border: 1px solid var(--brand-secondary); }
         .markets .markets_dropdown .search input::-webkit-input-placeholder {
           /* Edge */
-          color: #d6dadb; }
+          color: var(--general-active); }
         .markets .markets_dropdown .search input:-ms-input-placeholder {
           /* Internet Explorer 10-11 */
-          color: #d6dadb; }
+          color: var(--general-active); }
         .markets .markets_dropdown .search input::-moz-placeholder {
-          color: #d6dadb; }
+          color: var(--general-active); }
         .markets .markets_dropdown .search input::-ms-input-placeholder {
-          color: #d6dadb; }
+          color: var(--general-active); }
         .markets .markets_dropdown .search input::placeholder {
-          color: #d6dadb; }
+          color: var(--general-active); }
       .markets .markets_dropdown .search .icon {
         width: 16px;
         height: 16px;
@@ -1770,7 +1880,7 @@ a.previous-wrapper {
                 -ms-flex-pack: justify;
                     justify-content: space-between;
             padding: 5px 15px 0;
-            border-bottom: 1px solid #d6dadb; }
+            border-bottom: 1px solid var(--border-normal); }
             .markets .markets_dropdown .markets_view .markets_column .mobile ul li {
               margin: 0 !important;
               font-size: 12px;
@@ -1921,20 +2031,20 @@ a.previous-wrapper {
                     width: 200px;
                     font-size: 16px; } }
                 .markets .markets_dropdown .markets_view .list .market .submarket .symbols .symbol_name:not(.active):hover {
-                  background: #e6e9e9; }
+                  background: var(--general-hover); }
                 .markets .markets_dropdown .markets_view .list .market .submarket .symbols .symbol_name.active {
-                  background: #d6dadb;
+                  background: var(--general-active);
                   font-weight: bold; }
                   @media (min-width: 320px) and (max-width: 767px) {
                     .markets .markets_dropdown .markets_view .list .market .submarket .symbols .symbol_name.active {
-                      background: #d6dadb;
+                      background: var(--general-active);
                       font-weight: bold;
                       padding-left: 5px; } }
 
 .contracts {
   position: relative; }
   .contracts .contract_current {
-    border: 1px solid #d6dadb;
+    border: 1px solid var(--border-normal);
     border-radius: 4px;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1965,7 +2075,7 @@ a.previous-wrapper {
     position: absolute;
     top: 0;
     background: #ffffff;
-    border: 1px solid #d6dadb;
+    border: 1px solid var(--border-normal);
     border-radius: 4px;
     -webkit-box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.08), 0 0 16px 0 rgba(0, 0, 0, 0.08);
             box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.08), 0 0 16px 0 rgba(0, 0, 0, 0.08);
@@ -2071,13 +2181,13 @@ a.previous-wrapper {
           cursor: pointer;
           line-height: normal; }
           .contracts .contracts_dropdown .contract .contract_subtypes .sub:hover {
-            background: #e6e9e9; }
+            background: var(--general-hover); }
           .contracts .contracts_dropdown .contract .contract_subtypes .sub.active {
-            background: #d6dadb;
+            background: var(--general-active);
             font-weight: bold; }
             @media (min-width: 320px) and (max-width: 767px) {
               .contracts .contracts_dropdown .contract .contract_subtypes .sub.active {
-                background: #d6dadb;
+                background: var(--general-active);
                 padding: 5px;
                 margin: 0 0 10px;
                 font-weight: bold; } }

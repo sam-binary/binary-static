@@ -265,7 +265,12 @@ body {
   position: relative;
   background: repeat-x bottom;
   overflow-x: hidden;
-  font-family: "IBM Plex Sans", sans-serif !important; }
+  font-family: "IBM Plex Sans", sans-serif !important;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%; }
   body .ui-widget {
     font-size: 1rem; }
   body .mm-page {
@@ -300,7 +305,7 @@ table td.no-border {
 
 select, input, button, textarea {
   background: #ffffff;
-  border: 1px solid #dedede;
+  border: 1px solid var(--border-normal);
   padding: 2px 3px; }
 
 select {
@@ -744,6 +749,12 @@ ul.bullet.gr-row > li {
   margin-top: 40px;
   margin-bottom: 20px; }
   #content div.select .select-dropdown {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     text-transform: none; }
   #content div.select ul.select-options {
     position: absolute;
@@ -1128,7 +1139,7 @@ label + input {
   text-decoration: none;
   text-transform: none !important;
   font-size: 0.8695652174rem;
-  font-weight: 500;
+  font-weight: bold;
   text-align: center;
   line-height: 1.5; }
   .btn--primary {
@@ -1136,6 +1147,12 @@ label + input {
     color: var(--text-colored-background) !important; }
     .btn--primary:hover {
       background: var(--button-primary-hover); }
+  .btn--secondary {
+    background: transparent;
+    border: 1px solid var(--button-secondary-default);
+    color: var(--text-prominent); }
+    .btn--secondary:hover {
+      background: var(--button-secondary-hover); }
   .btn--outline {
     background: transparent;
     color: var(--button-primary-default) !important; }
@@ -1144,6 +1161,9 @@ label + input {
   .btn:focus {
     background: inherit;
     outline: 0; }
+
+.button-secondary span {
+  font-weight: bold !important; }
 
 /* main style */
 #androidApp, #appstore {
@@ -1270,7 +1290,7 @@ body #topbar {
   padding: 0;
   color: #000000;
   background-color: #ffffff;
-  border-top: 1px solid #f2f3f4;
+  border-top: 1px solid var(--general-section-1);
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -1301,7 +1321,7 @@ body #topbar {
       margin-left: 0.8em;
       cursor: pointer; }
       body #topbar #topbar-info #topbar-fullscreen:hover {
-        background-color: #e6e9e9; }
+        background-color: var(--general-hover); }
       body #topbar #topbar-info #topbar-fullscreen img {
         width: 16px;
         height: 16px;
@@ -1313,7 +1333,7 @@ body #topbar {
     padding: 0.7em;
     max-width: 280px;
     border-radius: 4px;
-    background: #d6dadb;
+    background: var(--general-active);
     color: #000000;
     content: attr(data-balloon);
     margin-bottom: 11px;
@@ -1341,7 +1361,6 @@ body #topbar {
   body #topbar #gmt-clock {
     font-size: 0.75rem;
     font-weight: 100;
-    font-family: 'IBM Plex Sans';
     padding: 0 0.8em;
     width: 147px; }
   body #topbar #gmt-clock, body #topbar #contact-us, body #topbar .upgrademessage {
@@ -1361,13 +1380,13 @@ body #topbar {
     height: 10px;
     margin: auto;
     border-radius: 50%;
-    background: #4bb4b3; }
+    background: var(--text-profit-success); }
     body #topbar #network_status.offline {
-      background: #ec3f3f; }
+      background: var(--text-loss-danger); }
     body #topbar #network_status.blinker {
       -webkit-animation: blinking-network-status 0.4s alternate infinite;
               animation: blinking-network-status 0.4s alternate infinite;
-      background: #4bb4b3; }
+      background: var(--text-profit-success); }
 
 body .header {
   background-color: #ffffff;
@@ -1456,6 +1475,7 @@ body .header {
             align-items: center;
     height: 100%;
     padding: 0 20px;
+    margin-right: 8px;
     cursor: pointer; }
     body .header__acc-info:hover {
       background: var(--state-hover); }
@@ -1463,7 +1483,7 @@ body .header {
     padding: 0 8px;
     color: var(--text-profit-success);
     font-size: 1rem;
-    font-weight: 500; }
+    font-weight: bold; }
   body .header__logo {
     height: 35px; }
   body .header__icon {
@@ -1477,7 +1497,7 @@ body .header {
       cursor: pointer;
       margin: 0 20px; }
   body .header__deposit {
-    margin: 0 8px; }
+    margin-right: 16px; }
   body .header__divider {
     height: 32px;
     width: 1px;
@@ -1763,15 +1783,71 @@ body .header {
         width: 16px;
         margin-left: 8px; }
 
-#ui-timepicker-div, #ui-timepicker-div:before, #ui-timepicker-div:after, #ui-datepicker-div, #ui-datepicker-div:before, #ui-datepicker-div:after {
-  -webkit-transition: none;
-  transition: none; }
+#ui-timepicker-div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
+  #ui-timepicker-div .ui-widget-header {
+    font-weight: bold; }
 
-.ui-datepicker.ui-widget-content, .ui-timepicker-table.ui-widget-content {
-  border: 0; }
+#ui-datepicker-div .ui-widget-header {
+  font-weight: 100; }
 
-.ui-datepicker.ui-corner-all, .ui-datepicker .ui-corner-all, .ui-timepicker-table.ui-corner-all, .ui-timepicker-table .ui-corner-all {
-  border-radius: 0; }
+#ui-timepicker-div, #ui-datepicker-div {
+  border: 2px solid var(--general-active);
+  border-radius: 4px;
+  padding: 0 !important;
+  margin-top: 5px; }
+  #ui-timepicker-div, #ui-timepicker-div:before, #ui-timepicker-div:after, #ui-datepicker-div, #ui-datepicker-div:before, #ui-datepicker-div:after {
+    -webkit-transition: none;
+    transition: none; }
+  #ui-timepicker-div .ui-widget-header, #ui-datepicker-div .ui-widget-header {
+    background: var(--general-section-1) !important;
+    border: none;
+    color: #000000 !important; }
+  #ui-timepicker-div a .ui-icon-circle-triangle-w, #ui-datepicker-div a .ui-icon-circle-triangle-w {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-23398.295 -21118.941 14.82 24'%3E%3Cpath fill='%232a3052' d='M8.59,27.18,17.75,18,8.59,8.82,11.41,6l12,12-12,12Z' transform='translate(-23374.885 -21088.941) rotate(180)'/%3E%3C/svg%3E");
+    background-position: initial; }
+  #ui-timepicker-div a .ui-icon-circle-triangle-e, #ui-datepicker-div a .ui-icon-circle-triangle-e {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-22965 -21118.941 14.82 24'%3E%3Cpath fill='%232a3052' d='M8.59,27.18,17.75,18,8.59,8.82,11.41,6l12,12-12,12Z' transform='translate(-22973.59 -21124.941)'/%3E%3C/svg%3E");
+    background-position: initial; }
+  #ui-timepicker-div .ui-datepicker-calendar tbody tr td .ui-state-default.ui-state-active, #ui-timepicker-div table .ui-timepicker .ui-state-default.ui-state-active, #ui-datepicker-div .ui-datepicker-calendar tbody tr td .ui-state-default.ui-state-active, #ui-datepicker-div table .ui-timepicker .ui-state-default.ui-state-active {
+    border: 2px solid var(--general-active) !important;
+    background-color: var(--general-active) !important;
+    color: #000000 !important;
+    font-weight: bold; }
+  #ui-timepicker-div .ui-timepicker-table, #ui-timepicker-div .ui-datepicker-calendar, #ui-datepicker-div .ui-timepicker-table, #ui-datepicker-div .ui-datepicker-calendar {
+    -webkit-box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.08), 0 0 16px 0 rgba(0, 0, 0, 0.08);
+            box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.08), 0 0 16px 0 rgba(0, 0, 0, 0.08); }
+  #ui-timepicker-div table, #ui-datepicker-div table {
+    border: none; }
+    #ui-timepicker-div table .ui-state-default:not(.ui-state-disabled):not(.ui-state-active), #ui-datepicker-div table .ui-state-default:not(.ui-state-disabled):not(.ui-state-active) {
+      border-radius: 4px; }
+      #ui-timepicker-div table .ui-state-default:not(.ui-state-disabled):not(.ui-state-active):hover, #ui-datepicker-div table .ui-state-default:not(.ui-state-disabled):not(.ui-state-active):hover {
+        border: 2px solid var(--general-hover);
+        background-color: var(--general-hover); }
+    #ui-timepicker-div table .ui-timepicker-table, #ui-datepicker-div table .ui-timepicker-table {
+      border-radius: 4px;
+      margin: none;
+      padding: 0.15em 0 0; }
+    #ui-timepicker-div table .ui-timepicker, #ui-datepicker-div table .ui-timepicker {
+      border-bottom: none;
+      padding: 0.15em 0 0;
+      margin: 0;
+      border-right: none; }
+      #ui-timepicker-div table .ui-timepicker th, #ui-datepicker-div table .ui-timepicker th {
+        min-height: 69px;
+        min-width: 35px; }
+      #ui-timepicker-div table .ui-timepicker th, #ui-timepicker-div table .ui-timepicker td a, #ui-datepicker-div table .ui-timepicker th, #ui-datepicker-div table .ui-timepicker td a {
+        font-weight: 100; }
+      #ui-timepicker-div table .ui-timepicker tbody, #ui-datepicker-div table .ui-timepicker tbody {
+        padding: 0.15em;
+        border-color: var(--general-active);
+        border: none; }
+    #ui-timepicker-div table .ui-timepicker-hours .ui-timepicker tbody, #ui-datepicker-div table .ui-timepicker-hours .ui-timepicker tbody {
+      border-style: solid;
+      border-width: 0 2px 0 0;
+      border-color: var(--general-active); }
 
 @media screen and (min-width: 770px) {
   .clearable {

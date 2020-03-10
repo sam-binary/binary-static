@@ -12792,23 +12792,23 @@ var ChartSettings = function () {
     // display a guide for clients to know what each line/spot in chart means
     var setLabels = function setLabels(params) {
         labels = labels || { // needs to be inside setLabels function so localize works
-            barrier_line: '<div class=\'nowrap gr-padding-10 gr-parent\'><span style="' + common_horizontal_line_style + ' border-color: green; border-style: solid;"></span>' + localize('Barrier') + '&nbsp;</div>',
-            barrier_spot: '<div class=\'nowrap gr-padding-10 gr-parent\'><span style="' + common_horizontal_line_style + ' border-color: green; border-style: dotted;"></span>' + localize('Barrier') + '&nbsp;</div>',
-            entry_spot: '<div class=\'nowrap gr-padding-10 gr-parent\'><span style="' + common_spot_style + ' border: 3px solid orange; width: 4px; height: 4px;"></span>' + localize('Entry Spot') + '&nbsp;</div>',
-            exit_spot: '<div class=\'nowrap gr-padding-10 gr-parent\'><span style="' + common_spot_style + ' background-color: orange; width:10px; height: 10px;"></span>' + localize('Exit Spot') + '&nbsp;</div>',
-            delay: '<div class=\'nowrap gr-padding-10 gr-parent delay\'><span class="chart-delay">' + localize('Charting for this underlying is delayed') + '&nbsp;</span></div>',
+            barrier_line: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_horizontal_line_style + ' border-color: var(--border-hover); border-style: solid;"></span>' + localize('Barrier') + '&nbsp;</div>',
+            barrier_spot: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_horizontal_line_style + ' border-color: var(--border-hover); border-style: dotted;"></span>' + localize('Barrier') + '&nbsp;</div>',
+            entry_spot: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_spot_style + ' border: 3px solid var(--brand-red-coral); width: 4px; height: 4px;"></span>' + localize('Entry Spot') + '&nbsp;</div>',
+            exit_spot: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_spot_style + ' background-color: var(--brand-red-coral); width:10px; height: 10px;"></span>' + localize('Exit Spot') + '&nbsp;</div>',
+            delay: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label delay\'><span class="chart-delay">' + localize('Charting for this underlying is delayed') + '&nbsp;</span></div>',
             payout_range: '<div class=\'nowrap gr-padding-10 gr-parent\'><span class="chart-payout-range"></span>' + localize('Payout Range') + '&nbsp;</div>',
-            purchase_time: '<div class=\'nowrap gr-padding-10 gr-parent\'><span style="' + common_vertical_line_style + ' border-color: #7cb5ec; border-style: solid;"></span>' + localize('Purchase Time') + '&nbsp;</div>',
-            reset_barrier: '<div class=\'nowrap gr-padding-10 gr-parent\'><span style="' + common_horizontal_line_style + ' border-color: green; border-style: solid;"></span>' + localize('Reset Barrier') + '&nbsp;</div>',
-            reset_time: '<div class=\'nowrap gr-padding-10 gr-parent\'><span style="' + common_vertical_line_style + ' border-color: #e98024; border-color: #000; border-style: solid;"></span>' + localize('Reset Time') + '&nbsp;</div>',
-            selected_tick: '<div class=\'nowrap gr-padding-10 gr-parent\'><span style="margin-left: 10px; margin-right: 5px; display: inline-block; border-radius: 6px; background-color: orange; width:10px; height: 10px;"></span>' + localize('Selected Tick') + '&nbsp;</div>',
+            purchase_time: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_vertical_line_style + ' border-color: var(--brand-secondary); border-style: solid;"></span>' + localize('Purchase Time') + '&nbsp;</div>',
+            reset_barrier: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_horizontal_line_style + ' border-color: var(   --border-hover); border-style: solid;"></span>' + localize('Reset Barrier') + '&nbsp;</div>',
+            reset_time: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_vertical_line_style + ' border-color: var(--brand-red-coral); border-color: #000; border-style: solid;"></span>' + localize('Reset Time') + '&nbsp;</div>',
+            selected_tick: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="margin-left: 10px; margin-right: 5px; display: inline-block; border-radius: 6px; background-color: var(--brand-red-coral); width:10px; height: 10px;"></span>' + localize('Selected Tick') + '&nbsp;</div>',
 
             // need to pass is_tick_trade params explicitly to return correct label when switching between ticks and non-ticks charts
             getEndTime: function getEndTime(is_tick_trade) {
-                return '<div class=\'nowrap gr-padding-10 gr-parent\'><span style="' + common_vertical_line_style + ' border-color: #e98024; border-style: dashed;"></span>' + (is_tick_trade ? localize('Exit Spot') : localize('End Time')) + '&nbsp;</div>';
+                return '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_vertical_line_style + ' border-color: var(--brand-red-coral); border-style: dashed;"></span>' + (is_tick_trade ? localize('Exit Spot') : localize('End Time')) + '&nbsp;</div>';
             },
             getStartTime: function getStartTime(is_tick_trade) {
-                return '<div class=\'nowrap gr-padding-10 gr-parent\'><span style="' + common_vertical_line_style + ' border-color: #e98024; border-style: solid;"></span>' + (is_tick_trade ? localize('Entry Spot') : localize('Start Time')) + '&nbsp;</div>';
+                return '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_vertical_line_style + ' border-color: var(--brand-red-coral); border-style: solid;"></span>' + (is_tick_trade ? localize('Entry Spot') : localize('Start Time')) + '&nbsp;</div>';
             }
         };
 
@@ -12836,6 +12836,9 @@ var ChartSettings = function () {
             exporting: { enabled: false },
             legend: { enabled: false },
             plotOptions: {
+                series: {
+                    color: 'var(--brand-secondary)'
+                },
                 candlestick: {
                     color: 'red',
                     lineColor: 'black',
@@ -12865,14 +12868,14 @@ var ChartSettings = function () {
                 zones: [{
                     // make the line grey until it reaches entry time or start time if entry spot time is not yet known
                     value: params.entry_time,
-                    color: '#ccc'
+                    color: 'var(--brand-secondary)'
                 }, {
                     // make the line default color until exit time is reached
                     value: params.exit_time,
                     color: ''
                 }, {
                     // make the line grey again after trade ended
-                    color: '#ccc'
+                    color: 'var(--brand-secondary)'
                 }]
             })],
             subtitle: _extends({}, params.user_sold && { style: { left: '180px' } }, {
@@ -12886,8 +12889,11 @@ var ChartSettings = function () {
             tooltip: _extends({}, params.tooltip || {}, {
                 useHTML: true
             }),
-            xAxis: _extends({}, params.x_axis || {}),
+            xAxis: _extends({
+                lineColor: 'var(--border-normal)'
+            }, params.x_axis || {}),
             yAxis: {
+                gridLineColor: 'var(--border-normal)',
                 labels: {
                     align: 'left',
                     formatter: function formatter() {
@@ -16704,7 +16710,7 @@ var HighchartUI = function () {
             value: params.value,
             id: params.id || (is_plotx ? params.value : params.label),
             label: { text: params.label || '' },
-            color: params.color || (is_plotx ? '#e98024' : 'green'),
+            color: params.color || (is_plotx ? 'var(--brand-red-coral)' : 'green'),
             zIndex: is_plotx ? 2 : 1,
             width: params.width || 2,
             dashStyle: params.dashStyle || 'Solid'
@@ -16726,8 +16732,8 @@ var HighchartUI = function () {
     };
 
     var getMarkerObject = function getMarkerObject(type) {
-        var color = type === 'entry' ? 'white' : 'orange';
-        return { fillColor: color, lineColor: 'orange', lineWidth: 3, radius: 4, states: { hover: { fillColor: color, lineColor: 'orange', lineWidth: 3, radius: 4 } } };
+        var color = type === 'entry' ? 'white' : 'var(--brand-red-coral)';
+        return { fillColor: color, lineColor: 'var(--brand-red-coral)', lineWidth: 3, radius: 4, states: { hover: { fillColor: color, lineColor: 'var(--brand-red-coral)', lineWidth: 3, radius: 4 } } };
     };
 
     return {
@@ -22700,10 +22706,10 @@ var TickDisplay = function () {
 
     var id_render = 'tick_chart';
 
-    var winning_color = 'rgba(46, 136, 54, 0.2)';
-    var losing_color = 'rgba(204, 0, 0, 0.1)';
+    var winning_color = 'rgba(75, 180, 179, 0.16)';
+    var losing_color = 'rgba(236, 63, 63, 0.16)';
 
-    var color = 'orange';
+    var color = 'var(--brand-red-coral)';
     var marker = {
         fillColor: color,
         lineColor: color,
@@ -22892,7 +22898,7 @@ var TickDisplay = function () {
                     align: Reset.isReset(contract_category) ? 'right' : 'center',
                     x: Reset.isReset(contract_category) ? -60 : 0
                 },
-                color: 'green',
+                color: 'var(--border-hover)',
                 width: 2,
                 zIndex: 2
             });
@@ -22913,7 +22919,7 @@ var TickDisplay = function () {
             chart.yAxis[0].addPlotLine({
                 id: 'tick-barrier',
                 value: calc_barrier,
-                color: 'green',
+                color: 'var(--border-hover)',
                 label: {
                     text: localize('Average') + ' (' + addComma(calc_barrier) + ')',
                     align: 'center'
@@ -22934,7 +22940,7 @@ var TickDisplay = function () {
             value: indicator.index,
             id: indicator.id,
             label: { text: indicator.label, x: /start_tick|entry_tick/.test(indicator.id) ? -15 : 5 },
-            color: indicator.color || '#e98024',
+            color: indicator.color || 'var(--brand-red-coral)',
             width: 2,
             zIndex: 2,
             dashStyle: indicator.dashStyle || ''
@@ -23222,7 +23228,7 @@ var TickDisplay = function () {
                 id: 'tick-reset-barrier',
                 value: +reset_barrier,
                 label: { text: localize('Reset Barrier') + ' (' + addComma(reset_barrier) + ')', align: 'right', x: -60, y: is_resetcall ? 15 : -5 },
-                color: 'green',
+                color: 'var(--border-hover)',
                 width: 2,
                 zIndex: 3
             });
@@ -23230,7 +23236,7 @@ var TickDisplay = function () {
                 id: 'tick-barrier',
                 value: +entry_barrier,
                 label: { text: localize('Barrier') + ' (' + addComma(entry_barrier) + ')', align: 'right', x: -60, y: is_resetcall ? -5 : 15 },
-                color: 'green',
+                color: 'var(--border-hover)',
                 width: 2,
                 zIndex: 3,
                 dashStyle: 'dot'
@@ -26200,6 +26206,7 @@ var updateTotal = function updateTotal() {
     var is_demo_tab = $('#acc_tabs').tabs('option', 'active') === 1;
     var virtual_total = $('.account__switcher-balance-virtual')[0];
     var total_amount = $('#account__switcher-total-balance-amount');
+    var current_currency = Client.get('currency');
 
     if (!virtual_total || !total_amount) {
         return;
@@ -26208,7 +26215,7 @@ var updateTotal = function updateTotal() {
     if (is_demo_tab) {
         total_amount.html(formatMoney('USD', virtual_total.textContent)).addClass('account__switcher-balance-virtual');
     } else {
-        total_amount.html(formatMoney('USD', total)).removeClass('account__switcher-balance-virtual');
+        total_amount.html(formatMoney(current_currency, total)).removeClass('account__switcher-balance-virtual');
     }
 };
 
@@ -26591,7 +26598,7 @@ var ViewPopup = function () {
             el_live_date.parentNode.setVisibility(0);
         }
 
-        containerSetText('trade_details_current_title', localize('Contract Result'));
+        containerSetText('trade_details_current_title', localize('Contract result'));
         containerSetText('trade_details_indicative_label', localize('Payout'));
         containerSetText('trade_details_profit_loss_label', localize('Profit/Loss'));
         if (contract.status === 'sold') {
@@ -26856,7 +26863,7 @@ var ViewPopup = function () {
         $container.prepend($('<div/>', { id: 'sell_bet_desc', class: 'popup_bet_desc drag-handle', text: longcode }));
         var $sections = $('<div/>').append($('<div class="gr-row container"><div id="sell_details_chart_wrapper" class="gr-8 gr-12-p gr-12-m"></div><div id="sell_details_table" class="gr-4 gr-12-p gr-12-m"></div></div>'));
 
-        var _localize = localize(['Barrier', 'Low Barrier']),
+        var _localize = localize(['Barrier', 'Low barrier']),
             _localize2 = _slicedToArray(_localize, 2),
             barrier_text = _localize2[0],
             low_barrier_text = _localize2[1];
@@ -26878,7 +26885,7 @@ var ViewPopup = function () {
 
         var should_show_entry_spot = !Lookback.isLookback(contract.contract_type) && !/digit/i.test(contract.contract_type);
         var should_show_barrier = !/runhigh|runlow/i.test(contract.contract_type);
-        $sections.find('#sell_details_table').append($('<table>\n            <tr id="contract_tabs"><th colspan="2" id="contract_information_tab">' + localize('Contract Information') + '</th></tr><tbody id="contract_information_content">\n            ' + createRow(localize('Contract Type'), '', 'trade_details_contract_type') + '\n            ' + createRow(localize('Transaction ID'), '', 'trade_details_ref_id') + '\n            ' + createRow(localize('Start Time'), '', 'trade_details_start_date', true) + '\n            ' + createRow(localize('Purchase Time'), '', 'trade_details_purchase_time', true) + '\n            ' + (!contract.tick_count && !is_multiplier_contract ? createRow(localize('Remaining Time'), '', 'trade_details_live_remaining') : '') + '\n            ' + (should_show_entry_spot ? createRow(localize('Entry Spot'), '', 'trade_details_entry_spot', 0, '<span></span>') : '') + '\n            ' + (should_show_barrier ? createRow(barrier_text, '', 'trade_details_barrier', true) : '') + '\n            ' + (Reset.isReset(contract.contract_type) ? createRow(localize('Reset Barrier'), '', 'trade_details_reset_barrier', true) : '') + '\n            ' + (contract.barrier_count > 1 ? createRow(low_barrier_text, '', 'trade_details_barrier_low', true) : '') + '\n            ' + createRow(Callputspread.isCallputspread(contract.contract_type) ? localize('Maximum payout') : localize('Potential Payout'), '', 'trade_details_payout') + '\n            ' + (multiplier && Lookback.isLookback(contract.contract_type) ? createRow(localize('Multiplier'), '', 'trade_details_multiplier') : '') + '\n            ' + createRow(localize('Purchase Price'), '', 'trade_details_purchase_price') + '\n            </tbody>\n            <th colspan="2" id="barrier_change" class="invisible">' + localize('Barrier Change') + '</th>\n            <tbody id="barrier_change_content" class="invisible"></tbody>\n            <tr><th colspan="2" id="trade_details_current_title">' + localize('Current') + '</th></tr>\n            ' + createRow(localize('Spot'), 'trade_details_spot_label', 'trade_details_current_spot', 0, '<span></span>') + '\n            ' + createRow(localize('Spot Time'), 'trade_details_spottime_label', 'trade_details_current_date') + '\n            ' + createRow(localize('Current Time'), '', 'trade_details_live_date') + '\n            ' + (!contract.tick_count ? createRow('', 'trade_details_end_label', 'trade_details_end_date', true) : '') + '\n            ' + createRow(localize('Indicative'), 'trade_details_indicative_label', 'trade_details_indicative_price') + '\n            ' + createRow(localize('Potential Profit/Loss'), 'trade_details_profit_loss_label', 'trade_details_profit_loss') + '\n            ' + (is_multiplier_contract ? createRow(localize('Deal Cancel. Fee'), 'trade_details_deal_cancellation_label', 'trade_details_deal_cancellation') : '') + '\n            ' + (is_multiplier_contract ? createRow(localize('Total Profit/Loss'), 'trade_details_total_pnl_label', 'trade_details_total_pnl') : '') + '\n            <tr><td colspan="2" class="last_cell" id="trade_details_message">&nbsp;</td></tr>\n            </table>\n            <div id="errMsg" class="notice-msg ' + hidden_class + '"></div>\n            <div id="trade_details_bottom"><div id="contract_sell_wrapper" class="' + hidden_class + '"></div><div id="contract_sell_message"></div><div id="contract_win_status" class="' + hidden_class + '"></div></div>'));
+        $sections.find('#sell_details_table').append($('<table>\n            <tr id="contract_tabs"><th colspan="2" id="contract_information_tab">' + localize('Contract information') + '</th></tr><tbody id="contract_information_content">\n            ' + createRow(localize('Contract type'), '', 'trade_details_contract_type') + '\n            ' + createRow(localize('Transaction ID'), '', 'trade_details_ref_id') + '\n            ' + createRow(localize('Start time'), '', 'trade_details_start_date', true) + '\n            ' + createRow(localize('Purchase time'), '', 'trade_details_purchase_time', true) + '\n            ' + (!contract.tick_count && !is_multiplier_contract ? createRow(localize('Remaining time'), '', 'trade_details_live_remaining') : '') + '\n            ' + (should_show_entry_spot ? createRow(localize('Entry spot'), '', 'trade_details_entry_spot', 0, '<span></span>') : '') + '\n            ' + (should_show_barrier ? createRow(barrier_text, '', 'trade_details_barrier', true) : '') + '\n            ' + (Reset.isReset(contract.contract_type) ? createRow(localize('Reset barrier'), '', 'trade_details_reset_barrier', true) : '') + '\n            ' + (contract.barrier_count > 1 ? createRow(low_barrier_text, '', 'trade_details_barrier_low', true) : '') + '\n            ' + createRow(Callputspread.isCallputspread(contract.contract_type) ? localize('Maximum payout') : localize('Potential payout'), '', 'trade_details_payout') + '\n            ' + (multiplier && Lookback.isLookback(contract.contract_type) ? createRow(localize('Multiplier'), '', 'trade_details_multiplier') : '') + '\n            ' + createRow(localize('Purchase price'), '', 'trade_details_purchase_price') + '\n            </tbody>\n            <th colspan="2" id="barrier_change" class="invisible">' + localize('Barrier change') + '</th>\n            <tbody id="barrier_change_content" class="invisible"></tbody>\n            <tr><th colspan="2" id="trade_details_current_title">' + localize('Current') + '</th></tr>\n            ' + createRow(localize('Spot'), 'trade_details_spot_label', 'trade_details_current_spot', 0, '<span></span>') + '\n            ' + createRow(localize('Spot time'), 'trade_details_spottime_label', 'trade_details_current_date') + '\n            ' + createRow(localize('Current time'), '', 'trade_details_live_date') + '\n            ' + (!contract.tick_count ? createRow('', 'trade_details_end_label', 'trade_details_end_date', true) : '') + '\n            ' + createRow(localize('Indicative'), 'trade_details_indicative_label', 'trade_details_indicative_price') + '\n            ' + createRow(localize('Potential profit/loss'), 'trade_details_profit_loss_label', 'trade_details_profit_loss') + '\n            ' + (is_multiplier_contract ? createRow(localize('Deal cancel. fee'), 'trade_details_deal_cancellation_label', 'trade_details_deal_cancellation') : '') + '\n            ' + (is_multiplier_contract ? createRow(localize('Total profit/loss'), 'trade_details_total_pnl_label', 'trade_details_total_pnl') : '') + '\n            <tr><td colspan="2" class="last_cell" id="trade_details_message">&nbsp;</td></tr>\n            </table>\n            <div id="errMsg" class="notice-msg ' + hidden_class + '"></div>\n            <div id="trade_details_bottom"><div id="contract_sell_wrapper" class="' + hidden_class + '"></div><div id="contract_sell_message"></div><div id="contract_win_status" class="' + hidden_class + '"></div></div>'));
 
         $sections.find('#sell_details_chart_wrapper').html($('<div/>', { id: contract.tick_count ? id_tick_chart : 'analysis_live_chart', class: 'live_chart_wrapper' }));
 
@@ -26955,7 +26962,7 @@ var ViewPopup = function () {
                 return;
             }
 
-            $sell_wrapper.setVisibility(1).append($('<div/>', { id: sell_wrapper_id }).append($('<button/>', { id: sell_button_id, class: 'button', text: is_started ? localize('Sell at market') : localize('Sell') })));
+            $sell_wrapper.setVisibility(1).append($('<div/>', { id: sell_wrapper_id }).append($('<button/>', { id: sell_button_id, class: 'button btn btn--secondary', text: is_started ? localize('Sell at market') : localize('Sell') })));
             if (is_started) {
                 addSellNote($sell_wrapper);
             }
@@ -27091,7 +27098,7 @@ var ViewPopupUI = function () {
             $container = null;
         }
         if (!$container) {
-            var $con = $('<div class="inpage_popup_container" id="sell_popup_container"><a class="close"></a><div class="inpage_popup_content"></div></div>');
+            var $con = $('<div class="inpage_popup_container" id="sell_popup_container"><a class="close close--light-bg"></a><div class="inpage_popup_content"></div></div>');
             $con.hide();
             var onClose = function onClose() {
                 cleanup(true);
