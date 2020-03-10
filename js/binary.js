@@ -278,7 +278,7 @@ var isEmptyObject = __webpack_require__(/*! ../utility */ "./src/javascript/_com
 var ClientBase = function () {
     var storage_key = 'client.accounts';
     var client_object = {};
-    var total_balance = '';
+    var total_balance = {};
     var current_loginid = void 0;
 
     var init = function init() {
@@ -345,8 +345,8 @@ var ClientBase = function () {
         return value;
     };
 
-    var setTotalBalance = function setTotalBalance(total) {
-        return total_balance = total;
+    var setTotalBalance = function setTotalBalance(amount, currency) {
+        return total_balance = { amount: amount, currency: currency };
     };
 
     var getTotalBalance = function getTotalBalance() {
@@ -26155,6 +26155,7 @@ var updateBalance = function updateBalance(response) {
         var balance = response.balance.balance;
         var currency = response.balance.currency;
         var total = response.balance.total.real.amount;
+        var total_currency = response.balance.total.real.currency;
         var is_current = Client.get('loginid') === loginid;
         var is_virtual = /^VRT/.test(loginid);
         if (!currency) {
@@ -26175,8 +26176,8 @@ var updateBalance = function updateBalance(response) {
             $('.account__switcher-balance-' + currency).html(view);
         }
 
-        Client.setTotalBalance(total);
-        updateTotal(total);
+        Client.setTotalBalance(total, total_currency);
+        updateTotal({ amount: total, currency: total_currency });
         updateContractBalance(balance);
         // $('#header__acc-balance, .topMenuBalance, .binary-balance').html(view)
         //     .css('visibility', 'visible');
@@ -26202,11 +26203,12 @@ var Client = __webpack_require__(/*! ../../base/client */ "./src/javascript/app/
 
 var updateTotal = function updateTotal() {
     var total = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : Client.getTotalBalance();
+    var amount = total.amount,
+        currency = total.currency;
 
     var is_demo_tab = $('#acc_tabs').tabs('option', 'active') === 1;
     var virtual_total = $('.account__switcher-balance-virtual')[0];
     var total_amount = $('#account__switcher-total-balance-amount');
-    var current_currency = Client.get('currency');
 
     if (!virtual_total || !total_amount) {
         return;
@@ -26215,7 +26217,7 @@ var updateTotal = function updateTotal() {
     if (is_demo_tab) {
         total_amount.html(formatMoney('USD', virtual_total.textContent)).addClass('account__switcher-balance-virtual');
     } else {
-        total_amount.html(formatMoney(current_currency, total)).removeClass('account__switcher-balance-virtual');
+        total_amount.html(formatMoney(currency, amount)).removeClass('account__switcher-balance-virtual');
     }
 };
 
