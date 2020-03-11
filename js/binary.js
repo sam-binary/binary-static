@@ -11273,9 +11273,9 @@ var Header = function () {
 
             // const has_no_tnc_limit = is_svg;
 
-            var getDateNow = function getDateNow() {
-                var now = new Date();
-                return String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
+            var formatDate = function formatDate(date) {
+                var date_obj = new Date(date * 1000);
+                return String(date_obj.getDate()).padStart(2, '0') + '/' + String(date_obj.getMonth() + 1).padStart(2, '0') + '/' + date_obj.getFullYear();
             };
 
             var messages = {
@@ -11283,7 +11283,7 @@ var Header = function () {
                     return { key: 'currency', title: localize('Set account currency'), message: localize('Please set the currency of your account to enable trading.'), type: 'danger', button_text: 'Set Currency', button_link: 'https://deriv.app/redirect?action=add_account' };
                 },
                 excluded_until: function excluded_until() {
-                    return { key: 'exluded_until', title: localize('Self-exclusion'), message: buildSpecificMessage(localizeKeepPlaceholders('You have opted to be excluded from Binary.com until [_1]. Please [_2]contact us[_3] for assistance.'), ['' + (Client.get('excluded_until') || getDateNow()), '<a href="https://www.deriv.com/contact-us/">', '</a>']), type: 'danger' };
+                    return { key: 'exluded_until', title: localize('Self-exclusion'), message: buildSpecificMessage(localizeKeepPlaceholders('You have opted to be excluded from Binary.com until [_1]. Please [_2]contact us[_3] for assistance.'), ['' + formatDate(Client.get('excluded_until') || new Date()), '<a href="https://www.deriv.com/contact-us/">', '</a>']), type: 'danger' };
                 },
                 authenticate: function authenticate() {
                     return { key: 'authenticate', title: localize('Authenticate'), message: localize('Authenticate your account now to take full advantage of all payment methods available.'), type: 'info', button_text: 'Authenticate', button_link: 'https://deriv.app/account/proof-of-identity' };
@@ -11354,7 +11354,8 @@ var Header = function () {
                     return !Client.get('currency');
                 },
                 excluded_until: function excluded_until() {
-                    return Client.get('excluded_until');
+                    return (/* Client.get('excluded_until') */true
+                    );
                 },
                 authenticate: function authenticate() {
                     return hasVerification('authenticate');
