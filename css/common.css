@@ -1153,10 +1153,10 @@ label + input {
     color: var(--text-prominent); }
     .btn--secondary:hover {
       background: var(--button-secondary-hover); }
-  .btn--outline {
+  .btn--transparent {
     background: transparent;
     color: var(--button-primary-default) !important; }
-    .btn--outline:hover {
+    .btn--transparent:hover {
       background: var(--button-tertiary-hover); }
   .btn:focus {
     background: inherit;
@@ -1484,6 +1484,13 @@ body .header {
     color: var(--text-profit-success);
     font-size: 1rem;
     font-weight: bold; }
+  body .header__acc-icon {
+    margin-right: 5px; }
+  body .header__account {
+    margin-right: 13px;
+    height: -webkit-min-content;
+    height: -moz-min-content;
+    height: min-content; }
   body .header__logo {
     height: 35px; }
   body .header__icon {
@@ -1492,10 +1499,10 @@ body .header {
     body .header__icon-text {
       margin-right: 0.5rem; }
     body .header__icon-button {
-      height: 22px;
-      width: 22px;
-      cursor: pointer;
-      margin: 0 20px; }
+      height: 20px;
+      width: 20px;
+      margin: 0 7px;
+      cursor: pointer; }
   body .header__deposit {
     margin-right: 16px; }
   body .header__divider {
@@ -1519,6 +1526,99 @@ body .header {
       transition: -webkit-transform 500ms;
       transition: transform 500ms;
       transition: transform 500ms, -webkit-transform 500ms; }
+  body .header__notification {
+    height: -webkit-min-content;
+    height: -moz-min-content;
+    height: min-content;
+    margin-right: 10px;
+    position: relative; }
+    body .header__notification-link {
+      color: var(--text-general) !important; }
+      body .header__notification-link:hover {
+        text-decoration: underline !important; }
+    body .header__notification-container {
+      display: none;
+      position: absolute;
+      z-index: 1;
+      top: 48px;
+      -webkit-transform: translateX(-45%);
+              transform: translateX(-45%);
+      background: var(--general-main-1);
+      -webkit-box-shadow: 0 4px 8px 2px var(--shadow-menu);
+              box-shadow: 0 4px 8px 2px var(--shadow-menu);
+      height: 525px;
+      width: 264px; }
+      body .header__notification-container--show {
+        display: block; }
+    body .header__notification-header {
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-normal);
+      color: var(--text-prominent); }
+    body .header__notification-count {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--status-danger);
+      font-size: 10px;
+      width: 16px;
+      height: 16px;
+      color: var(--text-colored-background);
+      text-align: center;
+      display: none;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
+      top: -2px;
+      right: 5px;
+      cursor: pointer; }
+    body .header__notification-content {
+      height: calc(100% - 37px);
+      overflow: auto; }
+      body .header__notification-content-item {
+        border-bottom: 1px solid var(--border-disabled);
+        padding: 10px 24px 10px 16px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex; }
+        body .header__notification-content-item > img {
+          width: 16px;
+          height: 16px;
+          margin-right: 8px; }
+      body .header__notification-content-title {
+        font-size: 0.8695652174rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+        color: var(--text-prominent);
+        position: relative;
+        line-height: 1.5; }
+      body .header__notification-content-desc {
+        font-size: 0.7561436673rem;
+        color: var(--text-prominent);
+        line-height: 1.5;
+        padding-right: 8px; }
+    body .header__notification-empty {
+      text-align: center;
+      margin-top: 50%; }
+      body .header__notification-empty-text {
+        font-size: 0.8695652174rem;
+        font-weight: 600;
+        color: var(--text-less-prominent);
+        padding: 8px; }
+      body .header__notification-empty-desc {
+        font-size: 0.7561436673rem;
+        color: var(--text-less-prominent); }
+    body .header__notification-btn {
+      margin: 8px 0 0 auto;
+      height: 24px !important;
+      width: 106px;
+      font-size: 0.7561436673rem; }
+    body .header__notification > img {
+      height: 24px;
+      width: 24px; }
   body .header .platform__switcher {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1782,6 +1882,12 @@ body .header {
         height: 16px;
         width: 16px;
         margin-left: 8px; }
+
+.notification__messages {
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+  top: 48px; }
 
 #ui-timepicker-div {
   display: -webkit-box;

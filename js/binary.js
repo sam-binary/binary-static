@@ -9582,7 +9582,7 @@ var BinaryLoader = function () {
         }
 
         if (!isStorageSupported(localStorage) || !isStorageSupported(sessionStorage)) {
-            Header.displayNotification(localize('[_1] requires your browser\'s web storage to be enabled in order to function properly. Please enable it or exit private browsing mode.', 'Binary.com'), true, 'STORAGE_NOT_SUPPORTED');
+            Header.displayNotification({ key: 'storage_not_supported', title: 'Storage not supported', message: localize('Requires your browser\'s web storage to be enabled in order to function properly. Please enable it or exit private browsing mode.'), type: 'danger' });
             getElementById('btn_login').classList.add('button-disabled');
         }
 
@@ -10601,7 +10601,7 @@ var isAuthenticationAllowed = __webpack_require__(/*! ../../_common/base/client_
 var GTM = __webpack_require__(/*! ../../_common/base/gtm */ "./src/javascript/_common/base/gtm.js");
 var Login = __webpack_require__(/*! ../../_common/base/login */ "./src/javascript/_common/base/login.js");
 var SocketCache = __webpack_require__(/*! ../../_common/base/socket_cache */ "./src/javascript/_common/base/socket_cache.js");
-var elementInnerHtml = __webpack_require__(/*! ../../_common/common_functions */ "./src/javascript/_common/common_functions.js").elementInnerHtml;
+// const elementInnerHtml         = require('../../_common/common_functions').elementInnerHtml;
 var getElementById = __webpack_require__(/*! ../../_common/common_functions */ "./src/javascript/_common/common_functions.js").getElementById;
 var localize = __webpack_require__(/*! ../../_common/localize */ "./src/javascript/_common/localize.js").localize;
 var localizeKeepPlaceholders = __webpack_require__(/*! ../../_common/localize */ "./src/javascript/_common/localize.js").localizeKeepPlaceholders;
@@ -10615,6 +10615,15 @@ var template = __webpack_require__(/*! ../../_common/utility */ "./src/javascrip
 var header_icon_base_path = '/images/pages/header/';
 
 var Header = function () {
+    var notifications = [];
+    var is_full_screen = false;
+    var fullscreen_map = {
+        event: ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'],
+        element: ['fullscreenElement', 'webkitFullscreenElement', 'mozFullScreenElement', 'msFullscreenElement'],
+        fnc_enter: ['requestFullscreen', 'webkitRequestFullscreen', 'mozRequestFullScreen', 'msRequestFullscreen'],
+        fnc_exit: ['exitFullscreen', 'webkitExitFullscreen', 'mozCancelFullScreen', 'msExitFullscreen']
+    };
+
     var onLoad = function onLoad() {
         populateAccountsList();
         bindPlatform();
@@ -10623,6 +10632,21 @@ var Header = function () {
         if (Client.isLoggedIn()) {
             displayAccountStatus();
         }
+        fullscreen_map.event.forEach(function (event) {
+            document.addEventListener(event, onFullScreen, false);
+        });
+    };
+
+    var onUnload = function onUnload() {
+        fullscreen_map.event.forEach(function (event) {
+            document.removeEventListener(event, onFullScreen);
+        });
+    };
+
+    var onFullScreen = function onFullScreen() {
+        is_full_screen = fullscreen_map.element.some(function (el) {
+            return document[el];
+        });
     };
 
     var bindSvg = function bindSvg() {
@@ -10630,8 +10654,10 @@ var Header = function () {
         var add = getElementById('add_icon');
         var reports = getElementById('reports_icon');
         var cashier = getElementById('cashier_icon');
+        var bell = getElementById('header__notification-icon');
         var account = getElementById('header__account-settings');
         var logout = getElementById('account__switcher-logout-icon');
+        var empty = getElementById('header__notification-empty-img');
 
         applyToAllElements('.header__expand', function (el) {
             el.src = Url.urlForStatic(header_icon_base_path + 'ic-chevron-down.svg');
@@ -10644,9 +10670,11 @@ var Header = function () {
         logo.src = Url.urlForStatic(header_icon_base_path + 'logo_smart_trader.svg');
         reports.src = Url.urlForStatic(header_icon_base_path + 'ic-reports.svg');
         cashier.src = Url.urlForStatic(header_icon_base_path + 'ic-cashier.svg');
+        bell.src = Url.urlForStatic(header_icon_base_path + 'ic-bell.svg');
         account.src = Url.urlForStatic(header_icon_base_path + 'ic-user-outline.svg');
         logout.src = Url.urlForStatic(header_icon_base_path + 'ic-logout.svg');
         add.src = Url.urlForStatic(header_icon_base_path + 'ic-add-circle.svg');
+        empty.src = Url.urlForStatic(header_icon_base_path + 'ic-box.svg');
     };
 
     var bindPlatform = function bindPlatform() {
@@ -10657,25 +10685,25 @@ var Header = function () {
         var platforms = {
             dtrader: {
                 name: 'DTrader',
-                desc: 'Start trading now with a powerful, yet easy-to-use platform',
+                desc: 'A whole new trading experience on a powerful yet easy to use platform.',
                 link: 'https://deriv.app',
                 icon: 'ic-brand-dtrader.svg'
             },
             dbot: {
                 name: 'DBot',
-                desc: 'Automate your trading ideas without coding',
+                desc: 'Automated trading at your fingertips. No coding needed.',
                 link: 'https://deriv.app/bot',
                 icon: 'ic-brand-dbot.svg'
             },
             dmt5: {
                 name: 'DMT5',
-                desc: 'Trade with platform of choice for professionals',
+                desc: 'The platform of choice for professionals worldwide.',
                 link: 'https://deriv.app/mt5',
                 icon: 'ic-brand-dmt5.svg'
             },
             smarttrader: {
                 name: 'SmartTrader',
-                desc: 'Trade in the world\'s financial markets with a simple online platform',
+                desc: 'Trade the world\'s markets with a simple and familiar platform.',
                 link: '#',
                 icon: 'logo_smart_trader.svg'
             }
@@ -10712,31 +10740,37 @@ var Header = function () {
             el.addEventListener('click', logoutOnClick);
         });
 
+        // Notificatiopn Event
+        var notification_bell = getElementById('header__notification');
+        var notification_container = getElementById('header__notification-container');
+        var notification_active = 'header__notification-container--show';
+        var showNotification = function showNotification(should_open) {
+            notification_container.toggleClass(notification_active, should_open);
+        };
+
+        notification_bell.addEventListener('click', function (event) {
+            if (notification_container.classList.contains(notification_active) && !notification_container.contains(event.target)) {
+                showNotification(false);
+            } else {
+                showNotification(true);
+            }
+        });
+
         // Account Switcher Event
         var acc_switcher = getElementById('acc_switcher');
         var account_switcher_dropdown = getElementById('account__switcher');
         var acc_expand = getElementById('header__acc-expand');
+        var acc_switcher_active = 'account__switcher--show';
         var showAccountSwitcher = function showAccountSwitcher(should_open) {
-            if (should_open) {
-                account_switcher_dropdown.classList.add('account__switcher--show');
-                acc_expand.classList.add('rotated');
-            } else {
-                account_switcher_dropdown.classList.remove('account__switcher--show');
-                acc_expand.classList.remove('rotated');
-            }
+            account_switcher_dropdown.toggleClass(acc_switcher_active, should_open);
+            acc_expand.toggleClass('rotated', should_open);
         };
 
         acc_switcher.addEventListener('click', function (event) {
-            if (!account_switcher_dropdown.contains(event.target)) {
-                if (account_switcher_dropdown.classList.contains('account__switcher--show')) {
-                    showAccountSwitcher(false);
-                } else {
-                    showAccountSwitcher(true);
-                }
-
-                if (platform_dropdown.classList.contains('platform__dropdown--show')) {
-                    showPlatformSwitcher(false);
-                }
+            if (account_switcher_dropdown.classList.contains(acc_switcher_active) && !account_switcher_dropdown.contains(event.target)) {
+                showAccountSwitcher(false);
+            } else {
+                showAccountSwitcher(true);
             }
         });
 
@@ -10744,17 +10778,12 @@ var Header = function () {
         var platform_switcher_arrow = getElementById('platform__switcher-expand');
         var platform_switcher = getElementById('platform__switcher');
         var platform_dropdown = getElementById('platform__dropdown');
+        var platform_dropdown_active = 'platform__dropdown--show';
         var body = document.body;
         var showPlatformSwitcher = function showPlatformSwitcher(should_open) {
-            if (should_open) {
-                platform_dropdown.classList.add('platform__dropdown--show');
-                platform_switcher_arrow.classList.add('rotated');
-                body.classList.add('stop-scrolling');
-            } else {
-                platform_dropdown.classList.remove('platform__dropdown--show');
-                platform_switcher_arrow.classList.remove('rotated');
-                body.classList.remove('stop-scrolling');
-            }
+            platform_dropdown.toggleClass(platform_dropdown_active, should_open);
+            platform_switcher_arrow.toggleClass('rotated', should_open);
+            body.toggleClass('stop-scrolling', should_open);
         };
 
         applyToAllElements('.platform__list-item', function (el) {
@@ -10764,7 +10793,7 @@ var Header = function () {
         });
 
         platform_switcher.addEventListener('click', function () {
-            if (platform_dropdown.classList.contains('platform__dropdown--show')) {
+            if (platform_dropdown.classList.contains(platform_dropdown_active)) {
                 showPlatformSwitcher(false);
             } else {
                 showPlatformSwitcher(true);
@@ -10774,15 +10803,18 @@ var Header = function () {
         // OnClickOutisde Event Handle
         document.addEventListener('click', function (event) {
             // Platform Switcher
-            var header = getElementById('deriv__header');
-            var platform_lists = getElementById('platform__list');
-            if (!header.contains(event.target) && !platform_lists.contains(event.target) && platform_dropdown.classList.contains('platform__dropdown--show')) {
+            if (!platform_switcher.contains(event.target) && !platform_dropdown.contains(event.target) && platform_dropdown.classList.contains(platform_dropdown_active)) {
                 showPlatformSwitcher(false);
             }
 
             // Account Switcher
-            if (!account_switcher_dropdown.contains(event.target) && !acc_switcher.contains(event.target) && account_switcher_dropdown.classList.contains('account__switcher--show')) {
+            if (!account_switcher_dropdown.contains(event.target) && !acc_switcher.contains(event.target) && account_switcher_dropdown.classList.contains(acc_switcher_active)) {
                 showAccountSwitcher(false);
+            }
+
+            // Notification
+            if (!notification_container.contains(event.target) && !notification_bell.contains(event.target) && notification_container.classList.contains(notification_active)) {
+                showNotification(false);
             }
         });
 
@@ -10792,10 +10824,16 @@ var Header = function () {
     };
 
     var toggleFullscreen = function toggleFullscreen() {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen();
-        } else if (document.exitFullscreen) {
-            document.exitFullscreen();
+        var to_exit = is_full_screen;
+        var el = to_exit ? document : document.documentElement;
+        var fncToCall = fullscreen_map[to_exit ? 'fnc_exit' : 'fnc_enter'].find(function (fnc) {
+            return el[fnc];
+        });
+
+        if (fncToCall) {
+            el[fncToCall]();
+        } else {
+            is_full_screen = false; // fullscreen API is not enabled
         }
     };
 
@@ -11015,47 +11053,106 @@ var Header = function () {
     //     applyToAllElements('li', (el) => { elementTextContent(el, localized_text); }, '', user_accounts);
     // };
 
-    var displayNotification = function displayNotification(message) {
-        var is_error = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-        var msg_code = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+    var displayNotification = function displayNotification(_ref) {
+        var key = _ref.key,
+            type = _ref.type,
+            title = _ref.title,
+            message = _ref.message,
+            button_text = _ref.button_text,
+            button_link = _ref.button_link;
 
-        var msg_notification = getElementById('msg_notification');
-        var platform_switcher = getElementById('platform__dropdown');
-        if (msg_notification.getAttribute('data-code') === 'STORAGE_NOT_SUPPORTED') return;
+        // const msg_notification = getElementById('msg_notification');
+        // const platform_switcher = getElementById('platform__dropdown');
+        // if (msg_notification.getAttribute('data-code') === 'STORAGE_NOT_SUPPORTED') return;
 
-        msg_notification.html(message);
-        msg_notification.setAttribute('data-message', message);
-        msg_notification.setAttribute('data-code', msg_code);
+        // msg_notification.html(message);
+        // msg_notification.setAttribute('data-message', message);
+        // msg_notification.setAttribute('data-code', msg_code);
 
-        if (msg_notification.offsetParent) {
-            msg_notification.toggleClass('error', is_error);
-        } else {
-            $(msg_notification).slideDown(500, function () {
-                if (is_error) msg_notification.classList.add('error');
-            });
+        // if (msg_notification.offsetParent) {
+        //     msg_notification.toggleClass('error', is_error);
+        // } else {
+        //     $(msg_notification).slideDown(500, () => { if (is_error) msg_notification.classList.add('error'); });
+        // }
+
+        // // Removed once notification feature is implemented
+        // platform_switcher.style.top = `${51 + 26}px`;
+
+        if (notifications.some(function (notification) {
+            return notification === key;
+        })) return;
+
+        var notification_content = getElementById('header__notification-content');
+        var notification_item = createElement('div', { class: 'header__notification-content-item', 'notification-key': key });
+        var notification_icon = createElement('img', { src: Url.urlForStatic(header_icon_base_path + 'ic-alert-' + (type || 'info') + '.svg') });
+        var notification_message = createElement('div', { class: 'header__notification-content-message' });
+        var notification_title = createElement('div', { text: title, class: 'header__notification-content-title' });
+        var notification_text = createElement('div', { html: message, class: 'header__notification-content-desc' });
+
+        notification_message.appendChild(notification_title);
+        notification_message.appendChild(notification_text);
+        notification_item.appendChild(notification_icon);
+        if (button_text && button_link) {
+            var notification_button = createElement('a', { text: button_text, class: 'btn btn--secondary header__notification-btn', href: button_link });
+            notification_message.appendChild(notification_button);
         }
-
-        // Removed once notification feature is implemented
-        platform_switcher.style.top = 51 + 26 + 'px';
+        notification_item.appendChild(notification_message);
+        notification_content.appendChild(notification_item);
+        notifications.push(key);
+        updateNotificationCount();
     };
 
-    var hideNotification = function hideNotification(msg_code) {
-        var msg_notification = getElementById('msg_notification');
-        var platform_switcher = getElementById('platform__dropdown');
-        if (/^(STORAGE_NOT_SUPPORTED|MFSA_MESSAGE)$/.test(msg_notification.getAttribute('data-code')) || msg_code && msg_notification.getAttribute('data-code') !== msg_code) {
-            return;
-        }
+    var hideNotification = function hideNotification(key) {
+        // const msg_notification = getElementById('msg_notification');
+        // const platform_switcher = getElementById('platform__dropdown');
+        // if (/^(STORAGE_NOT_SUPPORTED|MFSA_MESSAGE)$/.test(msg_notification.getAttribute('data-code')) ||
+        //     msg_code && msg_notification.getAttribute('data-code') !== msg_code) {
+        //     return;
+        // }
 
-        if (msg_notification.offsetParent) {
-            msg_notification.classList.remove('error');
-            $(msg_notification).slideUp(500, function () {
-                elementInnerHtml(msg_notification, '');
-                msg_notification.removeAttribute('data-message data-code');
-            });
-        }
+        // if (msg_notification.offsetParent) {
+        //     msg_notification.classList.remove('error');
+        //     $(msg_notification).slideUp(500, () => {
+        //         elementInnerHtml(msg_notification, '');
+        //         msg_notification.removeAttribute('data-message data-code');
+        //     });
+        // }
 
-        // Removed once notification feature is implemented
-        platform_switcher.style.top = '51px';
+        // // Removed once notification feature is implemented
+        // platform_switcher.style.top = '51px';
+
+        if (!notifications.some(function (notification) {
+            return notification === key;
+        })) return;
+
+        notifications.splice(notifications.indexOf(key), 1);
+
+        var removed_item = document.querySelector('div[notification-key="' + key + '"]');
+        applyToAllElements('#header__notification-content', function (el) {
+            el.removeChild(removed_item);
+        });
+        updateNotificationCount();
+    };
+
+    var updateNotificationCount = function updateNotificationCount() {
+        applyToAllElements('#header__notification-count', function (el) {
+            var notification_length = notifications.length;
+            el.html(notification_length);
+            if (notifications.length) {
+                el.style.display = 'flex';
+                el.html(notifications.length);
+            } else {
+                el.style.display = 'none';
+            }
+        });
+
+        applyToAllElements('#header__notification-empty', function (el) {
+            if (notifications.length) {
+                el.style.display = 'none';
+            } else {
+                el.style.display = 'block';
+            }
+        });
     };
 
     var displayAccountStatus = function displayAccountStatus() {
@@ -11083,7 +11180,7 @@ var Header = function () {
             };
 
             var buildMessage = function buildMessage(string, path) {
-                return template(string, ['<a href="' + path + '">', '</a>']);
+                return template(string, ['<a class="header__notification-link" href="' + path + '">', '</a>']);
             };
             var buildSpecificMessage = function buildSpecificMessage(string, additional) {
                 return template(string, [].concat(_toConsumableArray(additional)));
@@ -11102,55 +11199,71 @@ var Header = function () {
                 if (!identity || !document || !needs_verification || !isAuthenticationAllowed()) {
                     return false;
                 }
-                var verification_length = needs_verification.length;
+                var verification_length = needs_verification.length || 0;
                 var result = false;
 
                 switch (string) {
-                    case 'unsubmitted':
+                    case 'authenticate':
                         {
-                            result = verification_length === 2 && identity.status === 'none' && document.status === 'none';
+                            result = verification_length && document.status === 'none' && identity.status === 'none';
                             break;
                         }
-                    case 'expired':
+                    case 'needs_poi':
                         {
-                            result = verification_length === 2 && identity.status === 'expired' && document.status === 'expired';
+                            result = verification_length && needs_verification.includes('identity') && !needs_verification.includes('document') && identity.status !== 'rejected' && identity.status !== 'expired';
                             break;
                         }
-                    case 'expired_identity':
+                    case 'needs_poa':
                         {
-                            result = verification_length && identity.status === 'expired';
+                            result = verification_length && needs_verification.includes('document') && !needs_verification.includes('identity') && document.status !== 'rejected' && document.status !== 'expired';
                             break;
                         }
-                    case 'expired_document':
+                    case 'poi_expired':
                         {
-                            result = verification_length && document.status === 'expired';
+                            result = identity.status === 'expired';
                             break;
                         }
-                    case 'rejected':
+                    case 'poa_expired':
                         {
-                            result = verification_length === 2 && (identity.status !== 'none' || document.status !== 'none');
+                            result = document.status === 'expired';
                             break;
                         }
-                    case 'rejected_identity':
-                        {
-                            result = verification_length && (identity.status === 'rejected' || identity.status === 'suspected');
-                            break;
-                        }
-                    case 'rejected_document':
-                        {
-                            result = verification_length && (document.status === 'rejected' || document.status === 'suspected');
-                            break;
-                        }
-                    case 'identity':
-                        {
-                            result = verification_length && identity.status === 'none';
-                            break;
-                        }
-                    case 'document':
-                        {
-                            result = verification_length && document.status === 'none';
-                            break;
-                        }
+                    /* case 'unsubmitted': {
+                        result = verification_length === 2 && identity.status === 'none' && document.status === 'none';
+                        break;
+                    }
+                    case 'expired': {
+                        result = verification_length === 2 && (identity.status === 'expired' && document.status === 'expired');
+                        break;
+                    }
+                    case 'expired_identity': {
+                        result = verification_length && identity.status === 'expired';
+                        break;
+                    }
+                    case 'expired_document': {
+                        result = verification_length && document.status === 'expired';
+                        break;
+                    }
+                    case 'rejected': {
+                        result = verification_length === 2 && (identity.status !== 'none' || document.status !== 'none');
+                        break;
+                    }
+                    case 'rejected_identity': {
+                        result = verification_length && (identity.status === 'rejected' || identity.status === 'suspected');
+                        break;
+                    }
+                    case 'rejected_document': {
+                        result = verification_length && (document.status === 'rejected' || document.status === 'suspected');
+                        break;
+                    }
+                    case 'identity': {
+                        result = verification_length && identity.status === 'none';
+                        break;
+                    }
+                    case 'document': {
+                        result = verification_length && document.status === 'none';
+                        break;
+                    } */
                     default:
                         break;
                 }
@@ -11158,120 +11271,114 @@ var Header = function () {
                 return result;
             };
 
-            var has_no_tnc_limit = is_svg;
+            // const has_no_tnc_limit = is_svg;
+
+            var getDateNow = function getDateNow() {
+                var now = new Date();
+                return String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
+            };
 
             var messages = {
-                cashier_locked: function cashier_locked() {
-                    return localize('Deposits and withdrawals have been disabled on your account. Please check your email for more details.');
-                },
                 currency: function currency() {
-                    return buildMessage(localizeKeepPlaceholders('Please set the [_1]currency[_2] of your account.'), 'https://deriv.app');
-                }, // TODO: redirect to set currency modal when link is available
-                unsubmitted: function unsubmitted() {
-                    return buildMessage(localizeKeepPlaceholders('Please submit your [_1]proof of identity and proof of address[_2].'), 'https://deriv.app/account/proof-of-identity');
-                },
-                expired: function expired() {
-                    return buildSpecificMessage(localizeKeepPlaceholders('Your [_1]proof of identity[_3] and [_2]proof of address[_3] have expired.'), ['<a href=\'https://deriv.app/account/proof-of-identity\'>', '<a href=\'https://deriv.app/account/proof-of-address\'>', '</a>']);
-                },
-                expired_identity: function expired_identity() {
-                    return buildMessage(localizeKeepPlaceholders('Your [_1]proof of identity[_2] has expired.'), 'https://deriv.app/account/proof-of-identity');
-                },
-                expired_document: function expired_document() {
-                    return buildMessage(localizeKeepPlaceholders('Your [_1]proof of address[_2] has expired.'), 'https://deriv.app/account/proof-of-address');
-                },
-                rejected: function rejected() {
-                    return buildSpecificMessage(localizeKeepPlaceholders('Your [_1]proof of identity[_3] and [_2]proof of address[_3] have not been verified. Please check your email for details.'), ['<a href=\'https://deriv.app/account/proof-of-identity\'>', '<a href=\'https://deriv.app/account/proof-of-address\'>', '</a>']);
-                },
-                rejected_identity: function rejected_identity() {
-                    return buildMessage(localizeKeepPlaceholders('Your [_1]proof of identity[_2] has not been verified. Please check your email for details.'), 'https://deriv.app/account/proof-of-identity');
-                },
-                rejected_document: function rejected_document() {
-                    return buildMessage(localizeKeepPlaceholders('Your [_1]proof of address[_2] has not been verified. Please check your email for details.'), 'https://deriv.app/account/proof-of-address');
-                },
-                identity: function identity() {
-                    return buildMessage(localizeKeepPlaceholders('Please submit your [_1]proof of identity[_2].'), 'https://deriv.app/account/proof-of-identity');
-                },
-                document: function document() {
-                    return buildMessage(localizeKeepPlaceholders('Please submit your [_1]proof of address[_2].'), 'https://deriv.app/account/proof-of-address');
+                    return { key: 'currency', title: localize('Set account currency'), message: localize('Please set the currency of your account to enable trading.'), type: 'danger', button_text: 'Set Currency', button_link: 'https://deriv.app/redirect?action=add_account' };
                 },
                 excluded_until: function excluded_until() {
-                    return buildMessage(localizeKeepPlaceholders('Your account is restricted. Kindly [_1]contact customer support[_2] for assistance.'), 'https://www.deriv.com/contact-us/');
+                    return { key: 'exluded_until', title: localize('Self-exclusion'), message: buildSpecificMessage(localizeKeepPlaceholders('You have opted to be excluded from Binary.com until [_1]. Please [_2]contact us[_3] for assistance.'), ['' + (Client.get('excluded_until') || getDateNow()), '<a href="https://www.deriv.com/contact-us/">', '</a>']), type: 'danger' };
                 },
-                // financial_limit      : () => buildMessage(localizeKeepPlaceholders('Please set your [_1]30-day turnover limit[_2] to remove deposit limits.'),                                                             'user/security/self_exclusionws'), // TODO: handle this when self exclusion is available
-                mt5_withdrawal_locked: function mt5_withdrawal_locked() {
-                    return localize('MT5 withdrawals have been disabled on your account. Please check your email for more details.');
+                authenticate: function authenticate() {
+                    return { key: 'authenticate', title: localize('Authenticate'), message: localize('Authenticate your account now to take full advantage of all payment methods available.'), type: 'info', button_text: 'Authenticate', button_link: 'https://deriv.app/account/proof-of-identity' };
                 },
-                required_fields: function required_fields() {
-                    return buildMessage(localizeKeepPlaceholders('Please complete your [_1]personal details[_2] before you proceed.'), 'https://deriv.app/account/personal-details');
-                },
-                residence: function residence() {
-                    return buildMessage(localizeKeepPlaceholders('Please set [_1]country of residence[_2] before upgrading to a real-money account.'), 'https://deriv.app');
-                },
-                risk: function risk() {
-                    return buildMessage(localizeKeepPlaceholders('Please complete the [_1]financial assessment form[_2] to lift your withdrawal and trading limits.'), 'https://deriv.app/account/financial-assessment');
-                },
-                tax: function tax() {
-                    return buildMessage(localizeKeepPlaceholders('Please [_1]complete your account profile[_2] to lift your withdrawal and trading limits.'), 'https://deriv.app/account/personal-details');
-                },
-                unwelcome: function unwelcome() {
-                    return buildMessage(localizeKeepPlaceholders('Trading and deposits have been disabled on your account. Kindly [_1]contact customer support[_2] for assistance.'), 'https://www.deriv.com/contact-us/');
+                cashier_locked: function cashier_locked() {
+                    return { key: 'cashier_locked', title: localize('Cashier disabled'), message: localize('Deposits and withdrawals have been disabled on your account. Please check your email for more details.'), type: 'warning' };
                 },
                 withdrawal_locked: function withdrawal_locked() {
-                    return localize('Withdrawals have been disabled on your account. Please check your email for more details.');
+                    return { key: 'withdrawal_locked', title: localize('Withdrawal disabled'), message: localize('Withdrawals have been disabled on your account. Please check your email for more details.'), type: 'warning' };
+                },
+                mt5_withdrawal_locked: function mt5_withdrawal_locked() {
+                    return { key: 'mt5_withdrawal_locked', title: localize('MT5 withdrawal disabled'), message: localize('MT5 withdrawals have been disabled on your account. Please check your email for more details.'), type: 'warning' };
+                },
+                document_needs_action: function document_needs_action() {
+                    return { key: 'document_needs_action', title: localize('Authentication failed'), message: buildMessage(localizeKeepPlaceholders('[_1]Your Proof of Identity or Proof of Address[_2] did not meet our requirements. Please check your email for further instructions.'), 'https://deriv.app/account/proof-of-identity'), type: 'warning' };
+                },
+                unwelcome: function unwelcome() {
+                    return { key: 'unwelcome', title: localize('Trading and deposit disabled'), message: buildMessage(localizeKeepPlaceholders('Trading and deposits have been disabled on your account. Kindly contact [_1]customer support[_2] for assistance.'), 'https://www.deriv.com/contact-us/'), type: 'danger' };
+                },
+                mf_retail: function mf_retail() {
+                    return { key: 'mf_retail', title: localize('Digital options trading disabled'), message: buildMessage(localizeKeepPlaceholders('Digital Options Trading has been disabled on your account. Kindly contact [_1]customer support[_2] for assistance.'), 'https://www.deriv.com/contact-us/'), type: 'danger' };
+                },
+                financial_limit: function financial_limit() {
+                    return { key: 'financial_limit', title: localize('Remove deposit limits'), message: buildMessage(localizeKeepPlaceholders('Please set your [_1]30-day turnover limit[_2] to remove deposit limits.'), 'user/security/self_exclusionws'), type: 'warning' };
+                }, // TODO: handle this when self exclusion is available
+                risk: function risk() {
+                    return { key: 'risk', title: localize('Withdrawal and trading limits'), message: buildMessage(localizeKeepPlaceholders('Please complete the [_1]financial assessment form[_2] to lift your withdrawal and trading limits.'), 'https://deriv.app/account/financial-assessment'), type: 'warning' };
+                },
+                tax: function tax() {
+                    return { key: 'tax', title: localize('Complete details'), message: buildMessage(localizeKeepPlaceholders('Please [_1]complete your account profile[_2] to lift your withdrawal and trading limits.'), 'https://deriv.app/account/personal-details'), type: 'danger' };
                 },
                 tnc: function tnc() {
-                    return buildMessage(has_no_tnc_limit ? localizeKeepPlaceholders('Please [_1]accept the updated Terms and Conditions[_2].') : localizeKeepPlaceholders('Please [_1]accept the updated Terms and Conditions[_2] to lift your deposit and trading limits.'), 'https://deriv.app');
+                    return { key: 'tnc', title: localize('Term & conditions updated'), message: buildMessage(localizeKeepPlaceholders('Please accept our [_1]updated Terms and Conditions[_2] to proceed.'), 'https://www.deriv.com/terms-and-conditions/'), type: 'warning' };
+                },
+                required_fields: function required_fields() {
+                    return { key: 'requried_fields', title: localize('Complete details'), message: localize('Please complete your Personal Details before you proceed.'), type: 'danger' };
+                },
+                needs_poi: function needs_poi() {
+                    return { key: 'needs_poi', title: localize('Proof of identity required'), message: localize('Please submit your proof of identity.'), type: 'warning' };
+                },
+                needs_poa: function needs_poa() {
+                    return { key: 'needs_poa', title: localize('Proof of address required'), message: localize('Please submit your proof of address.'), type: 'warning' };
+                },
+                poi_expired: function poi_expired() {
+                    return { key: 'needs_poi', title: localize('Proof of identity'), message: localize('Proof of identity expired'), type: 'danger' };
+                },
+                poa_expired: function poa_expired() {
+                    return { key: 'needs_poa', title: localize('Proof of address'), message: localize('Proof of address expired'), type: 'danger' };
                 }
+                // poa_rejected         : () => ({ key: 'poa_expired', title: localize('Proff of address'), message: localize('Your documents for proof of address is expired. Please submit again.'), type: 'danger'}),
+                // unsubmitted          : () => ({ title: localize('Set account currency'), message: localize('Please set the currency of your account to enable trading.'), type: 'danger', button_text: 'Click test', button_link: 'https://deriv.app/account/proof-of-identity' }),
+                // expired              : () => buildSpecificMessage(localizeKeepPlaceholders('Your [_1]proof of identity[_3] and [_2]proof of address[_3] have expired.'),                                                   ['<a href=\'https://deriv.app/account/proof-of-identity\'>', '<a href=\'https://deriv.app/account/proof-of-address\'>', '</a>']),
+                // expired_identity     : () => buildMessage(localizeKeepPlaceholders('Your [_1]proof of identity[_2] has expired.'),                                                                                         'https://deriv.app/account/proof-of-identity'),
+                // expired_document     : () => buildMessage(localizeKeepPlaceholders('Your [_1]proof of address[_2] has expired.'),                                                                                          'https://deriv.app/account/proof-of-address'),
+                // rejected             : () => buildSpecificMessage(localizeKeepPlaceholders('Your [_1]proof of identity[_3] and [_2]proof of address[_3] have not been verified. Please check your email for details.'),    ['<a href=\'https://deriv.app/account/proof-of-identity\'>', '<a href=\'https://deriv.app/account/proof-of-address\'>', '</a>']),
+                // rejected_identity    : () => buildMessage(localizeKeepPlaceholders('Your [_1]proof of identity[_2] has not been verified. Please check your email for details.'),                                          'https://deriv.app/account/proof-of-identity'),
+                // rejected_document    : () => buildMessage(localizeKeepPlaceholders('Your [_1]proof of address[_2] has not been verified. Please check your email for details.'),                                           'https://deriv.app/account/proof-of-address'),
+                // identity             : () => buildMessage(localizeKeepPlaceholders('Please submit your [_1]proof of identity[_2].'),                                                                                       'https://deriv.app/account/proof-of-identity'),
+                // document             : () => buildMessage(localizeKeepPlaceholders('Please submit your [_1]proof of address[_2].'),                                                                                        'https://deriv.app/account/proof-of-address'),
+                // residence            : () => buildMessage(localizeKeepPlaceholders('Please set [_1]country of residence[_2] before upgrading to a real-money account.'),                                                   'https://deriv.app'),
+                // tnc                  : () => buildMessage(has_no_tnc_limit
+                //     ? localizeKeepPlaceholders('Please [_1]accept the updated Terms and Conditions[_2].')
+                //     : localizeKeepPlaceholders('Please [_1]accept the updated Terms and Conditions[_2] to lift your deposit and trading limits.'), 'https://deriv.app'),
             };
 
             var validations = {
-                cashier_locked: function cashier_locked() {
-                    return hasStatus('cashier_locked');
-                },
                 currency: function currency() {
                     return !Client.get('currency');
-                },
-                unsubmitted: function unsubmitted() {
-                    return hasVerification('unsubmitted');
-                },
-                expired: function expired() {
-                    return hasVerification('expired');
-                },
-                expired_identity: function expired_identity() {
-                    return hasVerification('expired_identity');
-                },
-                expired_document: function expired_document() {
-                    return hasVerification('expired_document');
-                },
-                rejected: function rejected() {
-                    return hasVerification('rejected');
-                },
-                rejected_identity: function rejected_identity() {
-                    return hasVerification('rejected_identity');
-                },
-                rejected_document: function rejected_document() {
-                    return hasVerification('rejected_document');
-                },
-                identity: function identity() {
-                    return hasVerification('identity');
-                },
-                document: function document() {
-                    return hasVerification('document');
                 },
                 excluded_until: function excluded_until() {
                     return Client.get('excluded_until');
                 },
-                financial_limit: function financial_limit() {
-                    return hasStatus('max_turnover_limit_not_set');
+                authenticate: function authenticate() {
+                    return hasVerification('authenticate');
+                },
+                cashier_locked: function cashier_locked() {
+                    return hasStatus('cashier_locked');
+                },
+                withdrawal_locked: function withdrawal_locked() {
+                    return hasStatus('withdrawal_locked');
                 },
                 mt5_withdrawal_locked: function mt5_withdrawal_locked() {
                     return hasStatus('mt5_withdrawal_locked');
                 },
-                required_fields: function required_fields() {
-                    return hasMissingRequiredField();
+                document_needs_action: function document_needs_action() {
+                    return hasStatus('document_needs_action');
                 },
-                residence: function residence() {
-                    return !Client.get('residence');
+                unwelcome: function unwelcome() {
+                    return hasStatus('unwelcome');
+                },
+                mf_retail: function mf_retail() {
+                    return Client.get('landing_company_shortcode') === 'maltainvest' && hasStatus('professional');
+                },
+                financial_limit: function financial_limit() {
+                    return hasStatus('max_turnover_limit_not_set');
                 },
                 risk: function risk() {
                     return Client.getRiskAssessment();
@@ -11282,18 +11389,63 @@ var Header = function () {
                 tnc: function tnc() {
                     return Client.shouldAcceptTnc();
                 },
-                unwelcome: function unwelcome() {
-                    return hasStatus('unwelcome');
+                required_fields: function required_fields() {
+                    return hasMissingRequiredField();
                 },
-                withdrawal_locked: function withdrawal_locked() {
-                    return hasStatus('withdrawal_locked');
+                needs_poi: function needs_poi() {
+                    return hasVerification('needs_poi');
+                },
+                needs_poa: function needs_poa() {
+                    return hasVerification('needs_poa');
+                },
+                poi_expired: function poi_expired() {
+                    return hasVerification('poi_expired');
+                },
+                poa_expired: function poa_expired() {
+                    return hasVerification('poa_expired');
                 }
+                /* poa_rejected         : () => hasVerification('poa_rejected'),
+                unsubmitted          : () => hasVerification('unsubmitted'),
+                expired              : () => hasVerification('expired'),
+                expired_identity     : () => hasVerification('expired_identity'),
+                expired_document     : () => hasVerification('expired_document'),
+                rejected             : () => hasVerification('rejected'),
+                rejected_identity    : () => hasVerification('rejected_identity'),
+                rejected_document    : () => hasVerification('rejected_document'),
+                identity             : () => hasVerification('identity'),
+                document             : () => hasVerification('document'),
+                required_fields      : () => hasMissingRequiredField(),
+                residence            : () => !Client.get('residence'),
+                risk                 : () => Client.getRiskAssessment(),
+                tax                  : () => Client.shouldCompleteTax(),
+                tnc                  : () => Client.shouldAcceptTnc(), */
             };
 
             // real account checks in order
-            var check_statuses_real = ['excluded_until', 'tnc', 'required_fields', 'financial_limit', 'risk', 'tax', 'currency', 'cashier_locked', 'withdrawal_locked', 'mt5_withdrawal_locked', 'unwelcome', 'unsubmitted', 'expired', 'expired_identity', 'expired_document', 'rejected', 'rejected_identity', 'rejected_document', 'identity', 'document'];
+            var check_statuses_real = ['currency', 'excluded_until', 'authenticate', 'cashier_locked', 'withdrawal_locked', 'mt5_withdrawal_locked', 'document_needs_action', 'unwelcome', 'mf_retail', 'financial_limit', 'risk', 'tax', 'tnc', 'required_fields', 'needs_poi', 'needs_poa', 'poi_expired', 'poa_expired'];
 
-            var check_statuses_mf_mlt = ['excluded_until', 'tnc', 'required_fields', 'financial_limit', 'risk', 'tax', 'currency', 'unsubmitted', 'expired', 'expired_identity', 'expired_document', 'rejected', 'rejected_identity', 'rejected_document', 'identity', 'document', 'unwelcome', 'cashier_locked', 'withdrawal_locked', 'mt5_withdrawal_locked'];
+            /* const check_statuses_mf_mlt = [
+                'excluded_until',
+                'tnc',
+                'required_fields',
+                'financial_limit',
+                'risk',
+                'tax',
+                'unsubmitted',
+                'expired',
+                'expired_identity',
+                'expired_document',
+                'rejected',
+                'rejected_identity',
+                'rejected_document',
+                'identity',
+                'document',
+                'unwelcome',
+                'cashier_locked',
+                'withdrawal_locked',
+                'mt5_withdrawal_locked',
+                'authenticate',
+            ]; */
 
             // virtual checks
             var check_statuses_virtual = ['residence'];
@@ -11301,10 +11453,10 @@ var Header = function () {
             var checkStatus = function checkStatus(check_statuses) {
                 var notified = check_statuses.some(function (check_type) {
                     if (validations[check_type]()) {
-                        displayNotification(messages[check_type](), false);
-                        return true;
+                        displayNotification(messages[check_type]());
+                        // return true;
                     }
-                    return false;
+                    // return false;
                 });
                 if (!notified) hideNotification();
             };
@@ -11317,11 +11469,11 @@ var Header = function () {
                     authentication = State.getResponse('get_account_status.authentication') || {};
                     get_account_status = State.getResponse('get_account_status') || {};
                     status = get_account_status.status;
-                    if (Client.get('landing_company_shortcode') === 'maltainvest' || Client.get('landing_company_shortcode') === 'malta' || Client.get('landing_company_shortcode') === 'iom') {
+                    /* if (Client.get('landing_company_shortcode') === 'maltainvest' || Client.get('landing_company_shortcode') === 'malta' || Client.get('landing_company_shortcode') === 'iom') {
                         checkStatus(check_statuses_mf_mlt);
-                    } else {
-                        checkStatus(check_statuses_real);
-                    }
+                    /* } else { */
+                    checkStatus(check_statuses_real);
+                    // }
                     var is_fully_authenticated = hasStatus('authenticated') && !+get_account_status.prompt_client_to_authenticate;
                     $('.account-id')[is_fully_authenticated ? 'append' : 'remove'](el_account_status);
                 });
@@ -11331,6 +11483,7 @@ var Header = function () {
 
     return {
         onLoad: onLoad,
+        onUnload: onUnload,
         populateAccountsList: populateAccountsList,
         upgradeMessageVisibility: upgradeMessageVisibility,
         displayNotification: displayNotification,
@@ -11562,7 +11715,7 @@ var getElementById = __webpack_require__(/*! ../../_common/common_functions */ "
 var localize = __webpack_require__(/*! ../../_common/localize */ "./src/javascript/_common/localize.js").localize;
 
 var NetworkMonitor = function () {
-    var connection_error_code = 'CONNECTION_ERROR';
+    var connection_error_code = 'you_are_offline';
 
     var el_status = void 0,
         el_tooltip = void 0;
@@ -11578,7 +11731,7 @@ var NetworkMonitor = function () {
         if (is_online) {
             Header.hideNotification(connection_error_code);
         } else {
-            Header.displayNotification(localize('Connection error: Please check your internet connection.'), true, connection_error_code);
+            Header.displayNotification({ key: connection_error_code, title: localize('You are offline'), message: localize('Check your conenction.'), type: 'danger' });
         }
 
         if (el_status && el_tooltip) {
@@ -12001,7 +12154,8 @@ var BinarySocketGeneral = function () {
                 Header.displayNotification(localize('You have reached the rate limit of requests per second. Please try later.'), true, 'RATE_LIMIT');
                 break;
             case 'InvalidAppID':
-                Header.displayNotification(response.error.message, true, 'INVALID_APP_ID');
+                //  Header.displayNotification(response.error.message, true, 'INVALID_APP_ID');
+                Header.displayNotification({ key: 'invalid_app_id', title: localize('Invalid app id'), message: response.error.message, type: 'danger' });
                 break;
             case 'DisabledClient':
                 showNoticeMessage(response.error.message);
