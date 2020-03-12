@@ -11354,8 +11354,7 @@ var Header = function () {
                     return !Client.get('currency');
                 },
                 excluded_until: function excluded_until() {
-                    return (/* Client.get('excluded_until') */true
-                    );
+                    return Client.get('excluded_until');
                 },
                 authenticate: function authenticate() {
                     return hasVerification('authenticate');
