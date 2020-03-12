@@ -11333,6 +11333,7 @@ var Header = function () {
                 poa_expired: function poa_expired() {
                     return { key: 'needs_poa', title: localize('Proof of address'), message: localize('Proof of address expired'), type: 'danger' };
                 }
+                // residence            : () => ({ key: 'residence', title: localize('Country of residence'), message: buildMessage(localizeKeepPlaceholders('Please set [_1]country of residence[_2] before upgrading to a real-money account.'), type: 'danger' }),
                 // poa_rejected         : () => ({ key: 'poa_expired', title: localize('Proff of address'), message: localize('Your documents for proof of address is expired. Please submit again.'), type: 'danger'}),
                 // unsubmitted          : () => ({ title: localize('Set account currency'), message: localize('Please set the currency of your account to enable trading.'), type: 'danger', button_text: 'Click test', button_link: 'https://deriv.app/account/proof-of-identity' }),
                 // expired              : () => buildSpecificMessage(localizeKeepPlaceholders('Your [_1]proof of identity[_3] and [_2]proof of address[_3] have expired.'),                                                   ['<a href=\'https://deriv.app/account/proof-of-identity\'>', '<a href=\'https://deriv.app/account/proof-of-address\'>', '</a>']),
@@ -11343,7 +11344,6 @@ var Header = function () {
                 // rejected_document    : () => buildMessage(localizeKeepPlaceholders('Your [_1]proof of address[_2] has not been verified. Please check your email for details.'),                                           'https://deriv.app/account/proof-of-address'),
                 // identity             : () => buildMessage(localizeKeepPlaceholders('Please submit your [_1]proof of identity[_2].'),                                                                                       'https://deriv.app/account/proof-of-identity'),
                 // document             : () => buildMessage(localizeKeepPlaceholders('Please submit your [_1]proof of address[_2].'),                                                                                        'https://deriv.app/account/proof-of-address'),
-                // residence            : () => buildMessage(localizeKeepPlaceholders('Please set [_1]country of residence[_2] before upgrading to a real-money account.'),                                                   'https://deriv.app'),
                 // tnc                  : () => buildMessage(has_no_tnc_limit
                 //     ? localizeKeepPlaceholders('Please [_1]accept the updated Terms and Conditions[_2].')
                 //     : localizeKeepPlaceholders('Please [_1]accept the updated Terms and Conditions[_2] to lift your deposit and trading limits.'), 'https://deriv.app'),
@@ -11357,7 +11357,8 @@ var Header = function () {
                     return Client.get('excluded_until');
                 },
                 authenticate: function authenticate() {
-                    return hasVerification('authenticate');
+                    return (/* hasVerification('authenticate') */true
+                    );
                 },
                 cashier_locked: function cashier_locked() {
                     return hasStatus('cashier_locked');
@@ -11403,6 +11404,9 @@ var Header = function () {
                 },
                 poa_expired: function poa_expired() {
                     return hasVerification('poa_expired');
+                },
+                residence: function residence() {
+                    return !Client.get('residence');
                 }
                 /* poa_rejected         : () => hasVerification('poa_rejected'),
                 unsubmitted          : () => hasVerification('unsubmitted'),
@@ -11448,7 +11452,9 @@ var Header = function () {
             ]; */
 
             // virtual checks
-            var check_statuses_virtual = ['residence'];
+            // const check_statuses_virtual = [
+            //     'residence',
+            // ];
 
             var checkStatus = function checkStatus(check_statuses) {
                 var notified = check_statuses.some(function (check_type) {
@@ -11461,9 +11467,9 @@ var Header = function () {
                 if (!notified) hideNotification();
             };
 
-            if (Client.get('is_virtual')) {
-                checkStatus(check_statuses_virtual);
-            } else {
+            if (!Client.get('is_virtual')) {
+                //     checkStatus(check_statuses_virtual);
+                // } else {
                 var el_account_status = createElement('span', { class: 'authenticated', 'data-balloon': localize('Account Authenticated'), 'data-balloon-pos': 'down' });
                 BinarySocket.wait('website_status', 'get_account_status', 'get_settings', 'balance').then(function () {
                     authentication = State.getResponse('get_account_status.authentication') || {};
