@@ -3197,7 +3197,7 @@ module.exports = CommonPasswords;
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 // https://github.com/xbsoftware/enjoyhint
-// (+ some custom changes for binary.com)
+// (+ some custom changes for our site)
 
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 var Kinetic = __webpack_require__(/*! kinetic */ "./node_modules/kinetic/kinetic.js");
@@ -3542,7 +3542,7 @@ var methods = {
             that.rect = new Kinetic.Rect({
                 //          x: 0,
                 //          y: 0,
-                fill: 'rgba(0,0,0,0.6)',
+                fill: 'rgba(0,0,0,0.8)',
                 width: that.canvas_size.w,
                 height: that.canvas_size.h
             });
@@ -3556,7 +3556,7 @@ var methods = {
                 that.hide();
                 that.options.onSkipClick();
             });
-            that.$next_btn = $('<div>', { 'class': that.cl.next_btn }).appendTo(that.enjoyhint).html('Next').click(function (e) {
+            that.$next_btn = $('<button>', { 'class': that.cl.next_btn }).appendTo(that.enjoyhint).html('Next').click(function (e) {
                 that.options.onNextClick();
             });
 
@@ -10204,7 +10204,7 @@ var RealityCheckData = __webpack_require__(/*! ../pages/user/reality_check/reali
 var ClientBase = __webpack_require__(/*! ../../_common/base/client_base */ "./src/javascript/_common/base/client_base.js");
 var GTM = __webpack_require__(/*! ../../_common/base/gtm */ "./src/javascript/_common/base/gtm.js");
 var SocketCache = __webpack_require__(/*! ../../_common/base/socket_cache */ "./src/javascript/_common/base/socket_cache.js");
-// const getElementById     = require('../../_common/common_functions').getElementById;
+var getElementById = __webpack_require__(/*! ../../_common/common_functions */ "./src/javascript/_common/common_functions.js").getElementById;
 var removeCookies = __webpack_require__(/*! ../../_common/storage */ "./src/javascript/_common/storage.js").removeCookies;
 var urlFor = __webpack_require__(/*! ../../_common/url */ "./src/javascript/_common/url.js").urlFor;
 var applyToAllElements = __webpack_require__(/*! ../../_common/utility */ "./src/javascript/_common/utility.js").applyToAllElements;
@@ -10218,9 +10218,9 @@ var Client = function () {
     };
 
     // const activateByClientType = (section_id) => {
-    var activateByClientType = function activateByClientType() {
+    var activateByClientType = function activateByClientType(section_id) {
         // const topbar_class = getElementById('topbar').classList;
-        // const el_section   = section_id ? getElementById(section_id) : document.body;
+        var el_section = section_id ? getElementById(section_id) : document.body;
 
         // const primary_bg_color_dark = 'primary-bg-color-dark';
         // const secondary_bg_color    = 'secondary-bg-color';
@@ -10233,6 +10233,10 @@ var Client = function () {
                 // applyToAllElements('.client_logged_in', (el) => {
                 //     el.setVisibility(1);
                 // });
+
+                if (ClientBase.get('is_virtual')) applyToAllElements('.client_virtual', function (el) {
+                    return el.setVisibility(1);
+                }, '', el_section);
 
                 // if (ClientBase.get('is_virtual')) {
                 //     applyToAllElements('.client_virtual', (el) => { el.setVisibility(1); }, '', el_section);
@@ -10263,9 +10267,9 @@ var Client = function () {
             // getElementById('topbar-msg').setVisibility(0);
             // getElementById('menu-top').classList.remove('smaller-font', 'top-nav-menu');
 
-            // applyToAllElements('.client_logged_out', (el) => {
-            //     el.setVisibility(1);
-            // }, '', el_section);
+            applyToAllElements('.client_logged_out', function (el) {
+                el.setVisibility(1);
+            }, '', el_section);
             // topbar_class.add(primary_bg_color_dark);
             // topbar_class.remove(secondary_bg_color);
 
@@ -10703,7 +10707,7 @@ var Header = function () {
             },
             smarttrader: {
                 name: 'SmartTrader',
-                desc: 'Trade the world\'s markets with a simple and familiar platform.',
+                desc: 'Trade the world\'s markets with our popular user-friendly platform.',
                 link: '#',
                 icon: 'logo_smart_trader.svg'
             }
@@ -12949,23 +12953,23 @@ var ChartSettings = function () {
     // display a guide for clients to know what each line/spot in chart means
     var setLabels = function setLabels(params) {
         labels = labels || { // needs to be inside setLabels function so localize works
-            barrier_line: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_horizontal_line_style + ' border-color: var(--border-hover); border-style: solid;"></span>' + localize('Barrier') + '&nbsp;</div>',
-            barrier_spot: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_horizontal_line_style + ' border-color: var(--border-hover); border-style: dotted;"></span>' + localize('Barrier') + '&nbsp;</div>',
-            entry_spot: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_spot_style + ' border: 3px solid var(--brand-red-coral); width: 4px; height: 4px;"></span>' + localize('Entry Spot') + '&nbsp;</div>',
-            exit_spot: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_spot_style + ' background-color: var(--brand-red-coral); width:10px; height: 10px;"></span>' + localize('Exit Spot') + '&nbsp;</div>',
+            barrier_line: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_horizontal_line_style + ' border-color: var(--text-prominent); border-style: solid;"></span>' + localize('Barrier') + '&nbsp;</div>',
+            barrier_spot: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_horizontal_line_style + ' border-color: var(--text-prominent); border-style: dotted;"></span>' + localize('Barrier') + '&nbsp;</div>',
+            entry_spot: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_spot_style + ' border: 3px solid var(--brand-red-coral); width: 4px; height: 4px;"></span>' + localize('Entry spot') + '&nbsp;</div>',
+            exit_spot: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_spot_style + ' background-color: var(--brand-red-coral); width:10px; height: 10px;"></span>' + localize('Exit spot') + '&nbsp;</div>',
             delay: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label delay\'><span class="chart-delay">' + localize('Charting for this underlying is delayed') + '&nbsp;</span></div>',
-            payout_range: '<div class=\'nowrap gr-padding-10 gr-parent\'><span class="chart-payout-range"></span>' + localize('Payout Range') + '&nbsp;</div>',
-            purchase_time: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_vertical_line_style + ' border-color: var(--brand-secondary); border-style: solid;"></span>' + localize('Purchase Time') + '&nbsp;</div>',
-            reset_barrier: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_horizontal_line_style + ' border-color: var(   --border-hover); border-style: solid;"></span>' + localize('Reset Barrier') + '&nbsp;</div>',
-            reset_time: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_vertical_line_style + ' border-color: var(--brand-red-coral); border-color: #000; border-style: solid;"></span>' + localize('Reset Time') + '&nbsp;</div>',
-            selected_tick: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="margin-left: 10px; margin-right: 5px; display: inline-block; border-radius: 6px; background-color: var(--brand-red-coral); width:10px; height: 10px;"></span>' + localize('Selected Tick') + '&nbsp;</div>',
+            payout_range: '<div class=\'nowrap gr-padding-10 gr-parent\'><span class="chart-payout-range"></span>' + localize('Payout range') + '&nbsp;</div>',
+            purchase_time: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_vertical_line_style + ' border-color: var(--text-prominent); border-style: solid;"></span>' + localize('Purchase time') + '&nbsp;</div>',
+            reset_barrier: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_horizontal_line_style + ' border-color: var(--text-prominent); border-style: solid;"></span>' + localize('Reset barrier') + '&nbsp;</div>',
+            reset_time: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_vertical_line_style + ' border-color: var(--brand-red-coral); border-color: #000; border-style: solid;"></span>' + localize('Reset time') + '&nbsp;</div>',
+            selected_tick: '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="margin-left: 10px; margin-right: 5px; display: inline-block; border-radius: 6px; background-color: var(--brand-red-coral); width:10px; height: 10px;"></span>' + localize('Selected tick') + '&nbsp;</div>',
 
             // need to pass is_tick_trade params explicitly to return correct label when switching between ticks and non-ticks charts
             getEndTime: function getEndTime(is_tick_trade) {
-                return '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_vertical_line_style + ' border-color: var(--brand-red-coral); border-style: dashed;"></span>' + (is_tick_trade ? localize('Exit Spot') : localize('End Time')) + '&nbsp;</div>';
+                return '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_vertical_line_style + ' border-color: var(--brand-red-coral); border-style: dashed;"></span>' + (is_tick_trade ? localize('Exit spot') : localize('End time')) + '&nbsp;</div>';
             },
             getStartTime: function getStartTime(is_tick_trade) {
-                return '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_vertical_line_style + ' border-color: var(--brand-red-coral); border-style: solid;"></span>' + (is_tick_trade ? localize('Entry Spot') : localize('Start Time')) + '&nbsp;</div>';
+                return '<div class=\'nowrap gr-padding-10 gr-parent chart-legend-label\'><span style="' + common_vertical_line_style + ' border-color: var(--brand-red-coral); border-style: solid;"></span>' + (is_tick_trade ? localize('Entry spot') : localize('Start time')) + '&nbsp;</div>';
             }
         };
 
@@ -13025,14 +13029,14 @@ var ChartSettings = function () {
                 zones: [{
                     // make the line grey until it reaches entry time or start time if entry spot time is not yet known
                     value: params.entry_time,
-                    color: 'var(--brand-secondary)'
+                    color: 'var(--general-disabled)'
                 }, {
                     // make the line default color until exit time is reached
                     value: params.exit_time,
                     color: ''
                 }, {
                     // make the line grey again after trade ended
-                    color: 'var(--brand-secondary)'
+                    color: 'var(--general-disabled)'
                 }]
             })],
             subtitle: _extends({}, params.user_sold && { style: { left: '180px' } }, {
@@ -13044,13 +13048,19 @@ var ChartSettings = function () {
                 text: params.title
             },
             tooltip: _extends({}, params.tooltip || {}, {
-                useHTML: true
+                useHTML: true,
+                borderWidth: 0,
+                shadow: false,
+                style: {
+                    backgroundColor: 'var(--general-active)',
+                    color: 'var(--text-prominent)'
+                }
             }),
             xAxis: _extends({
-                lineColor: 'var(--border-normal)'
+                lineColor: 'var(--general-section-1)'
             }, params.x_axis || {}),
             yAxis: {
-                gridLineColor: 'var(--border-normal)',
+                gridLineColor: 'var(--general-section-1)',
                 labels: {
                     align: 'left',
                     formatter: function formatter() {
@@ -14072,8 +14082,8 @@ var Guide = function () {
         $.extend(true, opt, options);
 
         cookie_name = 'hide_guide';
-        btn_next = { className: 'button', html: $('<span/>', { text: localize('Next') }) };
-        btn_finish = { className: 'button btnFinish', html: $('<span/>', { text: localize('Finish') }) };
+        btn_next = { className: 'btn btn--primary', html: $('<span/>', { text: localize('Next') }) };
+        btn_finish = { className: 'btn btn--primary', html: $('<span/>', { text: localize('Finish') }) };
 
         if ($(opt.guideBtnID).length === 0 || opt.script.length === 0) {
             return;
@@ -14113,7 +14123,7 @@ var Guide = function () {
             return;
         }
 
-        $(opt.guideBtnID).addClass('gr-hide-m pulser').append($('<span/>', { class: 'close', text: 'X' })).append($('<strong/>'));
+        $(opt.guideBtnID).addClass('gr-hide-m').append($('<span/>', { class: 'close', text: 'X' })).append($('<strong/>'));
         $(opt.guideBtnID + ' strong').html('<span></span>' + opt.btnText);
 
         setEvents();
@@ -16357,7 +16367,7 @@ var Highchart = function () {
                                     drawLineX({
                                         value: purchase_time,
                                         label: localize('Purchase Time'),
-                                        color: '#7cb5ec'
+                                        color: '#333333'
                                     });
                                 }
 
@@ -16867,7 +16877,7 @@ var HighchartUI = function () {
             value: params.value,
             id: params.id || (is_plotx ? params.value : params.label),
             label: { text: params.label || '' },
-            color: params.color || (is_plotx ? 'var(--brand-red-coral)' : 'green'),
+            color: params.color || (is_plotx ? 'var(--brand-red-coral)' : 'var(--text-prominent)'),
             zIndex: is_plotx ? 2 : 1,
             width: params.width || 2,
             dashStyle: params.dashStyle || 'Solid'
@@ -16995,7 +17005,66 @@ var WebtraderChart = function () {
             showShare: true
         };
 
-        chart = WebtraderCharts.chartWindow.addNewChart($('#webtrader_chart'), chart_config);
+        // Combination of Deriv.app + Highcharts default colours.
+        var line_colours = ['var(--brand-secondary)', '#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce', '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a'];
+
+        var custom_highcharts_opts = {
+            webtrader: {
+                currentPrice: {
+                    stroke: 'var(--brand-red-coral)'
+                }
+            },
+            colors: line_colours,
+            navigator: {
+                maskFill: 'rgba(255, 255, 255, 0)',
+                series: {
+                    // TODO: Dark theme -- fillOpacity cannot be applied to
+                    // CSS vars and is dependent on this value.
+                    color: '#85acb0',
+                    lineWidth: 1,
+                    fillOpacity: 0.1
+                },
+                xAxis: {
+                    labels: {
+                        style: {
+                            color: 'var(--text-prominent)'
+                        }
+                    }
+                }
+            },
+            plotOptions: {
+                candlestick: {
+                    color: '#f95454',
+                    upColor: '#4caf50',
+                    lineWidth: 0
+                },
+                ohlc: {
+                    color: '#f95454',
+                    upColor: '#4caf50'
+                }
+            },
+            xAxis: {
+                color: 'var(--text-prominent)',
+                labels: {
+                    style: {
+                        color: 'var(--text-prominent)'
+                    }
+                }
+            },
+            yAxis: [{
+                labels: {
+                    style: {
+                        color: 'var(--text-prominent)'
+                    }
+                }
+            }],
+            tooltip: {
+                borderWidth: 0,
+                shadow: false
+            }
+        };
+
+        chart = WebtraderCharts.chartWindow.addNewChart($('#webtrader_chart'), chart_config, custom_highcharts_opts);
     };
 
     var redrawChart = function redrawChart() {
@@ -18727,7 +18796,7 @@ var DigitDisplay = function () {
             text: localize('Spot')
         })).append($('<strong />', {
             class: 'gr-6',
-            text: localize('Spot Time (GMT)')
+            text: localize('Spot time (GMT)')
         })))).append($('<div />', {
             class: 'digit-ticker invisible',
             id: 'digit_ticker_container'
@@ -18807,7 +18876,7 @@ var DigitDisplay = function () {
         spot.innerText = localize('Spot');
         spot.classList.add('gr-3');
 
-        spot_time.innerText = localize('Spot Time (GMT)');
+        spot_time.innerText = localize('Spot time (GMT)');
         spot_time.classList.add('gr-6');
 
         var fragment = document.createDocumentFragment();
@@ -26759,17 +26828,17 @@ var ViewPopup = function () {
 
         containerSetText('trade_details_current_title', localize('Contract result'));
         containerSetText('trade_details_indicative_label', localize('Payout'));
-        containerSetText('trade_details_profit_loss_label', localize('Profit/Loss'));
+        containerSetText('trade_details_profit_loss_label', localize('Profit/loss'));
         if (contract.status === 'sold') {
-            containerSetText('trade_details_end_label', localize('End Time'));
+            containerSetText('trade_details_end_label', localize('End time'));
             containerSetText('trade_details_end_date', epochToDateTime(contract.sell_time), '', true);
         }
         if (Lookback.isLookback(contract.contract_type)) {
             containerSetText('trade_details_spot_label', localize('Close'));
-            containerSetText('trade_details_spottime_label', localize('Close Time'));
+            containerSetText('trade_details_spottime_label', localize('Close time'));
         } else {
-            containerSetText('trade_details_spot_label', localize('Exit Spot'));
-            containerSetText('trade_details_spottime_label', localize('Exit Spot Time'));
+            containerSetText('trade_details_spot_label', localize('Exit spot'));
+            containerSetText('trade_details_spottime_label', localize('Exit spot time'));
         }
 
         // show validation error if contract is not settled yet
@@ -26840,7 +26909,7 @@ var ViewPopup = function () {
         th_previous.appendChild(link);
 
         tr.appendChild(th_previous);
-        tr.appendChild(Utility.createElement('th', { class: 'gr-8 gr-6-t gr-6-p gr-4-m', text: localize('Audit Page') }));
+        tr.appendChild(Utility.createElement('th', { class: 'gr-8 gr-6-t gr-6-p gr-4-m', text: localize('Audit page') }));
         tr.appendChild(Utility.createElement('th', { class: 'gr-2 gr-3-t gr-3-p gr-4-m' }));
         table.appendChild(tr);
         div.appendChild(table);
@@ -26932,9 +27001,15 @@ var ViewPopup = function () {
     var createAuditHeader = function createAuditHeader(table) {
         var tr = Utility.createElement('tr', { class: 'gr-row' });
 
+        var td_mid = Utility.createElement('td', { class: 'gr-3 audit-table-head no-margin' });
+        td_mid.appendChild(Utility.createElement('strong', { text: localize('Spot') }));
+
+        var td_last = Utility.createElement('td', { class: 'gr-4 audit-table-head no-margin' });
+        td_last.appendChild(Utility.createElement('strong', { text: localize('Spot time (GMT)') }));
+
         tr.appendChild(Utility.createElement('td', { class: 'gr-4' }));
-        tr.appendChild(Utility.createElement('td', { class: 'gr-3 no-margin secondary-color', text: localize('Spot') }));
-        tr.appendChild(Utility.createElement('td', { class: 'gr-4 no-margin secondary-color', text: localize('Spot Time (GMT)') }));
+        tr.appendChild(td_mid);
+        tr.appendChild(td_last);
 
         table.insertBefore(tr, table.childNodes[0]);
     };
@@ -26967,7 +27042,7 @@ var ViewPopup = function () {
 
     var populateAuditTable = function populateAuditTable(show_audit_table) {
         if (!contract.tick_count) {
-            var contract_starts = createAuditTable(localize('Contract Starts'));
+            var contract_starts = createAuditTable(localize('Contract starts'));
             parseAuditResponse(contract_starts.table, contract.audit_details.contract_start).then(function () {
                 if (contract.audit_details.contract_start) {
                     createAuditHeader(contract_starts.table);
@@ -26977,7 +27052,7 @@ var ViewPopup = function () {
                 }
                 // don't show exit tick information if missing or manual sold
                 if (contract.audit_details.contract_end && contract.status !== 'sold') {
-                    var contract_ends = createAuditTable(localize('Contract Ends'));
+                    var contract_ends = createAuditTable(localize('Contract ends'));
                     parseAuditResponse(contract_ends.table, contract.audit_details.contract_end).then(function () {
                         if (contract.audit_details.contract_end) {
                             createAuditHeader(contract_ends.table);
@@ -26992,7 +27067,7 @@ var ViewPopup = function () {
                 }
             });
         } else {
-            var contract_details = createAuditTable(localize('Contract Details'));
+            var contract_details = createAuditTable(localize('Contract details'));
             parseAuditResponse(contract_details.table, contract.audit_details.all_ticks).then(function () {
                 if (contract.audit_details.all_ticks) {
                     createAuditHeader(contract_details.table);
@@ -27035,11 +27110,11 @@ var ViewPopup = function () {
             barrier_text = _Lookback$getBarrierL2[0];
             low_barrier_text = _Lookback$getBarrierL2[1];
         } else if (contract.barrier_count > 1) {
-            barrier_text = localize('High Barrier');
+            barrier_text = localize('High barrier');
         } else if (/^DIGIT(MATCH|DIFF)$/.test(contract.contract_type)) {
             barrier_text = localize('Target');
         } else if (/^(tickhigh|ticklow)$/i.test(contract.contract_type)) {
-            barrier_text = localize('Selected Tick');
+            barrier_text = localize('Selected tick');
         }
 
         var should_show_entry_spot = !Lookback.isLookback(contract.contract_type) && !/digit/i.test(contract.contract_type);
