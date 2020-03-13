@@ -1612,6 +1612,7 @@ body .header {
         font-size: 0.7561436673rem;
         color: var(--text-less-prominent); }
     body .header__notification-btn {
+      color: var(--text-general) !important;
       margin: 8px 0 0 auto;
       height: 24px !important;
       width: 106px;
@@ -1679,7 +1680,7 @@ body .header {
     padding: 24px 16px;
     -ms-flex-preferred-size: 100%;
         flex-basis: 100%;
-    width: 302px; }
+    width: 288px; }
     body .header .platform__list-item:not(.platform__list-item--active):hover {
       background: var(--state-hover); }
     body .header .platform__list-item--active {

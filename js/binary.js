@@ -11357,8 +11357,7 @@ var Header = function () {
                     return Client.get('excluded_until');
                 },
                 authenticate: function authenticate() {
-                    return (/* hasVerification('authenticate') */true
-                    );
+                    return hasVerification('authenticate');
                 },
                 cashier_locked: function cashier_locked() {
                     return hasStatus('cashier_locked');
@@ -11404,11 +11403,9 @@ var Header = function () {
                 },
                 poa_expired: function poa_expired() {
                     return hasVerification('poa_expired');
-                },
-                residence: function residence() {
-                    return !Client.get('residence');
                 }
-                /* poa_rejected         : () => hasVerification('poa_rejected'),
+                /* residence            : () => !Client.get('residence'),
+                poa_rejected         : () => hasVerification('poa_rejected'),
                 unsubmitted          : () => hasVerification('unsubmitted'),
                 expired              : () => hasVerification('expired'),
                 expired_identity     : () => hasVerification('expired_identity'),
