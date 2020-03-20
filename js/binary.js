@@ -10,7 +10,7 @@
 /******/ 		var moduleId, chunkId, i = 0, resolves = [];
 /******/ 		for(;i < chunkIds.length; i++) {
 /******/ 			chunkId = chunkIds[i];
-/******/ 			if(installedChunks[chunkId]) {
+/******/ 			if(Object.prototype.hasOwnProperty.call(installedChunks, chunkId) && installedChunks[chunkId]) {
 /******/ 				resolves.push(installedChunks[chunkId][0]);
 /******/ 			}
 /******/ 			installedChunks[chunkId] = 0;
@@ -46,6 +46,7 @@
 /******/ 				result = __webpack_require__(__webpack_require__.s = deferredModule[0]);
 /******/ 			}
 /******/ 		}
+/******/
 /******/ 		return result;
 /******/ 	}
 /******/
@@ -112,7 +113,6 @@
 /******/ 				promises.push(installedChunkData[2] = promise);
 /******/
 /******/ 				// start chunk loading
-/******/ 				var head = document.getElementsByTagName('head')[0];
 /******/ 				var script = document.createElement('script');
 /******/ 				var onScriptComplete;
 /******/
@@ -123,6 +123,8 @@
 /******/ 				}
 /******/ 				script.src = jsonpScriptSrc(chunkId);
 /******/
+/******/ 				// create error before stack unwound to get useful stacktrace later
+/******/ 				var error = new Error();
 /******/ 				onScriptComplete = function (event) {
 /******/ 					// avoid mem leaks in IE.
 /******/ 					script.onerror = script.onload = null;
@@ -132,7 +134,8 @@
 /******/ 						if(chunk) {
 /******/ 							var errorType = event && (event.type === 'load' ? 'missing' : event.type);
 /******/ 							var realSrc = event && event.target && event.target.src;
-/******/ 							var error = new Error('Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')');
+/******/ 							error.message = 'Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')';
+/******/ 							error.name = 'ChunkLoadError';
 /******/ 							error.type = errorType;
 /******/ 							error.request = realSrc;
 /******/ 							chunk[1](error);
@@ -144,7 +147,7 @@
 /******/ 					onScriptComplete({ type: 'timeout', target: script });
 /******/ 				}, 120000);
 /******/ 				script.onerror = script.onload = onScriptComplete;
-/******/ 				head.appendChild(script);
+/******/ 				document.head.appendChild(script);
 /******/ 			}
 /******/ 		}
 /******/ 		return Promise.all(promises);
@@ -200,7 +203,7 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/binary-static/js/";
+/******/ 	__webpack_require__.p = "/js/";
 /******/
 /******/ 	// on error function for async loading
 /******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
@@ -239,13 +242,12 @@ function webpackContext(req) {
 	return __webpack_require__(id);
 }
 function webpackContextResolve(req) {
-	var id = map[req];
-	if(!(id + 1)) { // check for number or string
+	if(!__webpack_require__.o(map, req)) {
 		var e = new Error("Cannot find module '" + req + "'");
 		e.code = 'MODULE_NOT_FOUND';
 		throw e;
 	}
-	return id;
+	return map[req];
 }
 webpackContext.keys = function webpackContextKeys() {
 	return Object.keys(map);
@@ -309,16 +311,16 @@ var ClientBase = function () {
         var loginid = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : current_loginid;
 
         if (key === 'loginid' && value !== current_loginid) {
-            LocalStore.set('active_loginid', value);
             syncWithDerivApp(value, client_object);
+            LocalStore.set('active_loginid', value);
             current_loginid = value;
         } else {
             if (!(loginid in client_object)) {
                 client_object[loginid] = {};
             }
             client_object[loginid][key] = value;
-            LocalStore.setObject(storage_key, client_object);
             syncWithDerivApp(loginid, client_object);
+            LocalStore.setObject(storage_key, client_object);
         }
     };
 
@@ -8429,7 +8431,7 @@ var setObject = function setObject(key, value) {
             this.setItem(key, JSON.stringify(value));
         }
     } catch (e) {
-        var quota_exceeded_error = e.name === ('QuotaExceededError' || 'QUOTA_EXCEEDED_ERR' || 'NS_ERROR_DOM_QUOTA_REACHED' || 'W3CException_DOM_QUOTA_EXCEEDED_ERR');
+        var quota_exceeded_error = e.name === ('QuotaExceededError' || false || false || false);
 
         if (quota_exceeded_error) {
             handlesQuotaExceededErrorException();
@@ -10363,16 +10365,12 @@ module.exports = Client;
 var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 var ServerTime = __webpack_require__(/*! ../../_common/base/server_time */ "./src/javascript/_common/base/server_time.js");
 var elementInnerHtml = __webpack_require__(/*! ../../_common/common_functions */ "./src/javascript/_common/common_functions.js").elementInnerHtml;
-var getElementById = __webpack_require__(/*! ../../_common/common_functions */ "./src/javascript/_common/common_functions.js").getElementById;
+var applyToAllElements = __webpack_require__(/*! ../../_common/utility */ "./src/javascript/_common/utility.js").applyToAllElements;
 
 var Clock = function () {
-    var el_clock = void 0,
-        fncExternalTimer = void 0;
+    var fncExternalTimer = void 0;
 
     var startClock = function startClock() {
-        if (!el_clock) {
-            el_clock = getElementById('gmt-clock');
-        }
 
         ServerTime.init(onTimeUpdated);
     };
@@ -10382,7 +10380,9 @@ var Clock = function () {
         window.time = server_time;
 
         var time_str = server_time.format('YYYY-MM-DD HH:mm:ss') + ' GMT';
-        elementInnerHtml(el_clock, time_str);
+        applyToAllElements('.gmt-clock', function (el) {
+            elementInnerHtml(el, time_str);
+        });
 
         if (typeof fncExternalTimer === 'function') {
             fncExternalTimer();
@@ -10654,14 +10654,18 @@ var Header = function () {
     };
 
     var bindSvg = function bindSvg() {
-        var logo = getElementById('logo');
         var add = getElementById('add_icon');
-        var reports = getElementById('reports_icon');
         var cashier = getElementById('cashier_icon');
-        var bell = getElementById('header__notification-icon');
         var account = getElementById('header__account-settings');
-        var logout = getElementById('account__switcher-logout-icon');
+        var menu = getElementById('header__hamburger');
         var empty = getElementById('header__notification-empty-img');
+        var bell = getElementById('header__notification-icon');
+        var trade = getElementById('mobile__platform-switcher-icon-trade');
+        var arrow = getElementById('mobile__platform-switcher-icon-arrowright');
+        var back = getElementById('mobile__menu-content-submenu-icon-back');
+        var open = getElementById('mobile__menu-content-submenu-icon-open');
+        var profit = getElementById('mobile__menu-content-submenu-icon-profit');
+        var statement = getElementById('mobile__menu-content-submenu-icon-statement');
 
         applyToAllElements('.header__expand', function (el) {
             el.src = Url.urlForStatic(header_icon_base_path + 'ic-chevron-down.svg');
@@ -10671,18 +10675,42 @@ var Header = function () {
             el.src = Url.urlForStatic(header_icon_base_path + 'ic-chevron-down.svg');
         });
 
-        logo.src = Url.urlForStatic(header_icon_base_path + 'logo_smart_trader.svg');
-        reports.src = Url.urlForStatic(header_icon_base_path + 'ic-reports.svg');
+        applyToAllElements('.header__logo', function (el) {
+            el.src = Url.urlForStatic(header_icon_base_path + 'logo_smart_trader.svg');
+        });
+
+        applyToAllElements('.logout-icon', function (el) {
+            el.src = Url.urlForStatic(header_icon_base_path + 'ic-logout.svg');
+        });
+
+        applyToAllElements('.reports-icon', function (el) {
+            el.src = Url.urlForStatic(header_icon_base_path + 'ic-reports.svg');
+        });
+
+        applyToAllElements('.btn__close', function (el) {
+            el.src = Url.urlForStatic(header_icon_base_path + 'ic-close.svg');
+        });
+
         cashier.src = Url.urlForStatic(header_icon_base_path + 'ic-cashier.svg');
-        bell.src = Url.urlForStatic(header_icon_base_path + 'ic-bell.svg');
         account.src = Url.urlForStatic(header_icon_base_path + 'ic-user-outline.svg');
-        logout.src = Url.urlForStatic(header_icon_base_path + 'ic-logout.svg');
         add.src = Url.urlForStatic(header_icon_base_path + 'ic-add-circle.svg');
         empty.src = Url.urlForStatic(header_icon_base_path + 'ic-box.svg');
+        bell.src = Url.urlForStatic(header_icon_base_path + 'ic-bell.svg');
+        menu.src = Url.urlForStatic(header_icon_base_path + 'ic-hamburger.svg');
+        trade.src = Url.urlForStatic(header_icon_base_path + 'ic-trade.svg');
+        arrow.src = Url.urlForStatic(header_icon_base_path + 'ic-chevron-right.svg');
+        back.src = Url.urlForStatic(header_icon_base_path + 'ic-chevron-left.svg');
+        open.src = Url.urlForStatic(header_icon_base_path + 'ic-portfolio.svg');
+        profit.src = Url.urlForStatic(header_icon_base_path + 'ic-profit-table.svg');
+        statement.src = Url.urlForStatic(header_icon_base_path + 'ic-statement.svg');
     };
 
     var bindPlatform = function bindPlatform() {
+        // Web
         var platform_list = getElementById('platform__list');
+
+        // Mobile
+        var mobile_platform_list = getElementById('mobile__platform-switcher-dropdown');
         if (platform_list.hasChildNodes()) {
             return;
         }
@@ -10691,25 +10719,30 @@ var Header = function () {
                 name: 'DTrader',
                 desc: 'A whole new trading experience on a powerful yet easy to use platform.',
                 link: 'https://deriv.app',
-                icon: 'ic-brand-dtrader.svg'
+                icon: 'ic-brand-dtrader.svg',
+                on_mobile: true
             },
             dbot: {
                 name: 'DBot',
                 desc: 'Automated trading at your fingertips. No coding needed.',
                 link: 'https://deriv.app/bot',
-                icon: 'ic-brand-dbot.svg'
+                icon: 'ic-brand-dbot.svg',
+                on_mobile: false
             },
             dmt5: {
                 name: 'DMT5',
                 desc: 'The platform of choice for professionals worldwide.',
                 link: 'https://deriv.app/mt5',
-                icon: 'ic-brand-dmt5.svg'
+                icon: 'ic-brand-dmt5.svg',
+                on_mobile: true
+
             },
             smarttrader: {
                 name: 'SmartTrader',
-                desc: 'Trade the world\'s markets with our popular user-friendly platform.',
+                desc: 'Trade the world\'s markets with a simple and familiar platform.',
                 link: '#',
-                icon: 'logo_smart_trader.svg'
+                icon: 'logo_smart_trader.svg',
+                on_mobile: true
             }
         };
 
@@ -10726,27 +10759,50 @@ var Header = function () {
             platform_text_container.appendChild(platform_desc);
             platform_div.appendChild(platform_text_container);
 
+            if (platform.on_mobile) {
+                mobile_platform_list.appendChild(platform_div.cloneNode(true));
+            }
             platform_list.appendChild(platform_div);
         });
     };
 
     var bindClick = function bindClick() {
-        // const logo = getElementById('logo');
-        // logo.removeEventListener('click', logoOnClick);
-        // logo.addEventListener('click', logoOnClick);
-
         var btn_login = getElementById('btn__login');
         btn_login.removeEventListener('click', loginOnClick);
         btn_login.addEventListener('click', loginOnClick);
 
-        applyToAllElements('#logout', function (el) {
+        applyToAllElements('.logout', function (el) {
             el.removeEventListener('click', logoutOnClick);
             el.addEventListener('click', logoutOnClick);
         });
 
+        // Mobile menu
+        var mobile_menu_overlay = getElementById('mobile__container');
+        var mobile_menu = getElementById('mobile__menu');
+        var mobile_menu_close = getElementById('mobile__menu-close');
+        var hamburger_menu = getElementById('header__hamburger');
+        var mobile_menu_active = 'mobile__container--active';
+        var showMobileMenu = function showMobileMenu(shouldShow) {
+            if (shouldShow) {
+                mobile_menu_overlay.classList.add(mobile_menu_active);
+                document.body.classList.add('stop-scrolling');
+            } else {
+                mobile_menu_overlay.classList.remove(mobile_menu_active);
+                document.body.classList.remove('stop-scrolling');
+            }
+        };
+
+        hamburger_menu.addEventListener('click', function () {
+            return showMobileMenu(true);
+        });
+        mobile_menu_close.addEventListener('click', function () {
+            return showMobileMenu(false);
+        });
+
         // Notificatiopn Event
-        var notification_bell = getElementById('header__notification');
+        var notification_bell = getElementById('header__notiifcation-icon-container');
         var notification_container = getElementById('header__notification-container');
+        var notification_close = getElementById('header__notification-close');
         var notification_active = 'header__notification-container--show';
         var showNotification = function showNotification(should_open) {
             notification_container.toggleClass(notification_active, should_open);
@@ -10759,35 +10815,26 @@ var Header = function () {
                 showNotification(true);
             }
         });
-
-        // Account Switcher Event
-        var acc_switcher = getElementById('acc_switcher');
-        var account_switcher_dropdown = getElementById('account__switcher');
-        var acc_expand = getElementById('header__acc-expand');
-        var acc_switcher_active = 'account__switcher--show';
-        var showAccountSwitcher = function showAccountSwitcher(should_open) {
-            account_switcher_dropdown.toggleClass(acc_switcher_active, should_open);
-            acc_expand.toggleClass('rotated', should_open);
-        };
-
-        acc_switcher.addEventListener('click', function (event) {
-            if (account_switcher_dropdown.classList.contains(acc_switcher_active) && !account_switcher_dropdown.contains(event.target)) {
-                showAccountSwitcher(false);
-            } else {
-                showAccountSwitcher(true);
-            }
+        notification_close.addEventListener('click', function () {
+            return showNotification(false);
         });
 
         // Platform Switcher Event
         var platform_switcher_arrow = getElementById('platform__switcher-expand');
         var platform_switcher = getElementById('platform__switcher');
         var platform_dropdown = getElementById('platform__dropdown');
+        var platform__list = getElementById('platform__list');
         var platform_dropdown_active = 'platform__dropdown--show';
-        var body = document.body;
         var showPlatformSwitcher = function showPlatformSwitcher(should_open) {
-            platform_dropdown.toggleClass(platform_dropdown_active, should_open);
-            platform_switcher_arrow.toggleClass('rotated', should_open);
-            body.toggleClass('stop-scrolling', should_open);
+            if (should_open) {
+                platform_dropdown.classList.add(platform_dropdown_active);
+                platform_switcher_arrow.classList.add('rotated');
+                document.body.classList.add('stop-scrolling');
+            } else {
+                platform_dropdown.classList.remove(platform_dropdown_active);
+                platform_switcher_arrow.classList.remove('rotated');
+                document.body.classList.remove('stop-scrolling');
+            }
         };
 
         applyToAllElements('.platform__list-item', function (el) {
@@ -10804,16 +10851,107 @@ var Header = function () {
             }
         });
 
+        // Mobile Platform Switcher Event
+        var mobile_platform_switcher_current = getElementById('mobile__platform-switcher-current');
+        var mobile_platform_switcher = getElementById('mobile__platform-switcher-expand');
+        var mobile_platform_switcher_dropdown = getElementById('mobile__platform-switcher-dropdown');
+        var mobile_platform_switcher_active = 'mobile__platform-switcher-dropdown--show';
+        var showMobilePlatformSwitcher = function showMobilePlatformSwitcher(shouldShow) {
+            if (shouldShow) {
+                mobile_platform_switcher.classList.add('rotated');
+                mobile_platform_switcher_dropdown.classList.add(mobile_platform_switcher_active);
+            } else {
+                mobile_platform_switcher.classList.remove('rotated');
+                mobile_platform_switcher_dropdown.classList.remove(mobile_platform_switcher_active);
+            }
+        };
+
+        mobile_platform_switcher_current.addEventListener('click', function () {
+            if (mobile_platform_switcher_dropdown.classList.contains(mobile_platform_switcher_active)) {
+                showMobilePlatformSwitcher(false);
+            } else {
+                showMobilePlatformSwitcher(true);
+            }
+        });
+
+        // Account Switcher Event
+        var acc_switcher = getElementById('acc_switcher');
+        var account_switcher = getElementById('account__switcher');
+        var account_switcher_dropdown = getElementById('account__switcher-dropdown');
+        var acc_expand = getElementById('header__acc-expand');
+        var account_switcher_active = 'account__switcher-dropdown--show';
+        var showAccountSwitcher = function showAccountSwitcher(should_open) {
+            if (should_open) {
+                account_switcher_dropdown.classList.add(account_switcher_active);
+                acc_expand.classList.add('rotated');
+            } else {
+                account_switcher_dropdown.classList.remove(account_switcher_active);
+                acc_expand.classList.remove('rotated');
+            }
+        };
+
+        acc_switcher.addEventListener('click', function (event) {
+            if (!account_switcher_dropdown.contains(event.target)) {
+                if (account_switcher_dropdown.classList.contains(account_switcher_active)) {
+                    showAccountSwitcher(false);
+                } else {
+                    showAccountSwitcher(true);
+                }
+
+                if (platform_dropdown.classList.contains(platform_dropdown_active)) {
+                    showPlatformSwitcher(false);
+                }
+            }
+        });
+
+        // Mobile account switcher click outside
+        account_switcher_dropdown.addEventListener('click', function (event) {
+            if (!account_switcher.contains(event.target)) {
+                showAccountSwitcher(false);
+            }
+        });
+
+        // Mobile reports menu
+        var report_menu = getElementById('mobile__platform-switcher-item-reports');
+        var menu = getElementById('mobile_menu-content');
+        var submenu = getElementById('mobile__menu-content-submenu');
+        var back = getElementById('mobile__menu-content-submenu-header');
+        var submenu_active = 'mobile__menu-content-submenu--active';
+        var menu_active = 'mobile__menu-content--active';
+        var showMobileSubmenu = function showMobileSubmenu(shouldShow) {
+            if (shouldShow) {
+                submenu.classList.add(submenu_active);
+                menu.classList.remove(menu_active);
+            } else {
+                submenu.classList.remove(submenu_active);
+                menu.classList.add(menu_active);
+            }
+        };
+
+        report_menu.addEventListener('click', function () {
+            showMobileSubmenu(true);
+        });
+
+        back.addEventListener('click', function () {
+            showMobileSubmenu(false);
+        });
+
         // OnClickOutisde Event Handle
         document.addEventListener('click', function (event) {
             // Platform Switcher
-            if (!platform_switcher.contains(event.target) && !platform_dropdown.contains(event.target) && platform_dropdown.classList.contains(platform_dropdown_active)) {
+            if (!platform_switcher.contains(event.target) && !platform__list.contains(event.target) && platform_dropdown.classList.contains(platform_dropdown_active)) {
                 showPlatformSwitcher(false);
             }
 
             // Account Switcher
-            if (!account_switcher_dropdown.contains(event.target) && !acc_switcher.contains(event.target) && account_switcher_dropdown.classList.contains(acc_switcher_active)) {
+            if (!account_switcher_dropdown.contains(event.target) && !acc_switcher.contains(event.target) && account_switcher_dropdown.classList.contains(account_switcher_active)) {
                 showAccountSwitcher(false);
+            }
+
+            // Mobile Menu
+            if (!mobile_menu.contains(event.target) && !hamburger_menu.contains(event.target) && mobile_menu_overlay.classList.contains(mobile_menu_active)) {
+                showMobilePlatformSwitcher(false);
+                showMobileMenu(false);
             }
 
             // Notification
@@ -10968,7 +11106,9 @@ var Header = function () {
         GTM.setLoginFlag('account_switch');
         Client.set('loginid', loginid);
         SocketCache.clear();
-        window.location.reload();
+        setTimeout(function () {
+            return window.location.reload();
+        }, 0);
     };
 
     var upgradeMessageVisibility = function upgradeMessageVisibility() {
@@ -11718,19 +11858,13 @@ module.exports = Menu;
 var Header = __webpack_require__(/*! ./header */ "./src/javascript/app/base/header.js");
 var BinarySocketGeneral = __webpack_require__(/*! ./socket_general */ "./src/javascript/app/base/socket_general.js");
 var NetworkMonitorBase = __webpack_require__(/*! ../../_common/base/network_monitor_base */ "./src/javascript/_common/base/network_monitor_base.js");
-var getElementById = __webpack_require__(/*! ../../_common/common_functions */ "./src/javascript/_common/common_functions.js").getElementById;
+var applyToAllElements = __webpack_require__(/*! ../../_common/utility */ "./src/javascript/_common/utility.js").applyToAllElements;
 var localize = __webpack_require__(/*! ../../_common/localize */ "./src/javascript/_common/localize.js").localize;
 
 var NetworkMonitor = function () {
     var connection_error_code = 'you_are_offline';
 
-    var el_status = void 0,
-        el_tooltip = void 0;
-
     var init = function init() {
-        el_status = getElementById('network_status');
-        el_tooltip = el_status.parentNode;
-
         NetworkMonitorBase.init(BinarySocketGeneral, updateUI);
     };
 
@@ -11741,10 +11875,10 @@ var NetworkMonitor = function () {
             Header.displayNotification({ key: connection_error_code, title: localize('You are offline'), message: localize('Check your conenction.'), type: 'danger' });
         }
 
-        if (el_status && el_tooltip) {
-            el_status.setAttribute('class', status.class);
-            el_tooltip.setAttribute('data-balloon', localize('Network status') + ': ' + status.tooltip);
-        }
+        applyToAllElements('.network_status', function (el) {
+            el.setAttribute('status', status.class);
+            el.parentNode.setAttribute('data-balloon', localize('Network status') + ': ' + status.tooltip);
+        });
     };
 
     return {
