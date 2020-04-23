@@ -276,6 +276,7 @@ var LocalStore = __webpack_require__(/*! ../storage */ "./src/javascript/_common
 var State = __webpack_require__(/*! ../storage */ "./src/javascript/_common/storage.js").State;
 var getPropertyValue = __webpack_require__(/*! ../utility */ "./src/javascript/_common/utility.js").getPropertyValue;
 var isEmptyObject = __webpack_require__(/*! ../utility */ "./src/javascript/_common/utility.js").isEmptyObject;
+var getAllowedLocalStorageOrigin = __webpack_require__(/*! ../url */ "./src/javascript/_common/url.js").getAllowedLocalStorageOrigin;
 
 var ClientBase = function () {
     var storage_key = 'client.accounts';
@@ -673,24 +674,22 @@ var ClientBase = function () {
     var syncWithDerivApp = function syncWithDerivApp(active_loginid, client_accounts) {
         var iframe_window = document.getElementById('localstorage-sync');
         if (iframe_window) {
-            var origin = void 0;
-            if (/^smarttrader-staging\.deriv\.app$/i.test(window.location.hostname)) {
-                origin = 'https://staging.deriv.app';
-            } else if (/^smarttrader\.deriv\.app$/i.test(window.location.hostname)) {
-                origin = 'https://deriv.app';
-            } else {
+            var origin = getAllowedLocalStorageOrigin();
+            if (!origin) {
                 return;
             }
 
             // Keep client.accounts in sync (in case user wasn't logged in).
-            iframe_window.contentWindow.postMessage({
-                key: 'client.accounts',
-                value: JSON.stringify(client_accounts)
-            }, origin);
-            iframe_window.contentWindow.postMessage({
-                key: 'active_loginid',
-                value: active_loginid
-            }, origin);
+            if (iframe_window.src === origin + '/localstorage-sync.html') {
+                iframe_window.contentWindow.postMessage({
+                    key: 'client.accounts',
+                    value: JSON.stringify(client_accounts)
+                }, origin);
+                iframe_window.contentWindow.postMessage({
+                    key: 'active_loginid',
+                    value: active_loginid
+                }, origin);
+            }
         }
     };
 
@@ -9046,6 +9045,7 @@ var ThirdPartyLinks = function () {
             return false;
         }
         return !!destination.host && !new RegExp('^.*\\.' + (getCurrentBinaryDomain() || 'binary\\.com') + '$').test(destination.host) // destination host is not binary subdomain
+        && !new RegExp('deriv\\.app$').test(destination.host) // destination host is not deriv.app
         && !new RegExp('^.*\\.binary\\.bot$').test(destination.host) // destination host is not binary subdomain
         && !/www.(betonmarkets|xodds).com/.test(destination.host) // destination host is not binary old domain
         && window.location.host !== destination.host;
@@ -9191,6 +9191,19 @@ var Url = function () {
         return static_host + path.replace(/(^\/)/g, '');
     };
 
+    var urlForDeriv = function urlForDeriv(path, pars) {
+        return getAllowedLocalStorageOrigin() + '/' + path + (pars ? '?' + pars : '');
+    };
+
+    var getAllowedLocalStorageOrigin = function getAllowedLocalStorageOrigin() {
+        if (/^smarttrader-staging\.deriv\.app$/i.test(window.location.hostname)) {
+            return 'https://staging.deriv.app';
+        } else if (/^smarttrader\.deriv\.app$/i.test(window.location.hostname)) {
+            return 'https://deriv.app';
+        }
+        return false;
+    };
+
     /**
      * @param {Object} new_params - Object with param-value pairs. To delete param, set value to null.
      * @param {boolean} should_preserve_old - Should existing query parameters be preserved.
@@ -9227,6 +9240,8 @@ var Url = function () {
         urlFor: urlFor,
         urlForCurrentDomain: urlForCurrentDomain,
         urlForStatic: urlForStatic,
+        urlForDeriv: urlForDeriv,
+        getAllowedLocalStorageOrigin: getAllowedLocalStorageOrigin,
         getSection: getSection,
         getHashValue: getHashValue,
         updateParamsWithoutReload: updateParamsWithoutReload,
@@ -9798,7 +9813,7 @@ var LoggedInHandler = __webpack_require__(/*! ./logged_in */ "./src/javascript/a
 // const DP2P                    = require('../pages/cashier/dp2p');
 // const PaymentAgentList        = require('../pages/cashier/payment_agent_list');
 // const PaymentAgentWithdraw    = require('../pages/cashier/payment_agent_withdraw');
-// const Endpoint                = require('../pages/endpoint');
+var Endpoint = __webpack_require__(/*! ../pages/endpoint */ "./src/javascript/app/pages/endpoint.js");
 // const EconomicCalendar        = require('../pages/resources/economic_calendar/economic_calendar');
 // const AssetIndexUI            = require('../pages/resources/asset_index/asset_index.ui');
 // const MetatraderDownloadUI    = require('../pages/resources/metatrader/download.ui');
@@ -9875,7 +9890,7 @@ var pages_config = {
     // dp2p                     : { module: DP2P,                       is_authenticated: true },
     // dubai                    : { module: StaticPages.Locations },
     // economic_calendar        : { module: EconomicCalendar },
-    // endpoint                 : { module: Endpoint },
+    endpoint: { module: Endpoint },
     // epg_forwardws            : { module: DepositWithdraw,            is_authenticated: true, only_real: true },
     // faq                      : { module: StaticPages.AffiliatesFAQ },
     // forex                    : { module: GetStarted.Forex },
@@ -10232,9 +10247,9 @@ var Client = function () {
                 // const client_logged_in = getElementById('client-logged-in');
                 // client_logged_in.classList.add('gr-centered');
 
-                // applyToAllElements('.client_logged_in', (el) => {
-                //     el.setVisibility(1);
-                // });
+                applyToAllElements('.client_logged_in', function (el) {
+                    el.setVisibility(1);
+                });
 
                 if (ClientBase.get('is_virtual')) applyToAllElements('.client_virtual', function (el) {
                     return el.setVisibility(1);
@@ -10615,11 +10630,13 @@ var applyToAllElements = __webpack_require__(/*! ../../_common/utility */ "./src
 var createElement = __webpack_require__(/*! ../../_common/utility */ "./src/javascript/_common/utility.js").createElement;
 var findParent = __webpack_require__(/*! ../../_common/utility */ "./src/javascript/_common/utility.js").findParent;
 var template = __webpack_require__(/*! ../../_common/utility */ "./src/javascript/_common/utility.js").template;
+var Language = __webpack_require__(/*! ../../_common/language */ "./src/javascript/_common/language.js");
 
 var header_icon_base_path = '/images/pages/header/';
 
 var Header = function () {
     var notifications = [];
+    var is_language_popup_on = false;
     var is_full_screen = false;
     var fullscreen_map = {
         event: ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'],
@@ -10630,6 +10647,7 @@ var Header = function () {
 
     var onLoad = function onLoad() {
         populateAccountsList();
+        setHeaderUrls();
         bindPlatform();
         bindClick();
         bindSvg();
@@ -10638,6 +10656,27 @@ var Header = function () {
         }
         fullscreen_map.event.forEach(function (event) {
             document.addEventListener(event, onFullScreen, false);
+        });
+    };
+
+    var setHeaderUrls = function setHeaderUrls() {
+        applyToAllElements('.url-reports-positions', function (el) {
+            el.href = Url.urlForDeriv('reports/positions', 'ext_platform_url=' + encodeURIComponent(window.location.href));
+        });
+        applyToAllElements('.url-reports-profit', function (el) {
+            el.href = Url.urlForDeriv('reports/profit', 'ext_platform_url=' + encodeURIComponent(window.location.href));
+        });
+        applyToAllElements('.url-reports-statement', function (el) {
+            el.href = Url.urlForDeriv('reports/statement', 'ext_platform_url=' + encodeURIComponent(window.location.href));
+        });
+        applyToAllElements('.url-cashier-deposit', function (el) {
+            el.href = Url.urlForDeriv('cashier/deposit', 'ext_platform_url=' + encodeURIComponent(window.location.href));
+        });
+        applyToAllElements('.url-account-details', function (el) {
+            el.href = Url.urlForDeriv('account/personal-details', 'ext_platform_url=' + encodeURIComponent(window.location.href));
+        });
+        applyToAllElements('.url-add-account', function (el) {
+            el.href = Url.urlForDeriv('redirect', 'action=add_account');
         });
     };
 
@@ -10739,7 +10778,7 @@ var Header = function () {
             },
             smarttrader: {
                 name: 'SmartTrader',
-                desc: 'Trade the world\'s markets with a simple and familiar platform.',
+                desc: 'Trade the world\'s markets on Binary.com\'s classic platform.',
                 link: '#',
                 icon: 'logo_smart_trader.svg',
                 on_mobile: true
@@ -10960,9 +10999,59 @@ var Header = function () {
             }
         });
 
+        // Language Popup.
+        var current_language = Language.get();
+        var available_languages = Object.entries(Language.getAll()).filter(function (language) {
+            return !/ACH/.test(language[0]);
+        });
+
+        var el_language_select_img = getElementById('language-select__logo');
+        el_language_select_img.src = Url.urlForStatic('images/languages/ic-flag-' + current_language.toLowerCase() + '.svg');
+
+        getElementById('language-select').addEventListener('click', toggleLanguagePopup);
+
+        var el_language_menu_modal = getElementById('language-menu-modal');
+        el_language_menu_modal.addEventListener('click', function (e) {
+            if ($(e.target).is(el_language_menu_modal)) {
+                toggleLanguagePopup();
+            }
+        });
+
+        available_languages.map(function (language) {
+            var language_menu_item = createElement('div', {
+                class: 'language-menu-item' + (current_language === language[0] ? ' language-menu-item__active' : ''),
+                id: language[0]
+            });
+            language_menu_item.appendChild(createElement('img', { src: Url.urlForStatic('images/languages/ic-flag-' + language[0].toLowerCase() + '.svg') }));
+            language_menu_item.appendChild(createElement('span', { text: language[1] }));
+            getElementById('language-menu-list').appendChild(language_menu_item);
+        });
+
+        applyToAllElements('.language-menu-item', function (el) {
+            el.addEventListener('click', function () {
+                var item_language = el.getAttribute('id');
+                if (item_language === current_language) return;
+                document.location = Language.urlFor(item_language);
+            });
+        }, '', getElementById('language-menu-list'));
+
+        var el_language_menu_close_btn = getElementById('language-menu-close_btn');
+        el_language_menu_close_btn.addEventListener('click', toggleLanguagePopup);
+
+        // Help center.
+        var topbar_help_center = getElementById('topbar-help-centre');
+        topbar_help_center.addEventListener('click', function () {
+            return window.location = 'https://www.deriv.com/help-centre/';
+        });
+
+        // Topbar fullscreen events.
         var topbar_fullscreen = getElementById('topbar-fullscreen');
-        topbar_fullscreen.removeEventListener('click', toggleFullscreen);
         topbar_fullscreen.addEventListener('click', toggleFullscreen);
+    };
+
+    var toggleLanguagePopup = function toggleLanguagePopup() {
+        is_language_popup_on = !is_language_popup_on;
+        getElementById('language-menu-modal').setVisibility(is_language_popup_on);
     };
 
     var toggleFullscreen = function toggleFullscreen() {
@@ -11005,7 +11094,7 @@ var Header = function () {
             Client.getAllLoginids().forEach(function (loginid) {
                 if (!Client.get('is_disabled', loginid) && Client.get('token', loginid)) {
                     // const account_title  = Client.getAccountTitle(loginid);
-                    var is_real = !Client.getAccountType(loginid); // this function only returns virtual/gaming/financial types
+                    var is_real = /undefined|gaming|financial/.test(Client.getAccountType(loginid)); // this function only returns virtual/gaming/financial types
                     var currency = Client.get('currency', loginid);
                     // const localized_type = localize('[_1] Account', is_real && currency ? currency : account_title);
                     var icon = '' + Url.urlForStatic(header_icon_base_path + 'ic-currency-' + (is_real ? currency.toLowerCase() : 'virtual') + '.svg');
@@ -11430,7 +11519,7 @@ var Header = function () {
                     return { key: 'exluded_until', title: localize('Self-exclusion'), message: buildSpecificMessage(localizeKeepPlaceholders('You have opted to be excluded from Binary.com until [_1]. Please [_2]contact us[_3] for assistance.'), ['' + formatDate(Client.get('excluded_until') || new Date()), '<a class="header__notification-link" href="https://www.deriv.com/contact-us/">', '</a>']), type: 'danger' };
                 },
                 authenticate: function authenticate() {
-                    return { key: 'authenticate', title: localize('Authenticate'), message: localize('Authenticate your account now to take full advantage of all payment methods available.'), type: 'info', button_text: 'Authenticate', button_link: 'https://deriv.app/account/proof-of-identity' };
+                    return { key: 'authenticate', title: localize('Account authentication'), message: localize('Authenticate your account now to take full advantage of all payment methods available.'), type: 'info', button_text: 'Authenticate', button_link: 'https://deriv.app/account/proof-of-identity' };
                 },
                 cashier_locked: function cashier_locked() {
                     return { key: 'cashier_locked', title: localize('Cashier disabled'), message: localize('Deposits and withdrawals have been disabled on your account. Please check your email for more details.'), type: 'warning' };
@@ -15001,6 +15090,51 @@ module.exports = TimePicker;
 
 /***/ }),
 
+/***/ "./src/javascript/app/pages/endpoint.js":
+/*!**********************************************!*\
+  !*** ./src/javascript/app/pages/endpoint.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var getAppId = __webpack_require__(/*! ../../config */ "./src/javascript/config.js").getAppId;
+var getSocketURL = __webpack_require__(/*! ../../config */ "./src/javascript/config.js").getSocketURL;
+
+var Endpoint = function () {
+    var onLoad = function onLoad() {
+        var $server_url = $('#server_url');
+        var $app_id = $('#app_id');
+        $server_url.val(getSocketURL().split('/')[2]);
+        $app_id.val(getAppId());
+
+        $('#frm_endpoint').on('submit', function (e) {
+            e.preventDefault();
+            var server_url = $server_url.val().trim().toLowerCase().replace(/[><()\/\"\']/g, '');
+            var app_id = $app_id.val().trim();
+            if (server_url) localStorage.setItem('config.server_url', server_url);
+            if (app_id && !isNaN(app_id)) localStorage.setItem('config.app_id', parseInt(app_id));
+            window.location.reload();
+        });
+
+        $('#reset_endpoint').on('click', function () {
+            localStorage.removeItem('config.server_url');
+            localStorage.removeItem('config.app_id');
+            window.location.reload();
+        });
+    };
+
+    return {
+        onLoad: onLoad
+    };
+}();
+
+module.exports = Endpoint;
+
+/***/ }),
+
 /***/ "./src/javascript/app/pages/trade/analysis.js":
 /*!****************************************************!*\
   !*** ./src/javascript/app/pages/trade/analysis.js ***!
@@ -15812,12 +15946,12 @@ var DigitInfo = function () {
         chart: {
             renderTo: 'last_digit_histo',
             defaultSeriesType: 'column',
-            backgroundColor: '#eee',
+            backgroundColor: 'var(--border-normal)',
             borderWidth: 1,
-            borderColor: '#ccc',
-            plotBackgroundColor: '#fff',
+            borderColor: 'var(--border-normal)',
+            plotBackgroundColor: 'var(--fill-normal)',
             plotBorderWidth: 1,
-            plotBorderColor: '#ccc',
+            plotBorderColor: 'var(--border-normal)',
             height: 225 // This is "unresponsive", but so is leaving it empty where it goes to 400px.
         },
         title: { text: '' },
@@ -15827,7 +15961,8 @@ var DigitInfo = function () {
             enabled: false
         },
         tooltip: {
-            borderWidth: 1,
+            borderWidth: 0,
+            borderRadius: 4,
             formatter: function formatter() {
                 var total = $('#tick_count').val();
                 var percentage = this.y / total * 100;
@@ -15838,14 +15973,15 @@ var DigitInfo = function () {
             column: {
                 shadow: false,
                 borderWidth: 0.5,
-                borderColor: '#666',
+                borderColor: 'var(--border-normal)',
                 pointPadding: 0,
                 groupPadding: 0.0,
-                color: '#e1f0fb'
+                color: 'var(--general-section-1)'
             },
             series: {
                 dataLabels: {
                     enabled: true,
+                    borderWidth: 0,
                     style: {
                         textShadow: false
                     },
@@ -15860,18 +15996,19 @@ var DigitInfo = function () {
         xAxis: {
             categories: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
             lineWidth: 0,
-            lineColor: '#999',
+            lineColor: 'var(--border-normal)',
             tickLength: 10,
-            tickColor: '#ccc'
+            tickWidth: 0,
+            tickColor: 'var(--border-normal)'
         },
         yAxis: {
             title: { text: '' },
             maxPadding: 0,
-            gridLineColor: '#e9e9e9',
+            gridLineColor: 'var(--general-section-1)',
             tickWidth: 1,
             tickLength: 3,
-            tickColor: '#ccc',
-            lineColor: '#ccc',
+            tickColor: 'var(--border-normal)',
+            lineColor: 'var(--border-normal)',
             endOnTick: true,
             opposite: false,
             labels: {
@@ -16074,28 +16211,28 @@ var DigitInfo = function () {
         var max_index = filtered_spots.indexOf(max);
         // changing color
         if (min_max_counter[min] >= 1) {
-            filtered_spots[min_index] = { y: min, color: '#CC0000' };
+            filtered_spots[min_index] = { y: min, color: 'var(--status-danger)' };
             if (prev_min_index === -1) {
                 prev_min_index = min_index;
             } else if (prev_min_index !== min_index) {
                 if (_typeof(filtered_spots[prev_min_index]) === 'object') {
-                    filtered_spots[prev_min_index] = { y: filtered_spots[prev_min_index].y, color: '#e1f0fb' };
+                    filtered_spots[prev_min_index] = { y: filtered_spots[prev_min_index].y, color: 'var(--general-section-1)' };
                 } else {
-                    filtered_spots[prev_min_index] = { y: filtered_spots[prev_min_index], color: '#e1f0fb' };
+                    filtered_spots[prev_min_index] = { y: filtered_spots[prev_min_index], color: 'var(--general-section-1)' };
                 }
                 prev_min_index = min_index;
             }
         }
 
         if (min_max_counter[max] >= 1) {
-            filtered_spots[max_index] = { y: max, color: '#2E8836' };
+            filtered_spots[max_index] = { y: max, color: 'var(--status-success)' };
             if (prev_max_index === -1) {
                 prev_max_index = max_index;
             } else if (prev_max_index !== max_index) {
                 if (_typeof(filtered_spots[prev_max_index]) === 'object') {
-                    filtered_spots[prev_max_index] = { y: filtered_spots[prev_max_index].y, color: '#e1f0fb' };
+                    filtered_spots[prev_max_index] = { y: filtered_spots[prev_max_index].y, color: 'var(--general-section-1)' };
                 } else {
-                    filtered_spots[prev_max_index] = { y: filtered_spots[prev_max_index], color: '#e1f0fb' };
+                    filtered_spots[prev_max_index] = { y: filtered_spots[prev_max_index], color: 'var(--general-section-1)' };
                 }
                 prev_max_index = max_index;
             }
@@ -18551,31 +18688,6 @@ var Defaults = function () {
 }();
 
 module.exports = Defaults;
-
-/***/ }),
-
-/***/ "./src/javascript/app/pages/trade/deriv-iframe.js":
-/*!********************************************************!*\
-  !*** ./src/javascript/app/pages/trade/deriv-iframe.js ***!
-  \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var getIFrameUrl = function getIFrameUrl() {
-    if (/^smarttrader-staging\.deriv\.app$/i.test(window.location.hostname)) {
-        return 'https://staging.deriv.app/localstorage-sync.html';
-    } else if (/^smarttrader\.deriv\.app$/i.test(window.location.hostname)) {
-        return 'https://deriv.app/localstorage-sync.html';
-    }
-    return null;
-};
-
-module.exports = {
-    getIFrameUrl: getIFrameUrl
-};
 
 /***/ }),
 
@@ -23715,19 +23827,18 @@ var Header = __webpack_require__(/*! ../../base/header */ "./src/javascript/app/
 var BinarySocket = __webpack_require__(/*! ../../base/socket */ "./src/javascript/app/base/socket.js");
 var Guide = __webpack_require__(/*! ../../common/guide */ "./src/javascript/app/common/guide.js");
 var TopUpVirtualPopup = __webpack_require__(/*! ../../pages/user/account/top_up_virtual/pop_up */ "./src/javascript/app/pages/user/account/top_up_virtual/pop_up.js");
-var getIFrameUrl = __webpack_require__(/*! ../../pages/trade/deriv-iframe */ "./src/javascript/app/pages/trade/deriv-iframe.js").getIFrameUrl;
 var State = __webpack_require__(/*! ../../../_common/storage */ "./src/javascript/_common/storage.js").State;
+var getAllowedLocalStorageOrigin = __webpack_require__(/*! ../../../_common/url */ "./src/javascript/_common/url.js").getAllowedLocalStorageOrigin;
 
 var TradePage = function () {
     var events_initialized = 0;
     State.remove('is_trading');
 
     var onLoad = function onLoad() {
-        var el_iframe = document.getElementById('localstorage-sync');
-        var iframe_src = getIFrameUrl();
-
-        if (el_iframe && iframe_src) {
-            el_iframe.src = iframe_src;
+        var iframe_target_origin = getAllowedLocalStorageOrigin();
+        if (iframe_target_origin) {
+            var el_iframe = document.getElementById('localstorage-sync');
+            el_iframe.src = iframe_target_origin + '/localstorage-sync.html';
         }
 
         BinarySocket.wait('authorize').then(function () {
@@ -26990,7 +27101,7 @@ var ViewPopup = function () {
     };
 
     var appendAuditLink = function appendAuditLink(element_id) {
-        var link = Utility.createElement('a', { href: 'javascript:;', class: 'link-audit button-secondary' });
+        var link = Utility.createElement('a', { href: 'javascript:;', class: 'link-audit btn btn__small btn--secondary' });
         var span = Utility.createElement('span', { text: localize('Audit') });
         link.appendChild(span);
         link.addEventListener('click', function () {
@@ -27330,7 +27441,7 @@ var ViewPopup = function () {
                 return;
             }
 
-            $sell_wrapper.setVisibility(1).append($('<div/>', { id: sell_wrapper_id }).append($('<button/>', { id: sell_button_id, class: 'button btn btn--secondary', text: is_started ? localize('Sell at market') : localize('Sell') })));
+            $sell_wrapper.setVisibility(1).append($('<div/>', { id: sell_wrapper_id }).append($('<button/>', { id: sell_button_id, class: 'btn btn__large btn--secondary', text: is_started ? localize('Sell at market') : localize('Sell') })));
             if (is_started) {
                 addSellNote($sell_wrapper);
             }

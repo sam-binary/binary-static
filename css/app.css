@@ -292,7 +292,6 @@ a.previous-wrapper {
   margin-bottom: 10px; }
 
 .chart-legend-label {
-  margin: 0 10px 0 0;
   font-size: 11px;
   color: var(--text-prominent); }
 
@@ -302,6 +301,10 @@ a.previous-wrapper {
 
 .highcharts-crosshair-label > text {
   fill: var(--text-prominent) !important; }
+
+.highcharts-title {
+  font-weight: bold;
+  line-height: 24px; }
 
 .popup_bet_desc {
   padding: 5px 0;
@@ -410,15 +413,15 @@ a.previous-wrapper {
           line-height: 20px; }
         .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table #sell_at_market_wrapper .note, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit #sell_at_market_wrapper .note {
           line-height: 18px;
-          margin-bottom: 10px;
           font-size: 0.7561436673rem;
-          padding: 3px 10px; }
+          margin: 10px 20px; }
         .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table #trade_details_entry_spot, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table #trade_details_current_spot, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit #trade_details_entry_spot, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit #trade_details_current_spot {
           line-height: 32px; }
           .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table #trade_details_entry_spot span:not(:last-child), .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table #trade_details_current_spot span:not(:last-child), .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit #trade_details_entry_spot span:not(:last-child), .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit #trade_details_current_spot span:not(:last-child) {
             padding-right: 20px; }
           .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table #trade_details_entry_spot a, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table #trade_details_current_spot a, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit #trade_details_entry_spot a, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit #trade_details_current_spot a {
-            margin-bottom: 0; }
+            margin-bottom: 0;
+            vertical-align: baseline; }
         .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table .audit-table, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit .audit-table {
           padding: 40px 40px 0; }
           .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table .audit-table legend, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit .audit-table legend {
@@ -460,7 +463,8 @@ a.previous-wrapper {
         .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table .explanation-section, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit .explanation-section {
           padding: 40px !important; }
           .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table .explanation-section p, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit .explanation-section p {
-            line-height: 25px; }
+            line-height: 20px;
+            margin: 16px 0; }
         @media screen and (max-width: 768px) {
           .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_table, .inpage_popup_container .inpage_popup_content_box #sell_content_wrapper #sell_details_audit {
             border-left: none; } }
@@ -750,7 +754,6 @@ a.previous-wrapper {
   .row.digit-trade .col .quote {
     width: auto;
     color: #c2c2c2;
-    font-weight: 100;
     margin-top: 2px; }
   .row.digit-trade .col .digit-tick-epoch {
     display: inline-block;
@@ -848,11 +851,6 @@ ul.bullet {
           transform: rotate(270deg) !important;
   margin-right: 2px; }
 
-[data-balloon-pos=down]:after {
-  -webkit-transform: rotate(180deg) translate(50%, 0) !important;
-          transform: rotate(180deg) translate(50%, 0) !important;
-  margin-top: 12px; }
-
 #trading_init_progress {
   cursor: pointer;
   /*background-image: url('../images/pages/binary-symbol-logo.png');
@@ -907,12 +905,11 @@ ul.bullet {
     height: 28px;
     border: solid 1px var(--border-normal); }
   #trading_socket_container div.select-dropdown:after {
-    content: '';
     height: 16px;
     width: 16px;
     -webkit-transform-origin: initial;
             transform-origin: initial;
-    background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2.836 10.87C2.632 11.056 2.316 11.04 2.13 10.836C1.944 10.632 1.96 10.316 2.164 10.13L7.664 5.13C7.854 4.957 8.146 4.957 8.336 5.13L13.836 10.13C14.041 10.316 14.056 10.632 13.87 10.836C13.684 11.041 13.368 11.056 13.164 10.87L8 6.176L2.836 10.87Z' fill='%23333333'/%3E%3C/svg%3E%0A"); }
+    content: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2.836 10.87C2.632 11.056 2.316 11.04 2.13 10.836C1.944 10.632 1.96 10.316 2.164 10.13L7.664 5.13C7.854 4.957 8.146 4.957 8.336 5.13L13.836 10.13C14.041 10.316 14.056 10.632 13.87 10.836C13.684 11.041 13.368 11.056 13.164 10.87L8 6.176L2.836 10.87Z' fill='%23333333'/%3E%3C/svg%3E%0A"); }
   #trading_socket_container ul.select-options {
     -webkit-box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.08), 0 0 16px 0 rgba(0, 0, 0, 0.08);
             box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.08), 0 0 16px 0 rgba(0, 0, 0, 0.08); }
@@ -1230,7 +1227,7 @@ ul.bullet {
           width: 100%;
           color: #ffffff;
           font-size: 16px;
-          font-weight: 500; }
+          font-weight: bold; }
         #trading_socket_container #contract_prices_container .price_container .contract_purchase #purchase_button_top, #trading_socket_container #contract_prices_container .price_container .contract_purchase #purchase_button_middle {
           background-color: var(--text-profit-success); }
         #trading_socket_container #contract_prices_container .price_container .contract_purchase #purchase_button_bottom {
@@ -1241,6 +1238,8 @@ ul.bullet {
           background-color: rgba(236, 63, 63, 0.32); }
         #trading_socket_container #contract_prices_container .price_container .contract_purchase.button-disabled .purchase_button {
           cursor: auto; }
+      #trading_socket_container #contract_prices_container .price_container .button-disabled span {
+        white-space: normal; }
     #trading_socket_container #contract_prices_container #contract_purchase_barrier {
       padding-bottom: 7px; }
     #trading_socket_container #contract_prices_container #contract_purchase_reference {
@@ -1676,6 +1675,19 @@ ul.bullet {
   border-color: #e31c4b !important;
   color: #e31c4b; }
 
+.action_btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: reverse;
+      -ms-flex-direction: row-reverse;
+          flex-direction: row-reverse; }
+  .action_btn > a {
+    margin-right: 0 !important; }
+  .action_btn > a + a {
+    margin-right: 8px !important; }
+
 #trading_bottom_content {
   margin-top: 15px;
   font-size: 1rem; }
@@ -1704,18 +1716,89 @@ ul.bullet {
     #trading_bottom_content #webtrader_chart a {
       color: var(--text-general); }
     #trading_bottom_content #webtrader_chart .button-secondary span, #trading_bottom_content #webtrader_chart .button span {
-      font-weight: bold;
-      padding: 6px 22px 6px 23px; }
+      -webkit-box-sizing: border-box;
+              box-sizing: border-box;
+      vertical-align: middle;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
+      -webkit-box-pack: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      -ms-touch-action: manipulation;
+          touch-action: manipulation;
+      cursor: pointer;
+      white-space: nowrap;
+      display: -webkit-inline-box;
+      display: -ms-inline-flexbox;
+      display: inline-flex;
+      border: 0;
+      border-radius: 4px;
+      -webkit-transition: all 0.2s cubic-bezier(0.65, 0.05, 0.36, 1);
+      transition: all 0.2s cubic-bezier(0.65, 0.05, 0.36, 1);
+      outline: 0;
+      position: relative;
+      text-decoration: none;
+      text-transform: none !important;
+      font-weight: bold !important;
+      text-align: center;
+      line-height: 1.5;
+      height: 32px;
+      border-width: 1px;
+      font-size: 0.8695652174rem !important;
+      padding: 0 16px;
+      min-width: 56px; }
+      #trading_bottom_content #webtrader_chart .button-secondary span:disabled, #trading_bottom_content #webtrader_chart .button-secondary span[disabled], #trading_bottom_content #webtrader_chart .button span:disabled, #trading_bottom_content #webtrader_chart .button span[disabled] {
+        opacity: 0.32;
+        cursor: not-allowed !important; }
     #trading_bottom_content #webtrader_chart .button span {
-      background-color: var(--brand-red-coral); }
+      background: var(--button-primary-default);
+      color: var(--text-colored-background) !important;
+      height: 40px;
+      border-width: 2px;
+      font-size: 0.8695652174rem !important;
+      padding: 0 16px;
+      min-width: 64px; }
+      #trading_bottom_content #webtrader_chart .button span:disabled, #trading_bottom_content #webtrader_chart .button span[disabled] {
+        opacity: 0.32;
+        cursor: not-allowed !important; }
+      #trading_bottom_content #webtrader_chart .button span:focus, #trading_bottom_content #webtrader_chart .button span:hover {
+        background: var(--button-primary-hover); }
+      #trading_bottom_content #webtrader_chart .button span:active:not([disabled]) {
+        background: var(--button-primary-default); }
     #trading_bottom_content #webtrader_chart .button:not(.button-disabled) span {
-      color: var(--general-main-1); }
-      #trading_bottom_content #webtrader_chart .button:not(.button-disabled) span:hover {
-        background-color: var(--button-primary-hover); }
+      background: var(--button-primary-default);
+      color: var(--text-colored-background) !important;
+      height: 40px;
+      border-width: 2px;
+      font-size: 0.8695652174rem !important;
+      padding: 0 16px;
+      min-width: 64px; }
+      #trading_bottom_content #webtrader_chart .button:not(.button-disabled) span:disabled, #trading_bottom_content #webtrader_chart .button:not(.button-disabled) span[disabled] {
+        opacity: 0.32;
+        cursor: not-allowed !important; }
+      #trading_bottom_content #webtrader_chart .button:not(.button-disabled) span:focus, #trading_bottom_content #webtrader_chart .button:not(.button-disabled) span:hover {
+        background: var(--button-primary-hover); }
+      #trading_bottom_content #webtrader_chart .button:not(.button-disabled) span:active:not([disabled]) {
+        background: var(--button-primary-default); }
     #trading_bottom_content #webtrader_chart .button-secondary span {
-      background-color: var(--status-default); }
+      background: transparent;
+      color: var(--text-prominent) !important;
+      border: 2px solid var(--button-secondary-default);
+      height: 40px;
+      border-width: 2px;
+      font-size: 0.8695652174rem !important;
+      padding: 0 16px;
+      min-width: 64px; }
+      #trading_bottom_content #webtrader_chart .button-secondary span:disabled, #trading_bottom_content #webtrader_chart .button-secondary span[disabled] {
+        opacity: 0.32;
+        cursor: not-allowed !important; }
+      #trading_bottom_content #webtrader_chart .button-secondary span:focus, #trading_bottom_content #webtrader_chart .button-secondary span:hover {
+        background: var(--button-secondary-hover); }
+      #trading_bottom_content #webtrader_chart .button-secondary span:active:not([disabled]) {
+        border: 1px solid var(--button-secondary-default); }
     #trading_bottom_content #webtrader_chart .button-secondary:not(.button-disabled) span {
-      color: var(--text-general); }
+      color: var(--text-prominent); }
       #trading_bottom_content #webtrader_chart .button-secondary:not(.button-disabled) span:hover {
         background-color: var(--general-hover); }
     #trading_bottom_content #webtrader_chart input {
@@ -1837,6 +1920,21 @@ ul.bullet {
         border: 1px solid var(--border-normal); }
       #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay {
         font-size: 12px; }
+        #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .button-secondary > span {
+          display: -webkit-inline-box;
+          display: -ms-inline-flexbox;
+          display: inline-flex;
+          -webkit-box-pack: center;
+              -ms-flex-pack: center;
+                  justify-content: center;
+          background-color: var(--general-section-1);
+          width: 100%;
+          border: none;
+          font-weight: normal !important;
+          font-size: 12px !important;
+          height: 30px !important; }
+          #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .button-secondary > span:hover {
+            background-color: var(--general-hover); }
         #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .templates > div > div {
           margin-top: 6px;
           margin-bottom: 0;
@@ -1856,24 +1954,33 @@ ul.bullet {
               text-decoration: underline !important;
               color: var(--brand-red-coral); }
         #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .confirm .title, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename .title, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as .title {
-          margin: 6px 0 8px;
+          margin: 8px 0;
           line-height: 18px; }
         #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .confirm .button, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename .button, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as .button {
           margin-bottom: 0; }
         #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .confirm button, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename button, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as button {
+          background: var(--button-primary-default);
+          color: var(--text-colored-background) !important;
           margin: 0 5px 3px 3px;
-          padding: 6px 22px 6px 23px;
-          line-height: 24px;
-          font-weight: bold;
-          background-color: var(--brand-red-coral);
-          color: var(--text-colored-background) !important; }
-          #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .confirm button:not(:disabled):hover, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename button:not(:disabled):hover, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as button:not(:disabled):hover {
-            background-color: var(--button-primary-hover); }
+          font-weight: bold; }
+          #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .confirm button:disabled, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .confirm button[disabled], #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename button:disabled, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename button[disabled], #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as button:disabled, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as button[disabled] {
+            opacity: 0.32;
+            cursor: not-allowed !important; }
+          #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .confirm button:focus, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .confirm button:hover, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename button:focus, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename button:hover, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as button:focus, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as button:hover {
+            background: var(--button-primary-hover); }
+          #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .confirm button:active:not([disabled]), #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename button:active:not([disabled]), #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as button:active:not([disabled]) {
+            background: var(--button-primary-default); }
           #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .confirm button:nth-child(2), #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename button:nth-child(2), #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as button:nth-child(2) {
-            background-color: var(--status-default);
-            color: var(--text-general) !important; }
-            #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .confirm button:nth-child(2):not(:disabled):hover, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename button:nth-child(2):not(:disabled):hover, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as button:nth-child(2):not(:disabled):hover {
-              background-color: var(--state-active); }
+            background: transparent;
+            color: var(--text-prominent) !important;
+            border: 1px solid var(--button-secondary-default); }
+            #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .confirm button:nth-child(2):disabled, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .confirm button:nth-child(2)[disabled], #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename button:nth-child(2):disabled, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename button:nth-child(2)[disabled], #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as button:nth-child(2):disabled, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as button:nth-child(2)[disabled] {
+              opacity: 0.32;
+              cursor: not-allowed !important; }
+            #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .confirm button:nth-child(2):focus, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .confirm button:nth-child(2):hover, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename button:nth-child(2):focus, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename button:nth-child(2):hover, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as button:nth-child(2):focus, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as button:nth-child(2):hover {
+              background: var(--button-secondary-hover); }
+            #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .confirm button:nth-child(2):active:not([disabled]), #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename button:nth-child(2):active:not([disabled]), #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as button:nth-child(2):active:not([disabled]) {
+              border: 1px solid var(--button-secondary-default); }
         #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .confirm input, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename input, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as input {
           padding: 5px; }
         #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .confirm .errors, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename .errors, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as .errors {
@@ -1885,11 +1992,11 @@ ul.bullet {
         #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as .title, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename .title {
           margin-bottom: 0; }
         #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .save-as input, #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay .chart-template-manager-root .rename input {
-          width: 162px; }
+          width: 164px; }
         #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay span.back-arrow > span {
           background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDIwIDIwIj4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPHBhdGggZD0iTTAgMEgyMFYyMEgweiIvPgogICAgICAgIDxwYXRoIGZpbGw9IiMzMzMiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTguMjIyIDYuNTY0VjMuMDFMMiA5LjIzbDYuMjIyIDYuMjIyVjExLjgxYzQuNDQ1IDAgNy41NTYgMS40MjIgOS43NzggNC41MzMtLjg4OS00LjQ0NC0zLjU1Ni04Ljg4OS05Ljc3OC05Ljc3OHoiLz4KICAgIDwvZz4KPC9zdmc+Cg==") !important; }
         #trading_bottom_content #webtrader_chart .chartOptions_overlay.loadSaveOverlay span.back-arrow a {
-          font-weight: normal; }
+          font-weight: bold; }
       #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog {
         height: calc(100% - 8px);
         border-color: var(--border-normal); }
@@ -1940,19 +2047,39 @@ ul.bullet {
           font-size: 12px;
           line-height: 18px; }
         #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .view .types .type .empty > a > span {
-          width: 182px;
-          line-height: 24px; }
+          background: transparent;
+          color: var(--text-prominent) !important;
+          border: 2px solid var(--button-secondary-default);
+          height: 40px;
+          border-width: 2px;
+          font-size: 0.8695652174rem !important;
+          padding: 0 16px;
+          min-width: 64px;
+          width: 192px;
+          white-space: nowrap; }
+          #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .view .types .type .empty > a > span:disabled, #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .view .types .type .empty > a > span[disabled] {
+            opacity: 0.32;
+            cursor: not-allowed !important; }
+          #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .view .types .type .empty > a > span:focus, #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .view .types .type .empty > a > span:hover {
+            background: var(--button-secondary-hover); }
+          #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .view .types .type .empty > a > span:active:not([disabled]) {
+            border: 1px solid var(--button-secondary-default); }
         #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .view.indicator > div {
-          color: var(--text-general); }
+          color: var(--text-general);
+          font-weight: normal;
+          font-size: 12px;
+          line-height: 18px; }
+        #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder > table tr td {
+          font-weight: normal; }
         #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder > table tr td:first-child {
           padding: 20px 15px 19px;
           font-size: 12px; }
+        #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder > table tr td a span {
+          height: 32px !important; }
         #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder > table tr .colorpicker-td {
           margin-top: 8px; }
           #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder > table tr .colorpicker-td input {
             display: none; }
-        #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder > table tr .dd-select {
-          margin-top: 11px; }
         #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder > table tr .applied-to {
           border: 1px solid var(--border-normal);
           border-radius: 4px;
@@ -1978,7 +2105,7 @@ ul.bullet {
             line-height: 18px;
             font-size: 12px;
             padding: 9px 13px;
-            width: calc(calc(calc(100% - 40px) / 4) - 26px);
+            width: calc((100% - 40px) / 4 - 29px);
             display: inline-block; }
             #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder table.levels tr td:nth-child(3) > div {
               border-radius: 4px;
@@ -1999,8 +2126,43 @@ ul.bullet {
             #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder table.levels .no-underline[data-balloon]:after {
               background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36px' height='12px'%3E%3Cpath fill='%23d6dadb' transform='rotate(0)' d='M2.658,0.000 C-13.615,0.000 50.938,0.000 34.662,0.000 C28.662,0.000 23.035,12.002 18.660,12.002 C14.285,12.002 8.594,0.000 2.658,0.000 Z'/%3E%3C/svg%3E"); }
         #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder a.button span, #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder a.button-secondary span {
-          font-size: 16px;
+          font-size: 14px;
           line-height: 24px; }
+        #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder .dd-select {
+          margin-top: 11px;
+          border-radius: 4px; }
+          #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder .dd-select.dd-open {
+            border: 1px solid var(--brand-secondary); }
+        #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder .dd-options {
+          border-radius: 4px;
+          border: 1px solid var(--border-normal); }
+        #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder .dd-option {
+          border-bottom: none; }
+          #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder .dd-option:hover {
+            background-color: var(--state-hover); }
+          #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder .dd-option-selected {
+            background-color: var(--state-active); }
+        #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder .levels-dialog button:first-of-type {
+          background: transparent;
+          color: var(--text-prominent) !important;
+          border: 1px solid var(--button-secondary-default); }
+          #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder .levels-dialog button:first-of-type:disabled, #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder .levels-dialog button:first-of-type[disabled] {
+            opacity: 0.32;
+            cursor: not-allowed !important; }
+          #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder .levels-dialog button:first-of-type:focus, #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder .levels-dialog button:first-of-type:hover {
+            background: var(--button-secondary-hover); }
+          #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder .levels-dialog button:first-of-type:active:not([disabled]) {
+            border: 1px solid var(--button-secondary-default); }
+        #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder .levels-dialog button:nth-of-type(2) {
+          background: var(--button-primary-default);
+          color: var(--text-colored-background) !important; }
+          #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder .levels-dialog button:nth-of-type(2):disabled, #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder .levels-dialog button:nth-of-type(2)[disabled] {
+            opacity: 0.32;
+            cursor: not-allowed !important; }
+          #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder .levels-dialog button:nth-of-type(2):focus, #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder .levels-dialog button:nth-of-type(2):hover {
+            background: var(--button-primary-hover); }
+          #trading_bottom_content #webtrader_chart .chartOptions_overlay.indicators > .indicator-dialog .indicator-builder .levels-dialog button:nth-of-type(2):active:not([disabled]) {
+            background: var(--button-primary-default); }
       #trading_bottom_content #webtrader_chart .chartOptions_overlay.chartTypeOverlay {
         width: 86px; }
         #trading_bottom_content #webtrader_chart .chartOptions_overlay.chartTypeOverlay .row.showborder, #trading_bottom_content #webtrader_chart .chartOptions_overlay.chartTypeOverlay .row .chartOptions .chartTypeOverlay .row:nth-last-child(2), #trading_bottom_content #webtrader_chart .chartOptions_overlay.chartTypeOverlay .row .chartOptions .chartTypeOverlay .row:nth-last-child(3) {
@@ -2072,10 +2234,13 @@ ul.bullet {
     font-weight: bold; }
   #trading_bottom_content #tab_explanation-content #explanation_explain h3 {
     margin: 40px 0 20px; }
-  #trading_bottom_content #tab_explanation-content p strong {
-    font-weight: 600;
-    letter-spacing: 0.25px;
-    margin: 20px 0; }
+  #trading_bottom_content #tab_explanation-content p {
+    margin: 16px 0;
+    line-height: 22px; }
+    #trading_bottom_content #tab_explanation-content p strong {
+      font-weight: 600;
+      letter-spacing: 0.25px;
+      margin: 20px 0; }
   #trading_bottom_content #tab_explanation-content img {
     margin: 40px 0 0; }
 
@@ -2084,10 +2249,7 @@ ul.bullet {
   margin: 0 0 0 10px; }
   #deposit_btn_trade span, #upgrade_btn_trade span {
     height: 20px;
-    line-height: 20px;
-    background-color: #ff9933; }
-    #deposit_btn_trade span:hover, #upgrade_btn_trade span:hover {
-      background-color: #ff8802; }
+    line-height: 20px; }
     #deposit_btn_trade span img, #upgrade_btn_trade span img {
       margin-right: 5px; }
 
@@ -2177,20 +2339,37 @@ body #lean_overlay .lean_overlay_buttonpane {
   border-top: 1px solid var(--border-normal);
   padding: 18px 16px; }
   body #lean_overlay .lean_overlay_buttonpane > div {
-    width: auto;
-    padding: 6px 22px 6px 23px;
-    line-height: 24px;
-    background-color: var(--status-default);
-    color: var(--text-general);
-    font-weight: bold; }
-    body #lean_overlay .lean_overlay_buttonpane > div:hover {
-      background-color: var(--state-active); }
+    background: transparent;
+    color: var(--text-prominent) !important;
+    border: 2px solid var(--button-secondary-default);
+    height: 40px;
+    border-width: 2px;
+    font-size: 0.8695652174rem !important;
+    padding: 0 16px;
+    min-width: 64px; }
+    body #lean_overlay .lean_overlay_buttonpane > div:disabled, body #lean_overlay .lean_overlay_buttonpane > div[disabled] {
+      opacity: 0.32;
+      cursor: not-allowed !important; }
+    body #lean_overlay .lean_overlay_buttonpane > div:focus, body #lean_overlay .lean_overlay_buttonpane > div:hover {
+      background: var(--button-secondary-hover); }
+    body #lean_overlay .lean_overlay_buttonpane > div:active:not([disabled]) {
+      border: 1px solid var(--button-secondary-default); }
     body #lean_overlay .lean_overlay_buttonpane > div:not(:first-child) {
-      margin-left: 16px;
-      background-color: var(--brand-red-coral);
-      color: var(--text-colored-background); }
-      body #lean_overlay .lean_overlay_buttonpane > div:not(:first-child):hover {
-        background-color: var(--button-primary-hover); }
+      background: var(--button-primary-default);
+      color: var(--text-colored-background) !important;
+      height: 40px;
+      border-width: 2px;
+      font-size: 0.8695652174rem !important;
+      padding: 0 16px;
+      min-width: 64px;
+      margin-left: 8px; }
+      body #lean_overlay .lean_overlay_buttonpane > div:not(:first-child):disabled, body #lean_overlay .lean_overlay_buttonpane > div:not(:first-child)[disabled] {
+        opacity: 0.32;
+        cursor: not-allowed !important; }
+      body #lean_overlay .lean_overlay_buttonpane > div:not(:first-child):focus, body #lean_overlay .lean_overlay_buttonpane > div:not(:first-child):hover {
+        background: var(--button-primary-hover); }
+      body #lean_overlay .lean_overlay_buttonpane > div:not(:first-child):active:not([disabled]) {
+        background: var(--button-primary-default); }
 
 body .sp-container {
   background-color: var(--text-colored-background);
@@ -2212,20 +2391,34 @@ body .sp-container {
       margin-left: 1px;
       height: 4px; }
     body .sp-container .sp-picker-container .sp-button-container {
-      margin-top: 6px;
+      margin-top: 11px;
       margin-bottom: 3px; }
       body .sp-container .sp-picker-container .sp-button-container .sp-cancel.sp-cancel, body .sp-container .sp-picker-container .sp-button-container .sp-choose.sp-choose {
         font-weight: bold;
-        padding: 6px 0;
-        line-height: 18px;
-        width: 84px; }
+        padding: 0;
+        width: calc(50% - 4px);
+        display: -webkit-inline-box;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        -webkit-box-align: center;
+            -ms-flex-align: center;
+                align-items: center;
+        -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        height: 32px;
+        -webkit-box-sizing: border-box;
+                box-sizing: border-box; }
         body .sp-container .sp-picker-container .sp-button-container .sp-cancel.sp-cancel:first-child, body .sp-container .sp-picker-container .sp-button-container .sp-choose.sp-choose:first-child {
-          background-color: var(--status-default) !important;
-          margin-right: 4px; }
+          background: transparent !important;
+          border: 1px solid var(--button-secondary-default);
+          color: var(--text-prominent);
+          margin-right: 8px; }
           body .sp-container .sp-picker-container .sp-button-container .sp-cancel.sp-cancel:first-child:hover, body .sp-container .sp-picker-container .sp-button-container .sp-choose.sp-choose:first-child:hover {
-            background-color: var(--general-hover) !important; }
+            background: var(--button-secondary-hover); }
         body .sp-container .sp-picker-container .sp-button-container .sp-cancel.sp-cancel:last-child, body .sp-container .sp-picker-container .sp-button-container .sp-choose.sp-choose:last-child {
-          background-color: var(--brand-red-coral); }
+          background-color: var(--brand-red-coral);
+          text-transform: uppercase; }
           body .sp-container .sp-picker-container .sp-button-container .sp-cancel.sp-cancel:last-child:hover, body .sp-container .sp-picker-container .sp-button-container .sp-choose.sp-choose:last-child:hover {
             background-color: var(--button-primary-hover); }
 
