@@ -15,6 +15,7 @@ import PaymentAgents        from './payment_agents.jsx';
 import Privacy              from './privacy.jsx';
 import TermsAndConditionsBinary from './terms_and_conditions.jsx';
 import TermsAndConditionsMT from './metatrader/terms_and_conditions.jsx';
+import TermsAndConditionsP2P from './p2p/terms_and_conditions.jsx';
 import { SidebarSubmenu, SidebarContent, SidebarContentContainer } from '../../_common/components/sidebar.jsx';
 
 const Tac = () => (
@@ -29,6 +30,7 @@ const Tac = () => (
                         submenu: [
                             { id: 'legal-binary', text: it.L('General') },
                             { id: 'legal-mt',     text: it.L('MetaTrader') },
+                            { id: 'legal-p2p',    text: it.L('P2P') },
                         ],
                     },
                     { id: 'datafeed',         text: it.L('Data Feed') },
@@ -79,6 +81,10 @@ const Tac = () => (
 
                 <SidebarContent id='code-of-conduct'>
                     <CodeOfConduct />
+                </SidebarContent>
+
+                <SidebarContent id='legal-p2p'>
+                    <TermsAndConditionsP2P />
                 </SidebarContent>
 
                 <SidebarContent id='legal-mt'>
