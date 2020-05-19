@@ -3,11 +3,11 @@ import React from 'react';
 const TermsAndConditions = () => (
     <div id='p2p-tnc'>
         <h1 data-anchor='p2p-tnc'>{it.L('P2P Cashier terms of use')}</h1>
-        <p><i>{it.L('Version 1.')}</i></p>
-        <p><i>{it.L('Last updated 2020/05/20.')}</i></p>
+        <p><i>{it.L('Version 1')}</i></p>
+        <p><i>{it.L('Last updated 20/05/2020')}</i></p>
 
         <h2 data-anchor='p2p-cashier'>{it.L('P2P Cashier services')}</h2>
-        <p>{it.L('It is the responsibility of each client to read and understand this legal notice and the terms and conditions pursuant to which an acquisition of financial contracts via this site is governed.')}</p>
+        <p>{it.L('This section of our [standard terms of use] (“the Terms”) applies to your use of P2P Cashier, our platform that provides an alternative way for buying and selling Deriv credits. You need to read this in conjunction with the [General terms of use] and [Funds and transfers].')}</p>
 
         <ol>
             <li>{it.L('Ads')}
