@@ -381,40 +381,35 @@
     margin-top: 10px;
     display: block; } }
 
-#p2p-tnc ol {
+#p2p-tnc .p2p-tnc__list {
   counter-reset: item1;
   padding-left: 0.2em; }
-  #p2p-tnc ol li {
+  #p2p-tnc .p2p-tnc__list li {
     display: block;
     position: relative; }
-    #p2p-tnc ol li ol.alpha li {
-      display: list-item;
-      list-style-type: lower-alpha !important; }
-      #p2p-tnc ol li ol.alpha li:before {
-        content: ''; }
-    #p2p-tnc ol li ol li {
+    #p2p-tnc .p2p-tnc__list li ol li {
       margin: 0.5em 0 0.5em 1.25em !important; }
-    #p2p-tnc ol li:before {
+    #p2p-tnc .p2p-tnc__list li:before {
       content: counter(item1) ".";
       counter-increment: item1;
       position: absolute;
       margin-right: 100%;
       right: 10px; }
-    #p2p-tnc ol li ul {
+    #p2p-tnc .p2p-tnc__list li ul {
       list-style: none; }
-  #p2p-tnc ol ol {
+  #p2p-tnc .p2p-tnc__list ol {
     counter-reset: item2; }
-    #p2p-tnc ol ol li:before {
+    #p2p-tnc .p2p-tnc__list ol li:before {
       content: counter(item1) "." counter(item2) ".";
       counter-increment: item2; }
-    #p2p-tnc ol ol ol {
+    #p2p-tnc .p2p-tnc__list ol ol {
       counter-reset: item3; }
-      #p2p-tnc ol ol ol li:before {
+      #p2p-tnc .p2p-tnc__list ol ol li:before {
         content: counter(item1) "." counter(item2) "." counter(item3) ".";
         counter-increment: item3; }
-      #p2p-tnc ol ol ol ol {
+      #p2p-tnc .p2p-tnc__list ol ol ol {
         counter-reset: item4; }
-        #p2p-tnc ol ol ol ol li:before {
+        #p2p-tnc .p2p-tnc__list ol ol ol li:before {
           content: counter(item1) "." counter(item2) "." counter(item3) "." counter(item4) ".";
           counter-increment: item4; }
 
