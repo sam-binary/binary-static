@@ -3,17 +3,15 @@ import React from 'react';
 const TermsAndConditions = () => (
     <div id='p2p-tnc'>
         <h1 data-anchor='p2p-tnc'>{it.L('P2P Cashier terms of use')}</h1>
-        <p><i>{it.L('Version 1')}</i></p>
-        <p><i>{it.L('Last updated 22/05/2020')}</i></p>
 
         <h2 data-anchor='p2p-cashier'>{it.L('P2P Cashier services')}</h2>
-        <p>{it.L('This section of our <a href="[_1]">standard terms of use</a> (“the Terms”) applies to your use of P2P Cashier, our platform that provides an alternative way for buying and selling Deriv credits. You need to read this in conjunction with the <a href="[_1]">General terms of use</a> and <a href="[_2]">Funds and transfers</a>.', 'https://www.binary.com/en/terms-and-conditions.html#legal-binary', 'https://www.binary.com/en/terms-and-conditions.html?anchor=customer-funds#legal-binary')}</p>
+        <p>{it.L('This section of our <a href="[_1]">standard terms of use</a> (“the Terms”) applies to your use of P2P Cashier, our platform that provides an alternative way for buying and selling [_3] credits. You need to read this in conjunction with the <a href="[_1]">General terms of use</a> and <a href="[_2]">Funds and transfers</a>.', 'https://www.binary.com/en/terms-and-conditions.html#legal-binary', 'https://www.binary.com/en/terms-and-conditions.html?anchor=customer-funds#legal-binary', it.website_name)}</p>
 
         <ol className='p2p-tnv__list'>
             <li>{it.L('Ads')}
                 <ol>
                     <li>{it.L('You are only authorised to post ads if we have pre-approved you according to our <a href="https://www.binary.com/en/terms-and-conditions.html?anchor=fraud-and-money-laundering#legal-binary">Know Your Customer policy</a>.')}</li>
-                    <li>{it.L('You can post one or more ads on our platform that provides an alternative way for buying and selling [_1] credit. We have the right to restrict the number of your ads or remove your ads for security reasons and reasons of suspected misconduct or fraudulent activity.', it.website_name)}</li>
+                    <li>{it.L('You can post one or more ads on our platform that provides an alternative way for buying and selling [_1] credits. We have the right to restrict the number of your ads or remove your ads for security reasons and reasons of suspected misconduct or fraudulent activity.', it.website_name)}</li>
                     <li>{it.L('When you post ads, it is recommended that you stay active and available to react to orders that are placed in response to your ads. If a dispute is initiated (see <a href="https://www.binary.com/en/terms-and-conditions.html#complaints">Complaints and disputes</a> for more information) in an exchange against an advertiser who has not been active and available for the duration of the exchange, the advertiser may be considered unresponsive and the dispute may be resolved against the advertiser.')}</li>
                     <li>{it.L('Information and payment details that you provide at any stage of exchanges, including but not limited to the ads and orders, must at all times be correct and up to date. Disputes may be resolved against you if you include out-of-date payment details. Failure to provide accurate, uptodate payment details for exchanges initiated from your ads is considered a violation of this agreement.')}</li>
                     <li>{it.L('The fixed rate that the advertiser enters in the ad details will determine any and all amounts that the advertiser will receive. After initiating an exchange, the price is locked and cannot be changed, neither can any fees be added.')}</li>
@@ -46,7 +44,7 @@ const TermsAndConditions = () => (
             <li>{it.L('Dispute initiation')}
                 <ol>
                     <li>{it.L('If you are in disagreement over an exchange, either you, the other party, or we can start a dispute until at most 30 days from the date of the exchange. Our support staff, whom you can reach by <a href="mailto:complaint@binary.com" target="_blank">complaints@binary.com</a>, facilitate reviewing and resolving the disputed exchanges.')}</li>
-                    <li>{it.L('Reviewing and resolving disputes may require reviewing communications between the buyer and the seller. If any part of this communication has taken place on our platform, it is not considered private communication. You hereby acknowledge and give consent that we are also a party to any communication that takes place on our platform and may access and otherwise process it in accordance with our <a href="https://www.binary.com/en/terms-and-conditions.html#complaints">Security and privacy policy.</a>')}</li>
+                    <li>{it.L('Reviewing and resolving disputes may require reviewing communications between the buyer and the seller. If any part of this communication has taken place on our platform, it is not considered private communication. You hereby acknowledge and give consent that we are also a party to any communication that takes place on our platform and may access and otherwise process it in accordance with our <a href="https://www.binary.com/en/terms-and-conditions.html#privacy">Security and privacy policy.</a>')}</li>
                     <li>{it.L('In the course of a dispute investigation, we may ask one or both parties to the dispute to provide records of their communications with each other that have not occured on our platform.')}</li>
                 </ol>
             </li>
